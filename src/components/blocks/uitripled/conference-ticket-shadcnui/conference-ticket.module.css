@@ -1,0 +1,13 @@
+.shimmer {
+  animation: shimmer 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-100%) rotate(20deg); }
+  to { transform: translateX(100%) rotate(20deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer { animation: none; }
+}

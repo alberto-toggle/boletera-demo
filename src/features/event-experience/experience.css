@@ -1,0 +1,442 @@
+.discovery .past-events {
+  padding: 90px 5%;
+  border-top: 1px solid var(--line);
+}
+.archive-note {
+  font-size: 11px;
+  color: var(--subtle);
+  max-width: 240px;
+}
+.past-timeline {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 50px;
+  margin-top: 45px;
+}
+.past-dates {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+  position: relative;
+}
+.past-dates::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 22px;
+  bottom: 22px;
+  width: 1px;
+  background: var(--line);
+}
+.past-dates button {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  min-height: 55px;
+  padding: 10px 4px;
+  font-size: 11px;
+  color: var(--subtle);
+}
+.timeline-dot {
+  width: 23px;
+  height: 23px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition:
+    background 0.25s,
+    box-shadow 0.25s;
+}
+.past-dates button[aria-pressed="true"] {
+  color: var(--ink);
+  font-weight: 600;
+}
+.past-dates button[aria-pressed="true"] .timeline-dot {
+  background: var(--accent-tone);
+  box-shadow: inset 0 0 0 5px var(--paper);
+  border-color: var(--accent-tone);
+}
+.past-story {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 40px;
+  align-items: center;
+  min-width: 0;
+}
+.past-copy h3 {
+  font-family: Georgia, serif;
+  font-size: clamp(30px, 3vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  margin: 20px 0;
+}
+.past-copy > p:not(.eyebrow) {
+  color: var(--subtle);
+  max-width: 400px;
+}
+.past-copy > span {
+  display: block;
+  font-size: 10px;
+  color: var(--subtle);
+  margin-top: 25px;
+}
+.past-photo {
+  position: relative;
+  min-height: 340px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.event-detail-nav {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 25px 0;
+  margin-bottom: 15px;
+}
+.event-detail-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 10px 18px;
+  font-size: 12px;
+}
+.event-detail-nav a:hover {
+  background: var(--muted);
+}
+.event-details {
+  margin-top: 90px;
+}
+.event-details section {
+  padding: 65px 0;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 40px;
+}
+.event-details .section-heading {
+  margin-bottom: 25px;
+}
+.event-story-intro {
+  max-width: 660px;
+  font-size: 16px;
+  color: var(--subtle);
+}
+.gallery-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin: 28px 0 18px;
+}
+.gallery-toolbar p {
+  color: var(--subtle);
+  font-size: 11px;
+}
+.gallery-toolbar > div {
+  display: flex;
+  gap: 8px;
+}
+.gallery-toolbar button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+.gallery-toolbar button:disabled {
+  opacity: 0.35;
+}
+.experience-filmstrip {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  scroll-snap-type: x mandatory;
+  padding: 4px 4px 20px;
+}
+.experience-filmstrip > button {
+  flex: 0 0 43%;
+  min-width: 0;
+  scroll-snap-align: start;
+  text-align: left;
+}
+.filmstrip-photo {
+  display: block;
+  position: relative;
+  height: 290px;
+  overflow: hidden;
+}
+.filmstrip-photo img {
+  transition: transform 0.4s;
+}
+.experience-filmstrip > button:hover img {
+  transform: scale(1.035);
+}
+.filmstrip-caption {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.filmstrip-caption small {
+  color: var(--subtle);
+}
+.filmstrip-caption > span {
+  margin-left: auto;
+}
+.gallery-dialog {
+  margin: auto;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 18px;
+  width: min(1000px, 94vw);
+  max-height: 94dvh;
+}
+.gallery-dialog::backdrop {
+  background: #000c;
+  backdrop-filter: blur(6px);
+}
+.gallery-dialog > button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  margin-bottom: 10px;
+}
+.gallery-dialog figure > div {
+  position: relative;
+  height: min(65dvh, 650px);
+}
+.discovery .gallery-dialog img {
+  object-fit: contain;
+}
+.gallery-dialog figcaption {
+  font-size: 12px;
+  padding-top: 18px;
+}
+html:has(.gallery-dialog[open]) {
+  overflow: hidden;
+}
+.event-program {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 60px;
+}
+.event-program h2 {
+  margin: 15px 0 22px;
+}
+.event-program > div > p:last-child {
+  color: var(--subtle);
+  font-size: 12px;
+}
+.event-program ol {
+  list-style: none;
+  padding: 0;
+}
+.event-program li {
+  display: flex;
+  gap: 25px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.event-program time {
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--accent-tone);
+}
+.event-program h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+.event-program li p {
+  font-size: 12px;
+  color: var(--subtle);
+}
+.venue-information {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 45px;
+  align-items: start;
+}
+.venue-map {
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  overflow: hidden;
+}
+.venue-map-art {
+  position: relative;
+  height: 290px;
+  transition: height 0.4s ease;
+  overflow: hidden;
+}
+.venue-map.is-expanded .venue-map-art {
+  height: 440px;
+}
+.venue-map-art > svg {
+  width: 100%;
+  height: 100%;
+}
+.venue-pin {
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 180px;
+  color: var(--ink);
+}
+.venue-pin strong {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  border-radius: 20px;
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+}
+.venue-pin > span {
+  background: var(--paper);
+  font-size: 9px;
+  padding: 3px 9px;
+}
+.venue-map-art > button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 99px;
+  padding: 10px 15px;
+  font-size: 11px;
+}
+.map-caption {
+  position: absolute;
+  bottom: 12px;
+  left: 15px;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  background: var(--paper);
+  padding: 4px;
+}
+.venue-map-caption {
+  padding: 20px;
+  background: var(--paper);
+}
+.venue-map-caption strong {
+  font-size: 14px;
+}
+.venue-map-caption p {
+  color: var(--subtle);
+  font-size: 11px;
+  margin-top: 8px;
+}
+.arrival-notes > div {
+  padding: 0 0 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.arrival-notes h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.arrival-notes p {
+  font-size: 13px;
+  color: var(--subtle);
+}
+.event-details > .demo-button {
+  margin: 0 0 30px;
+}
+@media (max-width: 800px) {
+  .past-timeline {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .past-dates {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .past-dates::before {
+    left: 10px;
+    right: 10px;
+    width: auto;
+    height: 1px;
+    top: 20px;
+    bottom: auto;
+  }
+  .past-dates button {
+    flex-direction: column;
+    align-items: start;
+    gap: 8px;
+    font-size: 9px;
+  }
+  .past-story {
+    gap: 24px;
+  }
+  .past-photo {
+    min-height: 300px;
+  }
+  .event-program,
+  .venue-information {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+@media (max-width: 550px) {
+  .discovery .past-events {
+    padding: 65px 6%;
+  }
+  .past-story {
+    grid-template-columns: 1fr;
+  }
+  .past-photo {
+    min-height: 260px;
+  }
+  .event-details {
+    margin-top: 60px;
+  }
+  .event-details section {
+    padding: 45px 0;
+  }
+  .experience-filmstrip > button {
+    flex-basis: 85%;
+  }
+  .filmstrip-photo {
+    height: 240px;
+  }
+  .event-detail-nav {
+    gap: 7px;
+  }
+  .event-detail-nav a {
+    font-size: 10px;
+    padding: 8px 12px;
+  }
+  .event-program li {
+    gap: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .venue-map-art,
+  .timeline-dot,
+  .filmstrip-photo img {
+    transition: none;
+  }
+  .experience-filmstrip > button:hover img {
+    transform: none;
+  }
+}
