@@ -2,14 +2,10 @@
 
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowLeft, ArrowRight, Printer, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Brand } from "@/features/event-discovery/components/chrome";
 import {
-  formatEventDate,
-  formatEventTime,
-  formatPrice,
   type DemoDirection,
   type DiscoveryEvent,
 } from "@/features/event-discovery/model";
@@ -17,7 +13,6 @@ import { createDemoVenue } from "../fixtures";
 import {
   initialBookingState,
   transitionBooking,
-  totalForSeats,
   type BookingAction,
   type BookingState,
 } from "../model";
@@ -27,20 +22,16 @@ import {
   PaymentSuccess,
   PAYMENT_ANIMATION_MS,
 } from "./payment-feedback";
-import { EventDetails } from "@/features/event-experience/components/event-details";
-import type { EventExperience } from "@/features/event-experience/model";
 import { Checkout } from "./checkout";
-import { EventTicket } from "./event-ticket";
-import { StatementTicket } from "@/features/immersive/components/statement-ticket";
+import { TicketDesignGallery } from "./ticket-design-gallery";
+import { ReservationClock } from "./reservation-clock";
 
 export function BookingFlow({
   event,
   direction,
-  experience,
 }: {
   event: DiscoveryEvent;
   direction: DemoDirection;
-  experience: EventExperience;
 }) {
   const venue = useMemo(() => createDemoVenue(event), [event]);
   const [state, dispatch] = useReducer(
@@ -87,10 +78,6 @@ export function BookingFlow({
   const selectedSeats = venue.seats.filter((seat) =>
     selectedIds.includes(seat.id),
   );
-  const total = formatPrice({
-    amountMinor: totalForSeats(selectedSeats),
-    currency: "MXN",
-  });
   function reserve() {
     const time = Date.now();
     setNow(time);
@@ -103,19 +90,26 @@ export function BookingFlow({
   const home = `/demo-${direction}`;
   const theme = direction === "institucional" ? "institutional" : direction;
   return (
-    <div className={`discovery booking ${theme}`}>
+    <div
+      className={`discovery booking purchase-page ${theme}${state.step === "selection" ? " booking-map-page" : ""}`}
+    >
       <header className="booking-header">
         <Link href={home} aria-label="Boletera, inicio">
           <Brand />
         </Link>
-        <Link href={home}>
-          <ArrowLeft size={16} /> Volver a eventos
+        <Link href={`${home}/eventos/${event.id}`}>
+          <ArrowLeft size={16} /> Detalle del evento
         </Link>
         <span>DEMOSTRACIÓN · SIN COBROS REALES</span>
       </header>
+      {expiresAt !== null && (
+        <ReservationClock
+          remainingSeconds={Math.max(0, Math.ceil((expiresAt - now) / 1000))}
+        />
+      )}
       <main className="booking-main">
         <nav className="booking-steps" aria-label="Pasos de compra">
-          {["Elige tus lugares", "Datos y pago", "Tus boletos"].map(
+          {["Elige tus lugares", "Identificación y pago", "Tus boletos"].map(
             (label, index) => (
               <span
                 key={label}
@@ -144,112 +138,25 @@ export function BookingFlow({
                 ? "Completa tu experiencia."
                 : state.step === "failed" || state.step === "expired"
                   ? "Vamos a intentarlo de nuevo."
-                  : event.title}
+                  : "Elige tus lugares"}
         </h1>
         {state.step === "selection" && (
           <>
-            <div className="booking-intro">
-              <div>
-                <p className="eyebrow">
-                  {formatEventDate(event.startsAt)} ·{" "}
-                  {formatEventTime(event.startsAt)} H
-                </p>
-                <p>
-                  {event.venue} · {event.city}
-                </p>
-                <p>{event.description}</p>
-                <ul>
-                  {event.includes.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="booking-photo">
-                <Image
-                  src={event.image}
-                  alt={event.imageAlt}
-                  loading="eager"
-                  fill
-                  sizes="(max-width: 700px) 100vw, 30vw"
-                />
-              </div>
-            </div>
-            <nav className="event-detail-nav" aria-label="Explorar el evento">
-              <a href="#lugares">Elegir lugares</a>
-              <a href="#la-experiencia">Galería y programa</a>
-              <a href="#ubicacion">Ubicación</a>
-            </nav>
-            <div className="booking-select-layout" id="lugares">
-              <section className="seat-panel venue-launcher">
-                <VenueSelector
-                  venue={venue}
-                  selectedIds={state.selectedIds}
-                  onToggle={(seatId) => dispatch({ type: "toggle", seatId })}
-                  onContinue={reserve}
-                  notice={state.notice}
-                />
-              </section>
-              <aside className="selection-summary checkout-panel">
-                <p className="eyebrow">TU SELECCIÓN</p>
-                <h2>
-                  {selectedSeats.length}{" "}
-                  {selectedSeats.length === 1 ? "lugar" : "lugares"}
-                </h2>
-                {selectedSeats.length ? (
-                  <ul>
-                    {selectedSeats.map((seat) => (
-                      <li key={seat.id}>
-                        <span>{seat.label}</span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            dispatch({ type: "toggle", seatId: seat.id })
-                          }
-                          aria-label={`Quitar ${seat.label}`}
-                        >
-                          ×
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>Selecciona uno o varios lugares en el mapa.</p>
-                )}
-                <div className="summary-total">
-                  <span>Total</span>
-                  <strong>
-                    {total} <small>MXN</small>
-                  </strong>
-                </div>
-                <Button
-                  className="demo-button"
-                  disabled={!selectedSeats.length}
-                  onClick={reserve}
-                >
-                  Continuar al checkout <ArrowRight size={16} />
-                </Button>
-                <p className="checkout-note">
-                  Al continuar los apartamos durante 5 minutos en esta sesión de
-                  prueba.
-                </p>
-                {state.notice && (
-                  <p className="booking-alert" role="status">
-                    {state.notice}
-                  </p>
-                )}
-              </aside>
-            </div>
-            <EventDetails event={event} experience={experience} />
+            <p className="purchase-event-name">{event.title}</p>
+            <VenueSelector
+              venue={venue}
+              eventTitle={event.title}
+              selectedIds={state.selectedIds}
+              onToggle={(seatId) => dispatch({ type: "toggle", seatId })}
+              onContinue={reserve}
+              notice={state.notice}
+            />
           </>
         )}
         {state.step === "checkout" && (
           <Checkout
             event={event}
             seats={selectedSeats}
-            remainingSeconds={Math.max(
-              0,
-              Math.ceil((state.expiresAt - now) / 1000),
-            )}
             onBack={() => dispatch({ type: "back" })}
             onExpire={() => dispatch({ type: "expire", now: state.expiresAt })}
             onPay={(buyer, mode, outcome) =>
@@ -283,27 +190,16 @@ export function BookingFlow({
           <section className="booking-confirmation">
             <PaymentSuccess order={state.order} />
             <div className="booking-alert">
-              Simulación: no se realizó ningún cargo ni se envió correo a{" "}
-              {state.order.buyer.email}. Puedes guardar tus boletos de ejemplo
-              con la opción de imprimir / guardar PDF.
+              Compra simulada · Sin cargos ni envíos reales. Boletos sin validez
+              de acceso.
             </div>
-            <div className="issued-tickets" id="tus-boletos">
-              {state.order.tickets.map((ticket) =>
-                direction === "inmersiva" ? (
-                  <StatementTicket
-                    key={ticket.id}
-                    ticket={ticket}
-                    event={event}
-                  />
-                ) : (
-                  <EventTicket key={ticket.id} ticket={ticket} event={event} />
-                ),
-              )}
-            </div>
+            <TicketDesignGallery
+              event={event}
+              order={state.order}
+              venue={venue}
+              direction={direction}
+            />
             <div className="confirmation-actions">
-              <Button className="demo-button" onClick={() => window.print()}>
-                <Printer size={17} /> Imprimir / guardar boletos
-              </Button>
               <Button
                 variant="outline"
                 onClick={() => dispatch({ type: "reset" })}

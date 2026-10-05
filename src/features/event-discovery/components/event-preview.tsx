@@ -3,14 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useId, useRef, type ReactNode } from "react";
-import { ArrowUpRight, CalendarDays, MapPin, X, Check } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  formatEventDate,
-  formatEventTime,
-  formatPrice,
-  type DiscoveryEvent,
-} from "../model";
+import type { DiscoveryEvent } from "../model";
 
 function Modal({
   label,
@@ -111,49 +106,30 @@ export function EventPreview({
   ].includes(parent)
     ? parent
     : "demo-institucional";
-  return (
-    <Modal
-      className={className}
-      label={
-        children ?? (
-          <>
-            Conocer el evento <ArrowUpRight aria-hidden="true" />
-          </>
-        )
-      }
-      title={event.title}
-    >
-      <p className="modal-description">{event.description}</p>
-      <div className="modal-facts">
-        <p>
-          <CalendarDays aria-hidden="true" />
-          {formatEventDate(event.startsAt)} · {formatEventTime(event.startsAt)}{" "}
-          h
-        </p>
-        <p>
-          <MapPin aria-hidden="true" />
-          {event.venue} · {event.city}
-        </p>
-      </div>
-      <ul className="includes-list">
-        {event.includes.map((item) => (
-          <li key={item}>
-            <Check aria-hidden="true" />
-            {item}
-          </li>
-        ))}
-      </ul>
-      <p className="modal-price">
-        Desde <strong>{formatPrice(event.price)}</strong> MXN / persona
-      </p>
-      <Link className="demo-button" href={`/${base}/eventos/${event.id}`}>
-        Elegir lugares y comprar <ArrowUpRight aria-hidden="true" />
-      </Link>
-      <p className="demo-notice">
-        Evento y precio ficticios. Puedes elegir tus lugares, simular el pago y
-        ver tus boletos sin realizar cargos reales.
-      </p>
-    </Modal>
+  const href = `/${base}/eventos/${event.id}`;
+  const label = children ?? (
+    <>
+      Ver evento <ArrowUpRight aria-hidden="true" />
+    </>
+  );
+  return className.includes("stretched-trigger") ? (
+    <>
+      <span
+        aria-hidden="true"
+        className={buttonVariants({ variant: "ghost", className })}
+      >
+        {label}
+      </span>
+      <Link
+        href={href}
+        className="card-hit-button"
+        aria-label={`Ver ${event.title}`}
+      />
+    </>
+  ) : (
+    <Link href={href} className={className}>
+      {label}
+    </Link>
   );
 }
 

@@ -4,6 +4,11 @@ export const demoAccount: Buyer = {
   name: "Alex Hernández",
   email: "alex@example.com",
   phone: "5550001234",
+  contactChannel: "email",
+  verifiedContact: "alex@example.com",
+  audience: "public",
+  registrationNumber: "",
+  militaryAttendees: 0,
 };
 export interface VenueSection {
   id: string;
@@ -18,7 +23,7 @@ export interface DemoVenue {
 }
 // 500 is an illustrative scenario from RF-AFO-002, not a confirmed venue capacity.
 export function createDemoVenue(event: DiscoveryEvent): DemoVenue {
-  const arrangement = event.id === "encuentro-liderazgo" ? "rows" : "tables";
+  const arrangement = event.category !== "Celebraciones" ? "rows" : "tables";
   const sections: VenueSection[] = ["A", "B", "C", "D", "E"].map(
     (id, index) => ({
       id,

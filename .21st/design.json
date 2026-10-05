@@ -340,8 +340,74 @@
     },
     {
       "scope": "Cuatro propuestas / carruseles y selección de lugares",
-      "decision": "Catálogo completo en carruseles manuales. Recinto demo de 500 lugares, cinco secciones de 100, mapa general en diálogo amplio y acceso al detalle de cada sección; 50 mesas de diez o filas para conferencias. Selección persistente entre secciones dentro del flujo.",
+      "decision": "Catálogo completo en carruseles manuales. Recinto demo de 500 lugares, cinco secciones de 100, mapa general en página dedicada y acceso al detalle de cada sección; 50 mesas de diez o filas para eventos sin mesas. Selección persistente entre secciones dentro del flujo.",
       "source": "Petición explícita del usuario; cifra ilustrativa del RF-AFO-002."
+    },
+    {
+      "scope": "Playground / Boleto clásico",
+      "decision": "Boleto vertical y horizontal inspirado en Receipt Tiers: papel marfil, tipografía monoespaciada, sello, borde dentado, QR y talón desprendible reversible.",
+      "source": "Petición explícita del usuario, 2026-10-04"
+    },
+    {
+      "scope": "Cuatro propuestas / recorrido del comprador",
+      "decision": "Inicio visual con cartelera; detalle separado; selección de lugares en ruta compra dedicada, sin modal. Contacto y verificación antes del pago, reserva visible, clasificación de comprador y asistentes, boletos QR y PDF individual/conjunto. Conservar las cuatro identidades visuales.",
+      "source": "Plan de seis puntos aprobado por el usuario, 2026-10-04"
+    },
+    {
+      "scope": "Identificación del comprador en las cuatro demos",
+      "decision": "Adaptar los bloques descargados Sign Up Split Panel y Modern & Stunning Sign In del Playground: tarjeta centrada, FancyButton extraído, contraseña visible, Google simulado con cuenta de ejemplo, login y registro conectados al checkout. Mantener invitado y verificación previa al pago.",
+      "source": "Corrección explícita del usuario, 2026-10-04"
+    },
+    {
+      "scope": "Selector de identificación",
+      "decision": "Tres pestañas equivalentes: Comprar como invitado, Iniciar sesión y Crear cuenta. Solo el panel seleccionado se muestra inmediatamente debajo. Google solo en login y registro. Invitado no se presenta como CTA redundante.",
+      "source": "Corrección explícita del usuario, 2026-10-04"
+    },
+    {
+      "scope": "Pago del checkout",
+      "decision": "Usar Glass Checkout Card de UI TripleD como composición del pago y Credit Card de Kibo UI como tarjeta giratoria. Conservar pago simulado, datos de ejemplo y resumen de compra.",
+      "source": "Selección explícita del usuario, 2026-10-04"
+    },
+    {
+      "scope": "Paletas de la propuesta inmersiva",
+      "decision": "Institucional predeterminada; Ciruela (antes Original) y Granate como alternativas. Selector dentro del menú, persistencia local durante navegación y compra. Sin referencias oficiales visibles.",
+      "source": "Petición explícita del usuario; colores contrastados con guía gráfica pública, 2026-10-04"
+    },
+    {
+      "scope": "Fotografía de la demo",
+      "decision": "Humanizar la experiencia con fotografía de asistentes: imagen de Jessica Ross seleccionada por el usuario en portada inmersiva y cena-baile. Priorizar invitados en el encuadre, conservar poco texto y el acceso a eventos.",
+      "source": "Petición del usuario, 2026-10-04"
+    },
+    {
+      "scope": "Navegación entre propuestas",
+      "decision": "Sustituir barra flotante por botón circular en esquina inferior derecha que despliega enlaces a las cuatro versiones. Cerrar con Escape, clic fuera o selección.",
+      "source": "Petición explícita del usuario, 2026-10-04"
+    },
+    {
+      "scope": "Catálogo compartido por las cuatro demos",
+      "decision": "Una colección de nueve eventos en orden cronológico, con fotos y encuadres compartidos. Todos los heroes usan Noche de Independencia y su imagen mexicana architecture.jpg; las identidades visuales se conservan. La fotografía de invitados sigue en Cena-baile de primavera.",
+      "source": "Petición explícita del usuario, 2026-10-04"
+    },
+    {
+      "scope": "Headers de las cuatro propuestas",
+      "decision": "Menús persistentes que se compactan después de 70px de scroll y recuperan su tamaño al volver arriba. Mantener espacio original para evitar saltos y anclas visibles. Institucional sobria, Gala redondeada oscura, Editorial recta con acento; Inmersiva conserva menú flotante.",
+      "source": "Petición explícita del usuario, 2026-10-04"
+    },
+    {
+      "date": "2026-10-04",
+      "decision": "El selector de lugares se amplía a toda la ventana mediante un diálogo nativo manteniendo montados el mapa, la cámara y la selección. Restablecer zoom usa un icono independiente. Uniforme MÉXICO como portada compartida de reconocimientos; saludo con boina en galería de Día del Ejército; composición blanca en galería de reconocimientos. Se conservan las fotografías anteriores."
+    },
+    {
+      "date": "2026-10-04",
+      "decision": "Selector de cinco apariencias de boleto en las cuatro confirmaciones: institucional, gala, editorial, inmersivo y clásico. Clásico ofrece vertical/horizontal. Datos y QR se conservan; el selector compara vistas y el PDF mantiene explícitamente su formato de impresión."
+    },
+    {
+      "date": "2026-10-04",
+      "decision": "Selección de lugares en las cuatro demos ocupa el viewport sin scroll de página: encabezado compacto, mapa sin márgenes exteriores y resumen con scroll independiente y total al pie lateral. En móvil, resumen alternable y total persistente inferior."
+    },
+    {
+      "date": "2026-10-04",
+      "decision": "El PDF de confirmación captura el diseño seleccionado a resolución triple, con tipografías incrustadas en la captura, un boleto completo por página A4 y orientación según su proporción. Previsualización y descargas comparten generador. No incluye controles de desprendimiento del clásico."
     }
   ],
   "evidence": [

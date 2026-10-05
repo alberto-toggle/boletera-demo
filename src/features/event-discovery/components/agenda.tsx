@@ -40,6 +40,7 @@ export function Agenda({
           {(["Todos", ...eventCategories] as const).map((item) => (
             <button
               key={item}
+              id={`tipo-${item.toLowerCase()}`}
               type="button"
               aria-pressed={category === item}
               onClick={() => setCategory(item)}

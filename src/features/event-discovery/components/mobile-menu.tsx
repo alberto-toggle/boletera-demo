@@ -46,8 +46,8 @@ export function MobileMenu() {
         <a href="#agenda" onClick={closeMenu}>
           Agenda de eventos
         </a>
-        <a href="#experiencia" onClick={closeMenu}>
-          La experiencia
+        <a href="#eventos-anteriores" onClick={closeMenu}>
+          Eventos anteriores
         </a>
         <a href="#ayuda" onClick={closeMenu}>
           Ayuda

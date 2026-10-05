@@ -199,3 +199,90 @@ test("venue contains 500 unique seats across five priced sections for both arran
     }
   }
 });
+
+test("contact must be verified before payment and changing it invalidates verification", () => {
+  for (const buyer of [
+    { ...demoAccount, verifiedContact: "" },
+    { ...demoAccount, email: "changed@example.com" },
+    {
+      ...demoAccount,
+      contactChannel: "phone",
+      phone: "123",
+      verifiedContact: "123",
+    },
+  ])
+    assert.equal(move(pending(), { ...pay, buyer }).step, "checkout");
+  const buyer = {
+    ...demoAccount,
+    email: "",
+    contactChannel: "phone",
+    verifiedContact: demoAccount.phone,
+  };
+  assert.equal(move(pending(), { ...pay, buyer }).step, "confirmed");
+});
+
+test("military buyer accepts arbitrary nonempty registration; attendance counts stay in range", () => {
+  for (const buyer of [
+    { ...demoAccount, audience: "military", registrationNumber: " " },
+    { ...demoAccount, militaryAttendees: 3 },
+    { ...demoAccount, militaryAttendees: -1 },
+    { ...demoAccount, militaryAttendees: 1.5 },
+  ])
+    assert.equal(move(pending(), { ...pay, buyer }).step, "checkout");
+  const buyer = {
+    ...demoAccount,
+    audience: "military",
+    registrationNumber: "cualquier cosa",
+    militaryAttendees: 1,
+  };
+  const state = move(pending(), { ...pay, buyer, mode: "register" });
+  assert.equal(state.step, "confirmed");
+  assert.equal(state.order.mode, "register");
+  assert.equal(state.order.buyer.militaryAttendees, 1);
+});
+
+const { layoutVenue, focusBox, constrainCamera } = await loadModule(
+  "../src/features/booking/venue-layout.ts",
+);
+test("one venue geometry preserves all seat identities and keeps rows and tables within their sections", () => {
+  for (const category of ["Celebraciones", "Conferencias"]) {
+    const venue = createDemoVenue({ ...featuredEvent, category });
+    const layout = layoutVenue(venue);
+    const seats = layout.flatMap((s) => s.groups.flatMap((g) => g.seats));
+    assert.equal(seats.length, venue.seats.length);
+    assert.equal(new Set(seats.map((s) => s.id)).size, seats.length);
+    for (const section of layout) {
+      const { box } = section;
+      for (const group of section.groups) {
+        for (const seat of group.seats) {
+          assert(seat.x - 7 > box.x && seat.x + 7 < box.x + box.width);
+          assert(seat.y - 7 > box.y && seat.y + 7 < box.y + box.height);
+          assert.equal(seat.sectionId, section.id);
+          if (venue.arrangement === "rows") assert.equal(seat.y, group.y);
+          else
+            assert(
+              Math.abs(Math.hypot(seat.x - group.x, seat.y - group.y) - 23) <
+                0.001,
+            );
+        }
+      }
+      const focus = focusBox(box);
+      assert(focus.x <= box.x && focus.y <= box.y);
+      assert(focus.x + focus.width >= box.x + box.width);
+      assert(focus.y + focus.height >= box.y + box.height);
+    }
+  }
+});
+test("venue camera limits prevent zooming away from the venue", () => {
+  for (const size of [1, 140, 500, 1060, 5000]) {
+    const camera = constrainCamera({
+      x: -99999,
+      y: 99999,
+      width: size,
+      height: size,
+    });
+    assert(camera.width >= 140 && camera.width <= 1060);
+    assert.equal(camera.height, camera.width);
+    assert(camera.x >= -100 && camera.y + camera.height <= 1100);
+  }
+});

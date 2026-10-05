@@ -171,3 +171,11 @@ posición del carrusel. No hay autoplay.
 Carruseles verificados en las cuatro propuestas: nueve eventos alcanzables,
 apertura del último evento, flechas y ausencia de desbordamiento de página a
 320 px. Las listas secundarias y el archivo de eventos anteriores se conservan.
+
+## Catálogo único entre propuestas
+
+Las cuatro agendas consumen `demoEvents` en el mismo orden cronológico de
+`fixtures.ts`. Los cuatro heroes y el menú destacado usan la imagen, texto
+alternativo y evento de `featuredEvent`, también incluido en esa colección.
+No asignar imágenes alternativas a los heroes por propuesta. La presentación
+y el encuadre responsive pueden variar; el evento y su fotografía son los mismos.

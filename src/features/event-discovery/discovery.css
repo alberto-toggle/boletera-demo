@@ -2843,3 +2843,86 @@ html:has(.discovery .event-modal[open]) {
     padding-top: 12px;
   }
 }
+
+/* Compact demo navigation, shared by the four visual proposals. */
+.discovery .proposal-widget {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 80;
+  color: var(--ink);
+  font-family: var(--font-geist-sans), sans-serif;
+}
+.proposal-widget-trigger {
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 18px #0002;
+  cursor: pointer;
+}
+.proposal-widget-panel {
+  position: absolute;
+  right: 0;
+  bottom: 62px;
+  width: min(260px, calc(100vw - 40px));
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px #0003;
+}
+.proposal-widget-panel p { margin: 4px 10px 10px; color: var(--subtle); font-size: 11px; }
+.proposal-widget-panel a { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px; border-radius: 8px; font-size: 13px; }
+.proposal-widget-panel a:hover { background: var(--muted); }
+.proposal-widget-panel a[aria-current="page"] { background: var(--ink); color: var(--paper); }
+.proposal-widget-panel a svg { margin-left: auto; }
+.proposal-widget-number { opacity: .65; font-size: 10px; }
+.proposal-widget-panel .proposal-widget-all { margin-top: 8px; border-top: 1px solid var(--line); border-radius: 0; font-size: 11px; }
+.proposal-widget :focus-visible { outline: 2px solid var(--accent-tone); outline-offset: 3px; }
+
+/* Each proposal keeps its own header; only its compact positioning is shared. */
+.discovery [id] { scroll-margin-top: 100px; }
+.sticky-header-frame.is-compact {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: 5%;
+  right: 5%;
+  z-index: 40;
+  max-width: 1280px;
+  margin-inline: auto;
+  transform-origin: top center;
+  animation: compact-header-enter .48s cubic-bezier(.22, 1, .36, 1) both;
+}
+.discovery .sticky-header-frame.is-compact .discovery-header {
+  min-height: 64px;
+  padding: 10px 22px;
+  margin: 0;
+  max-width: none;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 24px #00000014;
+}
+.discovery .sticky-header-frame.is-compact .circle-brand { font-size: 26px; }
+.discovery .sticky-header-frame.is-compact .circle-brand > svg { width: 27px; height: 27px; }
+.discovery .sticky-header-frame.is-compact .header-cta { padding-block: 10px; min-height: 40px; }
+.institutional .sticky-header-frame.is-compact .discovery-header { border-radius: 10px; }
+.gala .sticky-header-frame.is-compact .discovery-header { border-radius: 22px; border-color: var(--accent-tone); }
+.gala-opening:has(.sticky-header-frame.is-compact) { z-index: 40; }
+.editorial .sticky-header-frame.is-compact .discovery-header { border-radius: 0; border-bottom: 3px solid var(--accent-tone); }
+@keyframes compact-header-enter {
+  from { opacity: 0; transform: translateY(calc(-100% - 16px)) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (max-width: 700px) {
+  .sticky-header-frame.is-compact { left: 12px; right: 12px; top: max(10px, env(safe-area-inset-top)); }
+  .discovery .sticky-header-frame.is-compact .discovery-header { min-height: 60px; padding: 8px 14px; gap: 12px; }
+  .discovery .sticky-header-frame.is-compact .circle-brand { font-size: 23px; }
+  .discovery .sticky-header-frame.is-compact .header-end { gap: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .sticky-header-frame.is-compact { animation: none; } }

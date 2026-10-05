@@ -1,0 +1,20 @@
+.root button,
+.root label,
+.root input[type="checkbox"] {
+  cursor: pointer;
+}
+.root button:disabled {
+  cursor: wait;
+}
+.root button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -123,6 +123,29 @@ export function getEventExperience(event: DiscoveryEvent): EventExperience {
     ...profiles[event.category],
     photos: [
       { src: event.image, alt: event.imageAlt, caption: event.title },
+      ...(event.id === "dia-ejercito"
+        ? [
+            {
+              src: "/images/events/saludo-bandera.jpg",
+              alt: "Militar con boina verde saludando de espaldas ante la bandera mexicana",
+              caption: "Honor y compromiso",
+            },
+            {
+              src: "/images/events/soldier-community.jpg",
+              alt: "Soldado junto a vehículos del Ejército Mexicano frente a un edificio histórico",
+              caption: "Una mirada al Ejército Mexicano",
+            },
+          ]
+        : []),
+      ...(event.id === "reconocimientos"
+        ? [
+            {
+              src: "/images/events/honor-bandera.jpg",
+              alt: "Composición de una silueta militar saludando y la bandera mexicana sobre fondo blanco",
+              caption: "Una vida dedicada al servicio",
+            },
+          ]
+        : []),
       ...photos.filter((photo) => photo.src !== event.image),
     ],
   };

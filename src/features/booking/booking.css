@@ -1476,3 +1476,1335 @@ html:has(.venue-dialog[open]) {
   border-left: 3px solid var(--accent-tone);
   background: var(--muted);
 }
+/* Progressive purchase journey, shared across the four visual directions. */
+.event-detail-main {
+  max-width: 1440px;
+}
+.event-detail-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(24px, 5vw, 70px);
+  align-items: center;
+}
+.event-detail-image {
+  position: relative;
+  min-height: 480px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.event-detail-image img {
+  object-fit: cover;
+}
+.event-detail-copy h1 {
+  font-size: clamp(36px, 4vw, 60px);
+  line-height: 1.05;
+  margin: 18px 0;
+}
+.event-detail-copy > p:not(.eyebrow) {
+  color: var(--subtle);
+  margin: 18px 0;
+}
+.event-detail-copy strong {
+  color: var(--ink);
+}
+.event-detail-facts {
+  display: grid;
+  gap: 14px;
+  margin: 25px 0;
+  font-size: 14px;
+}
+.event-detail-facts p,
+.event-detail-facts a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.event-detail-facts svg {
+  flex-shrink: 0;
+}
+.event-extra {
+  border-block-end: 1px solid var(--line);
+  padding: 20px 0;
+}
+.event-extra summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 8px 0;
+}
+.event-extra p,
+.event-extra ul {
+  color: var(--subtle);
+  font-size: 14px;
+  padding: 12px 0;
+}
+.event-extra ul {
+  padding-left: 20px;
+}
+.event-details > section > h2 {
+  font-size: 32px;
+  margin-bottom: 24px;
+}
+.purchase-page .booking-main {
+  max-width: 1600px;
+  padding: 24px 3% 50px;
+}
+.purchase-page .booking-title {
+  font-size: clamp(28px, 3vw, 42px);
+  margin-bottom: 8px;
+}
+.purchase-event-name {
+  color: var(--subtle);
+  margin-bottom: 24px;
+}
+.purchase-page .booking-steps {
+  padding-bottom: 20px;
+}
+.venue-workspace {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: clip;
+  background: var(--paper);
+}
+.venue-workspace .venue-dialog-body {
+  overflow: visible;
+}
+.venue-workspace .venue-dialog-header {
+  padding: 16px 24px;
+}
+.venue-workspace .venue-dialog-header .eyebrow {
+  display: none;
+}
+.venue-workspace .venue-dialog-header h2 {
+  font-size: 24px;
+  margin: 0;
+}
+.venue-workspace .venue-selection {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+}
+.venue-workspace .venue-dialog-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  box-shadow: 0 -8px 24px #00000008;
+}
+.reservation-banner {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 5%;
+  color: var(--paper);
+  background: var(--ink);
+  border-bottom: 3px solid var(--accent-tone);
+}
+.reservation-banner > div {
+  flex: 1;
+}
+.reservation-banner strong {
+  display: block;
+  font-size: 14px;
+}
+.reservation-banner span:not(.sr-only) {
+  display: block;
+  font-size: 12px;
+  opacity: 0.8;
+}
+.reservation-banner time {
+  font-size: 32px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+.reservation-urgent {
+  border-bottom-color: #df6d50;
+}
+.checkout-progress {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--subtle);
+}
+.checkout-progress span {
+  flex: 1;
+  padding: 10px 0;
+  border-bottom: 2px solid var(--line);
+}
+.checkout-progress [aria-current] {
+  color: var(--ink);
+  border-color: var(--ink);
+  font-weight: 600;
+}
+.checkout-section h2:focus {
+  outline: none;
+}
+.verified-contact {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--subtle);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.audience-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.audience-options legend,
+.attendee-count legend {
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.audience-options label {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  gap: 12px;
+  cursor: pointer;
+}
+.audience-options label:has(input:checked) {
+  border-color: var(--ink);
+  background: var(--muted);
+}
+.attendee-count {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.attendee-count input {
+  max-width: 130px;
+}
+.buyer-fields small,
+.verification-step small {
+  color: var(--subtle);
+  font-size: 12px;
+}
+.verification-step {
+  display: grid;
+  gap: 16px;
+}
+.verification-step h3 {
+  font-size: 26px;
+}
+.verification-step .verification-code {
+  font-size: 28px;
+  letter-spacing: 0.3em;
+  height: 60px;
+  max-width: 300px;
+}
+.purchase-terms {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 22px 0;
+}
+.purchase-terms input {
+  margin-top: 4px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.purchase-page .order-summary {
+  top: 110px;
+}
+.ticket-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.ticket-downloads details {
+  width: 100%;
+}
+.ticket-downloads summary {
+  cursor: pointer;
+  padding: 14px 0;
+}
+.ticket-downloads li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.booking button:not(:disabled),
+.booking summary,
+.booking a {
+  cursor: pointer;
+}
+.identity-form,
+.verification-step,
+.venue-section-detail {
+  animation: payment-reveal 0.3s ease-out;
+}
+@media (max-width: 900px) {
+  .venue-workspace .venue-selection {
+    position: static;
+  }
+  .booking-checkout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .purchase-page .order-summary {
+    position: static;
+  }
+}
+@media (max-width: 700px) {
+  .event-detail-hero {
+    grid-template-columns: 1fr;
+  }
+  .event-detail-image {
+    min-height: 260px;
+  }
+  .event-detail-copy .demo-button {
+    width: 100%;
+  }
+  .purchase-page .booking-steps {
+    gap: 12px;
+  }
+  .purchase-page .booking-steps span {
+    font-size: 10px;
+    gap: 5px;
+  }
+  .purchase-page .booking-steps b {
+    flex-shrink: 0;
+    width: 23px;
+    height: 23px;
+  }
+  .booking-header {
+    padding: 18px 4%;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .booking-header > span {
+    flex-basis: 100%;
+  }
+  .reservation-banner {
+    padding: 12px 4%;
+    gap: 10px;
+  }
+  .reservation-banner strong {
+    font-size: 12px;
+  }
+  .reservation-banner span:not(.sr-only) {
+    font-size: 10px;
+  }
+  .reservation-banner time {
+    font-size: 26px;
+  }
+  .checkout-section {
+    padding: 20px;
+  }
+  .checkout-section h2 {
+    font-size: 28px;
+  }
+  .audience-options {
+    grid-template-columns: 1fr;
+  }
+  .venue-workspace .venue-dialog-footer {
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+  }
+  .venue-workspace .venue-dialog-footer .demo-button {
+    flex: 1;
+  }
+  .ticket-downloads > button {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .identity-form,
+  .verification-step,
+  .venue-section-detail {
+    animation: none;
+  }
+}
+@media print {
+  .ticket-downloads,
+  .reservation-banner {
+    display: none !important;
+  }
+}
+
+/* Auth card adapted from diarmuradi/sign-up-1 and preetsuthar17/modern-stunning-sign-in. */
+.booking .auth-card {
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --foreground: var(--ink);
+  --background: var(--paper);
+  max-width: 440px;
+  margin: 26px auto 8px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--paper);
+  box-shadow: 0 12px 36px color-mix(in srgb, var(--ink) 7%, transparent);
+}
+.auth-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 18px;
+  border-radius: 15px;
+  color: var(--paper);
+  background: var(--ink);
+  box-shadow: inset 0 1px 1px color-mix(in srgb, var(--paper) 30%, transparent);
+}
+.auth-heading {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.booking .auth-heading h3 {
+  font-size: clamp(24px, 2vw, 30px);
+  line-height: 1.15;
+  margin: 0 0 10px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+.auth-heading h3:focus {
+  outline: none;
+}
+.auth-heading p,
+.auth-demo-note {
+  color: var(--subtle);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.booking .auth-google-button {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  gap: 12px;
+}
+.auth-google-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.auth-demo-note {
+  text-align: center;
+  margin: 9px 0 18px;
+  font-size: 10px;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--subtle);
+  font-size: 11px;
+  margin: 20px 0;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.auth-card .buyer-fields {
+  gap: 16px;
+}
+.auth-card .buyer-fields input {
+  border-radius: 10px;
+  min-width: 0;
+}
+.auth-card .payment-scenario {
+  padding: 10px 12px;
+  font-size: 11px;
+  border-radius: 10px;
+}
+.auth-password {
+  position: relative;
+}
+.auth-password input {
+  padding-right: 48px;
+  width: 100%;
+}
+.auth-password button {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 38px;
+  height: 38px;
+  color: var(--subtle);
+}
+.booking .auth-submit {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
+  gap: 10px;
+}
+.auth-submit:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+.auth-switch {
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+  padding-top: 14px;
+  text-align: center;
+}
+.auth-switch p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--subtle);
+}
+.auth-switch button {
+  padding: 4px 6px;
+  height: auto;
+  min-height: 36px;
+  font-size: 12px;
+  color: var(--ink);
+}
+.auth-google-choice {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+.booking .auth-account-choice {
+  display: flex;
+  white-space: normal;
+  text-align: left;
+  width: 100%;
+  height: auto;
+  padding: 16px 12px;
+  gap: 10px;
+  border-radius: 12px;
+}
+.auth-account-choice span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.auth-account-choice strong,
+.auth-account-choice small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.auth-account-choice small {
+  font-size: 11px;
+  color: var(--subtle);
+}
+.auth-avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .booking .auth-card {
+    padding: 22px 16px;
+    margin-top: 20px;
+  }
+}
+.booking .auth-heading h3 {
+  text-align: center;
+  scroll-margin-top: 120px;
+}
+
+/* One mode selector directly controls the adjacent identification panel. */
+.auth-mode-tabs {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+  gap: 4px;
+}
+.booking .auth-mode-tabs button {
+  min-height: 56px;
+  padding: 10px 6px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--subtle);
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+}
+.booking .auth-mode-tabs button[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+  font-weight: 600;
+}
+.auth-card [role="tabpanel"] > .buyer-fields {
+  margin-top: 0;
+}
+
+/* UI TripleD glass composition with the Kibo front/back credit card. */
+.booking .payment-glass {
+  gap: 0;
+  max-width: 540px;
+  margin: 24px auto;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--paper) 85%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 16px 44px color-mix(in srgb, var(--ink) 8%, transparent);
+}
+.payment-glass-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.booking .payment-glass-heading h3 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+.payment-glass-heading p,
+.payment-flip-hint {
+  font-size: 11px;
+  color: var(--subtle);
+  line-height: 1.5;
+}
+.payment-card-preview {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  margin-block: 28px 32px;
+}
+.booking .payment-card-face {
+  background: linear-gradient(135deg, #334155, #0f172a);
+  color: #fff;
+}
+.payment-card-signature {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  color: #0f172a;
+  border-radius: 4px;
+}
+.payment-card-signature span {
+  font-size: 12px;
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.payment-card-fields {
+  margin-top: 24px;
+  display: grid;
+  gap: 16px;
+}
+.payment-card-fields label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+.payment-field-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.payment-card-fields input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--paper) 50%, transparent);
+}
+.payment-icon-input {
+  position: relative;
+}
+.payment-icon-input svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--subtle);
+  pointer-events: none;
+}
+.payment-icon-input input {
+  padding-left: 36px;
+}
+.payment-glass-actions .booking-pay {
+  width: 100%;
+  border-radius: 12px;
+}
+@media (max-width: 700px) {
+  .booking .payment-glass {
+    padding: 18px 14px;
+  }
+  .payment-field-pair {
+    gap: 10px;
+  }
+  .payment-flip-hint {
+    text-align: center;
+  }
+}
+
+.ticket-pdf-preview {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(1100px, 96vw);
+  height: 90dvh;
+  max-height: 90dvh;
+  max-width: 96vw;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.ticket-pdf-preview[open] {
+  display: flex;
+  flex-direction: column;
+}
+.ticket-pdf-preview::backdrop {
+  background: #0009;
+}
+.ticket-pdf-preview header,
+.ticket-pdf-preview footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  flex-shrink: 0;
+}
+.booking .ticket-pdf-preview h2 {
+  font-size: 22px;
+  margin: 0;
+}
+.ticket-pdf-preview header p {
+  font-size: 11px;
+  color: var(--subtle);
+  overflow-wrap: anywhere;
+}
+.ticket-pdf-preview iframe {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: #525659;
+}
+.ticket-pdf-preview footer {
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.ticket-pdf-preview footer > a {
+  text-decoration: underline;
+}
+.ticket-pdf-preview .pdf-preview-download {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+/* Continuous venue camera: every scale uses the same seat coordinates. */
+.continuous-venue .venue-map-toolbar {
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.continuous-venue .venue-map-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.continuous-venue select {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 42px;
+  padding: 8px;
+  max-width: 235px;
+}
+.venue-map-canvas {
+  position: relative;
+  background: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.venue-world {
+  display: block;
+  width: 100%;
+  height: clamp(360px, calc(100svh - 440px), 700px);
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+.venue-world:active {
+  cursor: grabbing;
+}
+.venue-shell {
+  fill: var(--paper);
+  stroke: var(--line);
+  stroke-width: 2;
+}
+.map-stage {
+  fill: var(--ink);
+}
+.map-stage-label {
+  fill: var(--paper);
+  font-size: 18px;
+  font-weight: 700;
+}
+.map-aisle {
+  fill: var(--subtle);
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+.map-section-ground {
+  fill: var(--muted);
+  stroke: var(--line);
+}
+.map-section-label {
+  fill: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+.map-group-label {
+  fill: var(--subtle);
+  font-size: 8px;
+  pointer-events: none;
+}
+.map-table {
+  fill: var(--paper);
+  stroke: var(--line);
+}
+.map-seat {
+  fill: var(--accent-tone);
+  cursor: pointer;
+  outline: none;
+}
+.map-seat.chosen {
+  fill: var(--ink);
+}
+.map-seat.occupied {
+  fill: var(--line);
+  cursor: default;
+}
+.map-seat text {
+  fill: var(--paper);
+  font-size: 7px;
+  pointer-events: none;
+  font-weight: 700;
+}
+.map-seat-hit {
+  fill: transparent;
+}
+.map-seat:not(.occupied):hover > circle:not(.map-seat-hit),
+.map-seat:focus > circle:not(.map-seat-hit) {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.map-section-target {
+  fill: transparent;
+  cursor: zoom-in;
+}
+.map-section-target:hover,
+.map-section-target:focus {
+  stroke: var(--accent-tone);
+  stroke-width: 3;
+  outline: none;
+}
+.venue-camera-controls {
+  position: absolute;
+  right: 12px;
+  bottom: 45px;
+  display: grid;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 3px 12px #0001;
+  overflow: hidden;
+}
+.venue-camera-controls button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--ink);
+}
+.venue-camera-controls button + button {
+  border-top: 1px solid var(--line);
+}
+.venue-camera-controls button:disabled {
+  opacity: 0.35;
+}
+.venue-camera-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  padding: 5px 9px;
+  background: var(--paper);
+  color: var(--subtle);
+  border-radius: 6px;
+  font-size: 11px;
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  .venue-world {
+    height: 460px;
+  }
+  .continuous-venue .venue-map-toolbar > span {
+    display: none;
+  }
+}
+.venue-selection .seat-legend i:not(.selected):not(.occupied) {
+  background: var(--accent-tone);
+  border-color: var(--accent-tone);
+}
+
+.map-section-price {
+  fill: var(--subtle);
+  font-size: 10px;
+  pointer-events: none;
+}
+
+/* Keep the same map mounted when expanding so camera and selection survive. */
+.discovery .venue-workspace-shell {
+  position: static;
+  display: block;
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+.venue-expand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+html:has(.venue-workspace-shell.is-fullscreen) {
+  overflow: hidden;
+}
+.discovery .venue-workspace-shell.is-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: auto;
+}
+.venue-workspace-shell.is-fullscreen .venue-workspace {
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+}
+.venue-workspace-shell.is-fullscreen .venue-world {
+  height: calc(100dvh - 250px);
+  min-height: 350px;
+}
+.venue-workspace-shell.is-fullscreen .venue-dialog-header {
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  background: var(--paper);
+}
+.venue-workspace-shell.is-fullscreen .venue-selection {
+  position: static;
+}
+.venue-workspace-shell.is-fullscreen .venue-dialog-footer {
+  padding-bottom: max(18px, env(safe-area-inset-bottom));
+}
+@media (max-width: 700px) {
+  .venue-workspace .venue-dialog-header {
+    gap: 10px;
+    padding: 12px;
+  }
+  .venue-workspace .venue-dialog-header h2 {
+    font-size: 20px;
+  }
+  .venue-expand {
+    max-width: 170px;
+    text-align: left;
+  }
+  .venue-expand svg {
+    flex-shrink: 0;
+  }
+  .venue-workspace-shell.is-fullscreen .venue-world {
+    height: calc(100dvh - 280px);
+  }
+}
+
+.ticket-design-gallery {
+  margin-top: 32px;
+}
+.ticket-design-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  margin: 16px 0;
+}
+.ticket-design-options legend {
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.ticket-design-options label {
+  position: relative;
+  cursor: pointer;
+}
+.ticket-design-options input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+}
+.ticket-design-options span {
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 13px;
+}
+.ticket-design-options input:checked + span {
+  color: var(--paper);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.ticket-design-options input:focus-visible + span {
+  outline: 2px solid var(--accent-tone);
+  outline-offset: 3px;
+}
+.ticket-orientation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+}
+.ticket-orientation select {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.ticket-design-note {
+  font-size: 12px;
+  color: var(--subtle);
+  margin: 12px 0;
+}
+.discovery.booking.ticket-design-preview {
+  min-height: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.ticket-design-preview .issued-tickets {
+  margin: 0 auto;
+}
+.classic-ticket-preview {
+  container-type: inline-size;
+  font-family: var(--font-geist-mono), monospace;
+}
+.classic-ticket-preview[data-orientation="horizontal"] > div {
+  max-width: 960px;
+}
+.ticket-design-preview .statement-ticket {
+  transition: transform 0.25s ease;
+}
+.ticket-design-preview .statement-ticket svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.ticket-design-preview .statement-issued {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  display: block;
+  max-width: 741px;
+  padding: 0;
+  margin: auto;
+}
+.ticket-design-preview .issued-ticket-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 0 0;
+  font-size: 12px;
+  color: var(--ink);
+}
+.ticket-design-preview .ticket-validity {
+  font-size: 10px;
+  text-align: center;
+  padding: 15px;
+}
+@media (max-width: 600px) {
+  .discovery.booking.ticket-design-preview {
+    padding: 10px;
+  }
+}
+@media print {
+  .ticket-design-options,
+  .ticket-orientation,
+  .ticket-design-note {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticket-design-preview * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Seat selection is a viewport workspace, with an independently scrolling basket. */
+.booking-map-page {
+  height: 100dvh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.booking-map-page .booking-header {
+  padding: 10px 20px;
+  min-height: 64px;
+  flex-shrink: 0;
+}
+.booking-map-page .booking-main {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+.booking-map-page .booking-steps,
+.booking-map-page .purchase-event-name,
+.booking-map-page .booking-footer {
+  display: none;
+}
+.booking-map-page .booking-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.booking-map-page .venue-workspace-shell {
+  height: 100%;
+  min-height: 0;
+}
+.booking-map-page .venue-workspace {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.booking-map-page .venue-dialog-header {
+  grid-column: 1 / -1;
+  padding: 10px 20px;
+  position: static;
+}
+.booking-map-page .venue-dialog-header h2 {
+  font-size: 21px;
+}
+.venue-step-label {
+  font-size: 11px;
+  color: var(--subtle);
+  margin: 3px 0 0;
+}
+.booking-map-page .venue-dialog-body {
+  display: contents;
+}
+.booking-map-page .venue-map-panel {
+  grid-column: 1;
+  grid-row: 2 / 4;
+  padding: 0;
+  min-height: 0;
+}
+.booking-map-page .continuous-venue {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.booking-map-page .venue-map-toolbar {
+  padding: 8px 16px;
+  margin: 0;
+  flex-shrink: 0;
+}
+.booking-map-page .venue-map-canvas {
+  flex: 1;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+}
+.booking-map-page .venue-world {
+  height: 100%;
+  min-height: 0;
+}
+.booking-map-page .venue-selection {
+  grid-column: 2;
+  grid-row: 2;
+  position: static;
+  align-self: stretch;
+  min-height: 0;
+  overflow: auto;
+  padding: 18px;
+}
+.booking-map-page .venue-selection h3 {
+  font-size: 24px;
+  margin: 0 0 8px;
+}
+.booking-map-page .venue-selection .seat-legend {
+  margin: 16px 0;
+}
+.booking-map-page .venue-selection ul {
+  max-height: none;
+  overflow: visible;
+}
+.booking-map-page .venue-dialog-footer {
+  grid-column: 2;
+  grid-row: 3;
+  position: static;
+  padding: 16px 18px;
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  box-shadow: none;
+}
+.booking-map-page .venue-dialog-footer .demo-button {
+  width: 100%;
+  justify-content: center;
+  min-height: 46px;
+}
+.venue-summary-toggle {
+  display: none;
+}
+@media (max-width: 760px) {
+  .booking-map-page .booking-header {
+    min-height: 52px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .booking-map-page .booking-header > span {
+    display: none;
+  }
+  .booking-map-page .venue-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .booking-map-page .venue-dialog-header {
+    padding: 8px 12px;
+  }
+  .booking-map-page .venue-dialog-header h2 {
+    font-size: 17px;
+  }
+  .booking-map-page .venue-expand {
+    font-size: 11px;
+    padding: 8px;
+    max-width: 115px;
+  }
+  .booking-map-page .venue-map-panel {
+    grid-row: 2;
+  }
+  .booking-map-page .venue-map-toolbar {
+    padding: 6px 12px;
+  }
+  .booking-map-page .venue-selection {
+    display: none;
+    grid-column: 1;
+    grid-row: 2;
+    z-index: 2;
+  }
+  .booking-map-page .show-selection .venue-selection {
+    display: block;
+  }
+  .booking-map-page .show-selection .venue-map-panel {
+    visibility: hidden;
+  }
+  .booking-map-page .venue-dialog-footer {
+    grid-column: 1;
+    padding: 8px 12px max(8px, env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 12px;
+  }
+  .booking-map-page .venue-summary-toggle {
+    display: block;
+    grid-column: 1 / -1;
+    text-align: left;
+    text-decoration: underline;
+    font-size: 12px;
+    min-height: 32px;
+  }
+  .booking-map-page .venue-dialog-footer .demo-button {
+    font-size: 12px;
+    padding: 10px;
+  }
+  .booking-map-page .venue-dialog-footer strong {
+    font-size: 22px;
+  }
+  .booking-map-page .venue-footer-notice {
+    grid-column: 1 / -1;
+  }
+}
+
+.payment-method-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.payment-method-options button { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 48px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); font-size: 13px; }
+.payment-method-options button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.payment-method-options button:focus-visible { outline: 2px solid var(--accent-tone); outline-offset: 3px; }
+.payment-paypal-wordmark { font-style: italic; font-weight: 700; }
+.payment-wallet-preview { display: grid; justify-items: center; gap: 12px; text-align: center; padding: 32px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--muted); }
+.payment-wallet-preview h4 { font-size: 24px; font-weight: 600; }
+.payment-wallet-preview p { font-size: 14px; }
+.payment-wallet-preview small { font-size: 11px; color: var(--subtle); }
+
+.ticket-design-gallery > .ticket-downloads { margin-top: 24px; }
+.ticket-design-preview.is-exporting *,
+.ticket-design-preview.is-exporting *::before,
+.ticket-design-preview.is-exporting *::after {
+  animation: none !important;
+  transition: none !important;
+}
+.ticket-design-preview.is-exporting [style*="opacity"] { opacity: 1 !important; }
+.ticket-design-preview.is-exporting [style*="transform"],
+.ticket-design-preview.is-exporting .statement-ticket { transform: none !important; }
+.ticket-design-options:disabled { opacity: .65; }
+
+.ticket-design-preview.is-exporting [data-pdf-stub] { transform: none !important; }

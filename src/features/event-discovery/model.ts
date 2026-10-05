@@ -18,6 +18,7 @@ export interface DiscoveryEvent {
   readonly price: { readonly amountMinor: number; readonly currency: "MXN" };
   readonly image: string;
   readonly imageAlt: string;
+  readonly imagePosition?: string;
   readonly description: string;
   readonly includes: readonly string[];
 }

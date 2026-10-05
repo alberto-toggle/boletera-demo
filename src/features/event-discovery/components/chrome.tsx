@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { StickyHeader } from "./sticky-header";
+import { ProposalWidget } from "./proposal-widget";
 import {
   ArrowUpRight,
   Asterisk,
@@ -24,24 +25,26 @@ export function Brand() {
 
 export function Header({ direction }: { direction: DemoDirection }) {
   return (
-    <header className="discovery-header">
-      <a href="#inicio" aria-label="Boletera, inicio">
-        <Brand />
-      </a>
-      <nav className="desktop-nav" aria-label="Navegación principal">
-        <a href="#agenda">Agenda de eventos</a>
-        <a href="#experiencia">La experiencia</a>
-        <a href="#ayuda">Ayuda</a>
-      </nav>
-      <div className="header-end">
-        <AccountPreview />
-        <a href="#agenda" className="header-cta">
-          Explorar eventos <ArrowUpRight size={16} aria-hidden="true" />
+    <StickyHeader>
+      <header className="discovery-header">
+        <a href="#inicio" aria-label="Boletera, inicio">
+          <Brand />
         </a>
-        <MobileMenu />
-      </div>
-      <span className="sr-only">Propuesta {direction}</span>
-    </header>
+        <nav className="desktop-nav" aria-label="Navegación principal">
+          <a href="#agenda">Agenda de eventos</a>
+          <a href="#eventos-anteriores">Eventos anteriores</a>
+          <a href="#ayuda">Ayuda</a>
+        </nav>
+        <div className="header-end">
+          <AccountPreview />
+          <a href="#agenda" className="header-cta">
+            Explorar eventos <ArrowUpRight size={16} aria-hidden="true" />
+          </a>
+          <MobileMenu />
+        </div>
+        <span className="sr-only">Propuesta {direction}</span>
+      </header>
+    </StickyHeader>
   );
 }
 
@@ -113,7 +116,7 @@ export function Help() {
           ],
           [
             "¿Cómo sé qué incluye mi entrada?",
-            "Cada evento tendrá su propia información: fecha, sede, tipo de acceso e inclusiones. Puedes consultar una vista previa al abrir cualquiera de los eventos de esta agenda.",
+            "Cada evento tendrá su propia información: fecha, sede, tipo de acceso e inclusiones. Consulta los detalles al abrir un evento.",
           ],
           [
             "¿Puedo elegir una mesa o un asiento?",
@@ -194,24 +197,5 @@ export const directions: readonly {
 ];
 
 export function ProposalSwitcher({ active }: { active: DemoDirection }) {
-  return (
-    <nav
-      className="proposal-switcher"
-      aria-label="Comparar propuestas de diseño"
-    >
-      <Link href="/" className="switcher-label">
-        Propuestas
-      </Link>
-      {directions.map((direction) => (
-        <Link
-          key={direction.id}
-          href={`/demo-${direction.id}`}
-          aria-current={direction.id === active ? "page" : undefined}
-        >
-          <span>{direction.number}</span>
-          <span className="switcher-name">{direction.label}</span>
-        </Link>
-      ))}
-    </nav>
-  );
+  return <ProposalWidget active={active} options={directions} />;
 }

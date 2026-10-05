@@ -21,6 +21,8 @@ export const featuredEvent: DiscoveryEvent = {
   ],
 };
 
+// Canonical chronological order for all four demos. Heroes use featuredEvent,
+// which is the same object included below, including its image and crop.
 export const demoEvents: readonly DiscoveryEvent[] = [
   {
     ...common,
@@ -30,9 +32,10 @@ export const demoEvents: readonly DiscoveryEvent[] = [
     startsAt: "2027-02-19T13:00:00-06:00",
     venue: "Salón de Honor",
     price: { amountMinor: 65000, currency: "MXN" },
-    image: "/images/events/banquet.jpg",
+    image: "/images/events/dia-ejercito.jpg",
     imageAlt:
-      "Salón de recepción preparado con mesas redondas y lámparas de cristal",
+      "Silueta de un soldado saludando junto a la bandera de México sobre una cima rocosa",
+    imagePosition: "65% 50%",
     description:
       "Un encuentro para reconocer la vocación de servicio y compartir una tarde con quienes forman parte de nuestra comunidad.",
     includes: [
@@ -67,8 +70,9 @@ export const demoEvents: readonly DiscoveryEvent[] = [
     startsAt: "2027-05-22T19:00:00-06:00",
     venue: "Gran Salón Boletera",
     price: { amountMinor: 95000, currency: "MXN" },
-    image: "/images/events/dinner.jpg",
-    imageAlt: "Montaje de una cena de celebración",
+    image: "/images/events/guests-celebration.jpg",
+    imageAlt:
+      "Invitados reunidos alrededor de mesas en un salón de celebración",
     description:
       "Buena música, una cena especial y toda una noche para bailar. Celebremos juntos una nueva temporada.",
     includes: [
@@ -104,8 +108,10 @@ export const demoEvents: readonly DiscoveryEvent[] = [
     startsAt: "2027-11-02T18:00:00-06:00",
     venue: "Patio de Tradiciones",
     price: { amountMinor: 75000, currency: "MXN" },
-    image: "/images/events/architecture.jpg",
-    imageAlt: "Fachada mexicana decorada con papel picado",
+    image: "/images/events/catrina-tradition.jpg",
+    imageAlt:
+      "Mujer caracterizada de catrina junto a una ofrenda iluminada con velas",
+    imagePosition: "68% 50%",
     description:
       "Sabores, historias y música que mantienen vivas nuestras tradiciones. Una celebración para recordar y compartir.",
     includes: ["Cena temática", "Presentación musical", "Recorrido cultural"],
@@ -118,8 +124,10 @@ export const demoEvents: readonly DiscoveryEvent[] = [
     startsAt: "2027-11-20T18:00:00-06:00",
     venue: "Salón de Honor",
     price: { amountMinor: 85000, currency: "MXN" },
-    image: "/images/events/banquet.jpg",
-    imageAlt: "Elegante salón de recepción con iluminación cálida",
+    image: "/images/events/uniforme-mexico.jpg",
+    imageAlt:
+      "Detalle de uniforme ceremonial con bordado MÉXICO y cordón dorado",
+    imagePosition: "50% 45%",
     description:
       "Una ceremonia de reconocimientos dedicada a las personas cuyas historias y compromiso dejan huella en nuestra comunidad.",
     includes: [
@@ -156,11 +164,4 @@ export const demoEvents: readonly DiscoveryEvent[] = [
       "Despidamos el año con una cena especial, baile y el primer brindis de una nueva historia. Lo mejor está por venir.",
     includes: ["Cena de gala", "Brindis de medianoche", "Música y baile"],
   },
-];
-
-export const curatedEvents = [
-  featuredEvent,
-  ...demoEvents.filter((event) =>
-    ["reconocimientos", "posada"].includes(event.id),
-  ),
 ];

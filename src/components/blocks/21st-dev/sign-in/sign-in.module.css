@@ -1,0 +1,85 @@
+.root button,
+.root a {
+  cursor: pointer;
+}
+
+.root :is(button, a, input):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+
+.root :global(.animate-element),
+.root :global(.animate-testimonial) {
+  animation: reveal 700ms both;
+}
+
+.root :global(.animate-slide-right) {
+  animation: slide 900ms both;
+}
+
+.root :global(.animate-delay-100) {
+  animation-delay: 100ms;
+}
+.root :global(.animate-delay-200) {
+  animation-delay: 200ms;
+}
+.root :global(.animate-delay-300) {
+  animation-delay: 300ms;
+}
+.root :global(.animate-delay-400) {
+  animation-delay: 400ms;
+}
+.root :global(.animate-delay-500) {
+  animation-delay: 500ms;
+}
+.root :global(.animate-delay-600) {
+  animation-delay: 600ms;
+}
+.root :global(.animate-delay-700) {
+  animation-delay: 700ms;
+}
+.root :global(.animate-delay-800) {
+  animation-delay: 800ms;
+}
+.root :global(.animate-delay-900) {
+  animation-delay: 900ms;
+}
+.root :global(.animate-delay-1000) {
+  animation-delay: 1000ms;
+}
+.root :global(.animate-delay-1200) {
+  animation-delay: 1200ms;
+}
+.root :global(.animate-delay-1400) {
+  animation-delay: 1400ms;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slide {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

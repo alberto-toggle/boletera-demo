@@ -35,3 +35,11 @@ oculta contenido a la espera de JavaScript. El boleto no acredita acceso real.
 - PDF del boleto generado e inspeccionado visualmente.
 - Revisión CLI 21st sin errores ni advertencias; las sugerencias de colores
   literales corresponden a la dirección visual y al arte SVG del boleto.
+
+## Paletas comparables
+
+Selector dentro del menú desplegable, limitado a `/demo-inmersiva` y sus rutas de detalle/compra. Original conserva lavanda y tinta violeta. Institucional reutiliza papel, tinta, contraste, líneas y acentos de la primera propuesta, además de su escala tipográfica del hero. Granate usa guinda, dorado y verde profundo; nombre neutral visible, sin marcas oficiales.
+
+Fuente cromática verificada: https://www.gob.mx/guias/grafica/index.html (guinda #611232, #9d2449, oro #a57f2c, arena #DDC9A3, verde #13322e, blanco). Las URLs de inicio/defensa/curp bloquearon la consulta directa. Se usó la guía pública para evitar inventar valores. Los neutros adicionales se adaptan para contraste y no representan una réplica oficial.
+
+Variables semánticas en immersive.css controlan navegación, hero, botones y estados, heredadas por el flujo de compra. La selección se guarda localmente, se sincroniza entre pestañas y no reinicia la reserva. Colores propios de fotografías, QR, marcas de pago y boleto físico se conservan. No hay transmisión de preferencias.

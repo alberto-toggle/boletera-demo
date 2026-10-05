@@ -1,17 +1,10 @@
 import { PastEvents } from "@/features/event-experience/components/past-events";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
-import {
-  Header,
-  Footer,
-  Experience,
-  Help,
-  ProposalSwitcher,
-} from "../components/chrome";
+import { Header, Footer, Help, ProposalSwitcher } from "../components/chrome";
 import { Agenda } from "../components/agenda";
 import { EventPreview } from "../components/event-preview";
 import { demoEvents, featuredEvent } from "../fixtures";
-import { formatPrice } from "../model";
 
 export function InstitutionalHome() {
   return (
@@ -45,22 +38,13 @@ export function InstitutionalHome() {
             <a href="#agenda" className="demo-button">
               Descubrir la agenda <ArrowUpRight size={18} aria-hidden="true" />
             </a>
-            <div className="hero-footnote">
-              <span className="ornament" aria-hidden="true">
-                ✳
-              </span>
-              <p>
-                Nueve ocasiones.
-                <br />
-                <strong>Un año de historias compartidas.</strong>
-              </p>
-            </div>
           </div>
           <div className="institutional-feature">
             <div className="institutional-hero-photo">
               <Image
-                src="/images/events/banquet.jpg"
-                alt="Gran salón preparado para una cena de celebración"
+                src={featuredEvent.image}
+                alt={featuredEvent.imageAlt}
+                style={{ objectPosition: featuredEvent.imagePosition }}
                 fill
                 sizes="(max-width: 800px) 100vw, 55vw"
                 priority
@@ -116,37 +100,10 @@ export function InstitutionalHome() {
                 <em>para reunirnos.</em>
               </h2>
             </div>
-            <p>
-              Ceremonias que nos inspiran.
-              <br />
-              Celebraciones que se vuelven recuerdos.
-            </p>
           </div>
           <Agenda events={demoEvents} />
         </section>
-        <section className="institutional-invitation">
-          <Image
-            src={featuredEvent.image}
-            alt={featuredEvent.imageAlt}
-            fill
-            sizes="100vw"
-          />
-          <div>
-            <p className="eyebrow">15 DE SEPTIEMBRE · 19:00 H</p>
-            <h2>
-              Una tradición.
-              <br />
-              <em>Mil razones para celebrar.</em>
-            </h2>
-            <p>Cena, música en vivo y el orgullo de encontrarnos.</p>
-            <EventPreview event={featuredEvent} />
-            <span>
-              Desde {formatPrice(featuredEvent.price)} MXN por persona
-            </span>
-          </div>
-        </section>
         <PastEvents />
-        <Experience />
         <Help />
       </main>
       <Footer />

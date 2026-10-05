@@ -1,14 +1,7 @@
-import { EventCarousel } from "../components/event-carousel";
 import { PastEvents } from "@/features/event-experience/components/past-events";
 import Image from "next/image";
-import { ArrowDown, ArrowUpRight, Asterisk } from "lucide-react";
-import {
-  Header,
-  Footer,
-  Experience,
-  Help,
-  ProposalSwitcher,
-} from "../components/chrome";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { Header, Footer, Help, ProposalSwitcher } from "../components/chrome";
 import { EventPreview } from "../components/event-preview";
 import { Agenda } from "../components/agenda";
 import { demoEvents, featuredEvent } from "../fixtures";
@@ -23,8 +16,9 @@ export function GalaHome() {
         <div className="gala-opening">
           <Image
             className="gala-backdrop"
-            src="/images/events/dinner.jpg"
-            alt="Una mesa preparada para una velada especial"
+            src={featuredEvent.image}
+            alt={featuredEvent.imageAlt}
+            style={{ objectPosition: featuredEvent.imagePosition }}
             fill
             sizes="100vw"
             priority
@@ -40,19 +34,14 @@ export function GalaHome() {
               que <em>se quedan.</em>
             </h1>
             <p className="hero-description">
-              La mesa está puesta. La música está por empezar.
-              <br />
-              Solo falta que tú seas parte de la historia.
+              Cena, música y una noche para recordar.
             </p>
             <EventPreview event={featuredEvent} className="demo-button">
               Descubre tu próxima noche{" "}
               <ArrowUpRight size={18} aria-hidden="true" />
             </EventPreview>
             <div className="gala-hero-bottom">
-              <a
-                href="#seleccion"
-                aria-label="Descubrir la selección de eventos"
-              >
+              <a href="#agenda" aria-label="Descubrir la selección de eventos">
                 <ArrowDown size={20} />
                 <span>SIGUE LA EXPERIENCIA</span>
               </a>
@@ -70,53 +59,6 @@ export function GalaHome() {
             </div>
           </section>
         </div>
-        <div className="gala-manifesto">
-          <Asterisk size={36} strokeWidth={1} aria-hidden="true" />
-          <p>
-            Nos reunimos por una fecha.
-            <br />
-            <em>Volvemos por lo que sentimos.</em>
-          </p>
-          <span>NUESTRA ESENCIA</span>
-        </div>
-        <section className="gala-selection" id="seleccion">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">EL ARTE DE CELEBRAR</p>
-              <h2>
-                Elige un momento.
-                <br />
-                <em>Hazlo inolvidable.</em>
-              </h2>
-            </div>
-            <a href="#agenda" className="text-link">
-              Toda la agenda <ArrowUpRight size={18} aria-hidden="true" />
-            </a>
-          </div>
-          <EventCarousel events={demoEvents} film />
-        </section>
-        <section className="gala-ticket-section">
-          <p className="eyebrow">TU LUGAR EN UNA GRAN HISTORIA</p>
-          <div className="gala-ticket">
-            <div>
-              <span className="eyebrow">BOLETERA PRESENTA</span>
-              <h2>
-                Noche de
-                <br />
-                <em>Independencia</em>
-              </h2>
-              <span>UNA CELEBRACIÓN DE LO QUE SOMOS</span>
-            </div>
-            <div className="gala-ticket-stub">
-              <span>SEP</span>
-              <strong>15</strong>
-              <span>2027 · 19:00 H</span>
-              <EventPreview event={featuredEvent} className="demo-button">
-                Ver evento <ArrowUpRight size={17} aria-hidden="true" />
-              </EventPreview>
-            </div>
-          </div>
-        </section>
         <section className="agenda-section" id="agenda">
           <div className="section-heading">
             <div>
@@ -127,10 +69,9 @@ export function GalaHome() {
             </div>
             <span className="eyebrow">09 ENCUENTROS · 2027</span>
           </div>
-          <Agenda events={demoEvents} presentation="list" />
+          <Agenda events={demoEvents} presentation="cards" />
         </section>
         <PastEvents />
-        <Experience />
         <Help />
       </main>
       <Footer />

@@ -14,6 +14,11 @@ export interface Buyer {
   name: string;
   email: string;
   phone: string;
+  contactChannel: "email" | "phone";
+  verifiedContact: string;
+  audience: "public" | "military";
+  registrationNumber: string;
+  militaryAttendees: number;
 }
 export interface DemoTicket {
   id: string;
@@ -25,7 +30,7 @@ export interface DemoOrder {
   id: string;
   eventId: string;
   buyer: Buyer;
-  mode: "guest" | "account";
+  mode: "guest" | "account" | "register";
   amountMinor: number;
   tickets: DemoTicket[];
 }
@@ -39,7 +44,7 @@ export type BookingState =
       orderId: string;
       payment: {
         buyer: Buyer;
-        mode: "guest" | "account";
+        mode: "guest" | "account" | "register";
         outcome: "approved" | "declined";
       };
     }
@@ -52,14 +57,14 @@ export type BookingAction =
       type: "pay";
       now: number;
       buyer: Buyer;
-      mode: "guest" | "account";
+      mode: "guest" | "account" | "register";
       outcome: "approved" | "declined";
     }
   | {
       type: "start-payment";
       now: number;
       buyer: Buyer;
-      mode: "guest" | "account";
+      mode: "guest" | "account" | "register";
       outcome: "approved" | "declined";
     }
   | { type: "finish-payment"; now: number }
@@ -74,12 +79,26 @@ export const initialBookingState: BookingState = {
   notice: null,
 };
 
-export function validateBuyer(buyer: Buyer): boolean {
+export function validateContact(
+  channel: "email" | "phone",
+  value: string,
+): boolean {
+  return channel === "email"
+    ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
+    : /^\+?[\d\s()-]{10,18}$/.test(value.trim()) &&
+        value.replace(/\D/g, "").length >= 10;
+}
+export function validateBuyer(buyer: Buyer, count?: number): boolean {
   return (
     buyer.name.trim().length >= 3 &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyer.email.trim()) &&
-    /^\+?[\d\s()-]{10,18}$/.test(buyer.phone.trim()) &&
-    buyer.phone.replace(/\D/g, "").length >= 10
+    validateContact(buyer.contactChannel, buyer[buyer.contactChannel]) &&
+    buyer.verifiedContact === buyer[buyer.contactChannel].trim() &&
+    (buyer.audience === "public" ||
+      (buyer.audience === "military" &&
+        buyer.registrationNumber.trim().length > 0)) &&
+    Number.isInteger(buyer.militaryAttendees) &&
+    buyer.militaryAttendees >= 0 &&
+    (count === undefined || buyer.militaryAttendees <= count)
   );
 }
 export function totalForSeats(seats: readonly BookingSeat[]): number {
@@ -166,7 +185,7 @@ export function transitionBooking(
         "Tu apartado expiró. Los lugares fueron liberados; vuelve al mapa para elegirlos.",
     };
   if (action.type === "start-payment") {
-    if (!validateBuyer(action.buyer)) return state;
+    if (!validateBuyer(action.buyer, state.seatIds.length)) return state;
     return {
       ...state,
       step: "processing",
@@ -177,7 +196,11 @@ export function transitionBooking(
       },
     };
   }
-  if (action.type !== "pay" || !validateBuyer(action.buyer)) return state;
+  if (
+    action.type !== "pay" ||
+    !validateBuyer(action.buyer, state.seatIds.length)
+  )
+    return state;
   if (action.outcome === "declined")
     return {
       step: "failed",

@@ -1,13 +1,7 @@
 import { PastEvents } from "@/features/event-experience/components/past-events";
 import Image from "next/image";
 import { ArrowUpRight, Asterisk } from "lucide-react";
-import {
-  Header,
-  Footer,
-  Experience,
-  Help,
-  ProposalSwitcher,
-} from "../components/chrome";
+import { Header, Footer, Help, ProposalSwitcher } from "../components/chrome";
 import { EventPreview } from "../components/event-preview";
 import { Agenda } from "../components/agenda";
 import { demoEvents, featuredEvent } from "../fixtures";
@@ -51,6 +45,7 @@ export function EditorialHome() {
               <Image
                 src={featuredEvent.image}
                 alt={featuredEvent.imageAlt}
+                style={{ objectPosition: featuredEvent.imagePosition }}
                 fill
                 priority
                 sizes="(max-width: 800px) 100vw, 65vw"
@@ -60,11 +55,7 @@ export function EditorialHome() {
               </span>
               <div>
                 <span className="eyebrow">15 SEP · CENA Y MÚSICA EN VIVO</span>
-                <h2>
-                  Noche de
-                  <br />
-                  Independencia
-                </h2>
+                <h2>{featuredEvent.title}</h2>
                 <EventPreview
                   event={featuredEvent}
                   className="demo-button stretched-trigger"
@@ -132,42 +123,10 @@ export function EditorialHome() {
                 En el <em>calendario.</em>
               </h2>
             </div>
-            <p>
-              9 eventos. Muchas formas de ser parte.
-              <br />
-              Descubre lo que viene este año.
-            </p>
           </div>
           <Agenda events={demoEvents} presentation="cards" />
         </section>
-        <section className="editorial-story">
-          <div>
-            <span className="eyebrow">MÁS QUE UNA ENTRADA</span>
-            <h2>
-              Estar ahí.
-              <br />
-              <em>Eso es todo.</em>
-            </h2>
-            <p>
-              Hay aplausos que se sienten distinto en persona. Mesas donde
-              empiezan nuevas amistades. Noches que merecen vivirse.
-            </p>
-            <a href="#agenda" className="demo-button">
-              Encuentra tu momento <ArrowUpRight aria-hidden="true" size={18} />
-            </a>
-          </div>
-          <div className="story-image">
-            <Image
-              src="/images/events/dinner.jpg"
-              alt="Mesas preparadas para compartir una celebración"
-              fill
-              sizes="(max-width: 700px) 100vw, 50vw"
-            />
-            <span>HISTORIAS QUE COMIENZAN EN UNA MESA.</span>
-          </div>
-        </section>
         <PastEvents />
-        <Experience />
         <Help />
       </main>
       <Footer />

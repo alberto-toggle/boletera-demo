@@ -4,19 +4,17 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValueEvent,
-  useScroll,
-} from "framer-motion";
+import { featuredEvent } from "@/features/event-discovery/fixtures";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
+import { useCompactHeader } from "@/features/event-discovery/components/sticky-header";
 import { Brand } from "@/features/event-discovery/components/chrome";
 import { AccountPreview } from "@/features/event-discovery/components/event-preview";
 import {
   eventCategories,
   type DiscoveryEvent,
 } from "@/features/event-discovery/model";
+import { PaletteSelector } from "./palette-switcher";
 import { useMotionPreference } from "../use-motion-preference";
 
 export function MegaNavigation({
@@ -25,13 +23,11 @@ export function MegaNavigation({
   events: readonly DiscoveryEvent[];
 }) {
   const [open, setOpen] = useState(false);
-  const [compact, setCompact] = useState(false);
+  const compact = useCompactHeader();
   const container = useRef<HTMLElement>(null);
   const desktopTrigger = useRef<HTMLButtonElement>(null);
   const mobileTrigger = useRef<HTMLButtonElement>(null);
   const reduced = useMotionPreference();
-  const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, "change", (y) => setCompact(y > 70));
   useEffect(() => {
     const handleOutside = (event: PointerEvent) => {
       if (
@@ -74,11 +70,11 @@ export function MegaNavigation({
               aria-controls="immersive-mega-panel"
               onClick={() => setOpen(!open)}
             >
-              Encuentra tu evento{" "}
+              Menú{" "}
               <ChevronDown className={open ? "rotate-180" : ""} size={16} />
             </button>
-            <a href="#experiencia" onClick={close}>
-              La experiencia
+            <a href="#eventos-anteriores" onClick={close}>
+              Eventos anteriores
             </a>
             <a href="#ayuda" onClick={close}>
               Ayuda
@@ -111,6 +107,7 @@ export function MegaNavigation({
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: reduced ? 0 : 0.28 }}
             >
+              <PaletteSelector />
               <div className="mega-panel-grid">
                 <div>
                   <span className="mega-eyebrow">ELIGE TU OCASIÓN</span>
@@ -118,8 +115,13 @@ export function MegaNavigation({
                     {eventCategories.map((category) => (
                       <li key={category}>
                         <Link
-                          href={`#tipo-${category.toLowerCase()}`}
-                          onClick={close}
+                          href="#agenda"
+                          onClick={() => {
+                            document
+                              .getElementById(`tipo-${category.toLowerCase()}`)
+                              ?.click();
+                            close();
+                          }}
                         >
                           {category}
                           <ArrowUpRight size={18} />
@@ -150,8 +152,8 @@ export function MegaNavigation({
                     ))}
                   </ul>
                   <div className="mega-mobile-links">
-                    <a href="#experiencia" onClick={close}>
-                      La experiencia
+                    <a href="#eventos-anteriores" onClick={close}>
+                      Eventos anteriores
                     </a>
                     <a href="#ayuda" onClick={close}>
                       Ayuda
@@ -160,12 +162,12 @@ export function MegaNavigation({
                 </div>
                 <Link
                   className="mega-preview"
-                  href="/demo-inmersiva/eventos/noche-independencia"
+                  href={`/demo-inmersiva/eventos/${featuredEvent.id}`}
                   onClick={close}
                 >
                   <Image
-                    src="/images/events/architecture.jpg"
-                    alt="Papel picado para la Noche de Independencia"
+                    src={featuredEvent.image}
+                    alt={featuredEvent.imageAlt}
                     fill
                     sizes="300px"
                   />

@@ -55,8 +55,9 @@ export function ScrollHero({ event }: { event: DiscoveryEvent }) {
             style={{ scale: reduced ? 1 : scale }}
           >
             <Image
-              src="/images/events/dinner.jpg"
-              alt="Una mesa preparada para una noche de celebración"
+              src={event.image}
+              alt={event.imageAlt}
+              style={{ objectPosition: event.imagePosition }}
               fill
               priority
               sizes="100vw"

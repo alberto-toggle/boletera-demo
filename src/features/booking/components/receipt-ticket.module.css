@@ -1,0 +1,401 @@
+.stage {
+  container-type: inline-size;
+  padding: 48px 20px;
+  border-radius: 20px;
+  background: #e9e8e3;
+  color: #2a2a26;
+  font-family: var(--font-geist-mono), monospace;
+}
+.intro {
+  text-align: center;
+  margin: 0 auto 48px;
+}
+.intro p,
+.intro span {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: #747269;
+}
+.intro h2 {
+  font-size: clamp(20px, 3cqi, 30px);
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  margin: 16px 0;
+}
+.examples {
+  display: grid;
+  gap: 40px;
+  align-items: start;
+}
+.examples section {
+  min-width: 0;
+}
+.caption {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  margin-bottom: 18px;
+  color: #747269;
+}
+.wrapper {
+  --paper: #fefdf8;
+  --ink: #2a2a26;
+  --muted: #737166;
+  --rule: #c4c1b6;
+  width: 100%;
+  max-width: 350px;
+  margin: auto;
+}
+.ticket {
+  color: var(--ink);
+  filter: drop-shadow(0 14px 12px #24231b14);
+}
+.body {
+  background: var(--paper);
+  padding: 28px 24px 22px;
+}
+.header {
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed var(--rule);
+}
+.brand {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+.micro {
+  font-size: 9px;
+  letter-spacing: 0.09em;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.header .micro {
+  margin-top: 6px;
+}
+.event {
+  position: relative;
+  padding: 22px 0 18px;
+  border-bottom: 1px dashed var(--rule);
+}
+.event h3 {
+  font-size: 21px;
+  line-height: 1.25;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  margin: 9px 0 22px;
+  max-width: 21ch;
+}
+.stamp {
+  display: inline-block;
+  color: #ae4938;
+  border: 2px solid #ae4938;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  padding: 4px 9px;
+  transform: rotate(-7deg);
+}
+.details {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 8px;
+  font-size: 10px;
+}
+.detail {
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+}
+.detail dt {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.detail span {
+  flex: 1;
+  min-width: 6px;
+  border-bottom: 1px dotted var(--rule);
+}
+.detail dd {
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.address {
+  font-size: 9px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.seats {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 8px;
+  border-block: 1px dashed var(--rule);
+  padding: 16px 0;
+  margin-top: 18px;
+}
+.seats dt {
+  font-size: 9px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.07em;
+}
+.seats dd {
+  font-size: 16px;
+  font-weight: 700;
+}
+.seats div:first-child dd {
+  font-size: 11px;
+  padding-top: 4px;
+}
+.total {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px dashed var(--rule);
+  margin-top: 18px;
+  padding: 16px 0;
+  font-size: 18px;
+  font-weight: 750;
+}
+.total small {
+  font-size: 9px;
+  font-weight: 400;
+}
+.serial {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+  color: var(--muted);
+}
+.stubWrap {
+  position: relative;
+}
+.perforation {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  inset-inline: 0;
+  border-top: 1px dashed var(--rule);
+}
+.controls {
+  text-align: center;
+  margin-top: 36px;
+}
+.controls button {
+  font: inherit;
+  font-size: 11px;
+  color: #68665e;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  padding: 10px;
+}
+.controls button:hover {
+  color: #ae4938;
+}
+.controls button:focus-visible {
+  outline: 2px solid #ae4938;
+  outline-offset: 3px;
+}
+.stub {
+  background: var(--paper);
+  padding: 28px 18px 24px;
+  text-align: center;
+  transform-origin: 15% 0;
+  transition: transform 650ms cubic-bezier(0.22, 0.8, 0.28, 1);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 7px),
+    95% 100%,
+    90% calc(100% - 7px),
+    85% 100%,
+    80% calc(100% - 7px),
+    75% 100%,
+    70% calc(100% - 7px),
+    65% 100%,
+    60% calc(100% - 7px),
+    55% 100%,
+    50% calc(100% - 7px),
+    45% 100%,
+    40% calc(100% - 7px),
+    35% 100%,
+    30% calc(100% - 7px),
+    25% 100%,
+    20% calc(100% - 7px),
+    15% 100%,
+    10% calc(100% - 7px),
+    5% 100%,
+    0 calc(100% - 7px)
+  );
+}
+.ticket[data-detached="true"] .stub {
+  transform: translate(4px, 18px) rotate(4deg);
+}
+.qr {
+  width: 124px;
+  margin: 8px auto;
+  background: white;
+  color: black;
+}
+.qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: black;
+}
+.stubSeat {
+  font-size: 10px;
+  font-weight: 700;
+}
+.demo {
+  display: block;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  margin-top: 10px;
+  color: var(--muted);
+}
+.status {
+  font-size: 9px;
+  line-height: 1.6;
+  text-align: center;
+  margin: 36px 0 0;
+  color: #747269;
+}
+.note {
+  text-align: center;
+  margin: 28px 0 0;
+  font-size: 11px;
+  line-height: 1.9;
+  color: #747269;
+}
+.horizontalExample {
+  container-type: inline-size;
+}
+.horizontalExample .wrapper {
+  max-width: 960px;
+}
+.examples {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 64px;
+}
+.caption {
+  text-align: center;
+}
+@container (min-width: 650px) {
+  .wrapper[data-orientation="horizontal"] .ticket {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 175px;
+  }
+  .wrapper[data-orientation="horizontal"] .body {
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    grid-template-areas: "header header" "event details" "event seats" "holder total" "address serial";
+    column-gap: 28px;
+    row-gap: 14px;
+  }
+  .wrapper[data-orientation="horizontal"] .header {
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 12px;
+    text-align: left;
+  }
+  .wrapper[data-orientation="horizontal"] .header .micro {
+    margin: 0;
+    font-size: 8px;
+    text-align: right;
+    max-width: 22ch;
+  }
+  .wrapper[data-orientation="horizontal"] .event {
+    grid-area: event;
+    padding: 0;
+    border: 0;
+  }
+  .wrapper[data-orientation="horizontal"] .event h3 {
+    margin: 10px 0 18px;
+    font-size: clamp(19px, 2.6cqi, 26px);
+  }
+  .wrapper[data-orientation="horizontal"] .body > .details:nth-child(3) {
+    grid-area: details;
+  }
+  .wrapper[data-orientation="horizontal"] .body > .details:nth-child(6) {
+    grid-area: holder;
+  }
+  .wrapper[data-orientation="horizontal"] .details {
+    margin: 0;
+    gap: 8px;
+  }
+  .wrapper[data-orientation="horizontal"] .seats {
+    grid-area: seats;
+    margin: 0;
+    padding: 12px 0;
+  }
+  .wrapper[data-orientation="horizontal"] .address {
+    grid-area: address;
+    font-size: 8px;
+  }
+  .wrapper[data-orientation="horizontal"] .total {
+    grid-area: total;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 17px;
+    align-items: center;
+  }
+  .wrapper[data-orientation="horizontal"] .body > .micro {
+    display: none;
+  }
+  .wrapper[data-orientation="horizontal"] .body > .serial {
+    grid-area: serial;
+    margin: 0;
+    text-align: right;
+    align-self: end;
+    font-size: 8px;
+  }
+  .wrapper[data-orientation="horizontal"] .stubWrap {
+    display: flex;
+    min-width: 0;
+  }
+  .wrapper[data-orientation="horizontal"] .stub {
+    clip-path: polygon(
+      0 0,
+      calc(100% - 7px) 0,
+      100% 5%, calc(100% - 7px) 10%,
+      100% 15%, calc(100% - 7px) 20%,
+      100% 25%, calc(100% - 7px) 30%,
+      100% 35%, calc(100% - 7px) 40%,
+      100% 45%, calc(100% - 7px) 50%,
+      100% 55%, calc(100% - 7px) 60%,
+      100% 65%, calc(100% - 7px) 70%,
+      100% 75%, calc(100% - 7px) 80%,
+      100% 85%, calc(100% - 7px) 90%,
+      100% 95%, calc(100% - 7px) 100%,
+      0 100%
+    );
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 12px;
+    transform-origin: 0 15%;
+  }
+  .wrapper[data-orientation="horizontal"] .perforation {
+    inset-block: 0;
+    left: 0;
+    right: auto;
+    border-top: 0;
+    border-left: 1px dashed var(--rule);
+  }
+  .wrapper[data-orientation="horizontal"] .ticket[data-detached="true"] .stub {
+    transform: translate(16px, 8px) rotate(5deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stub {
+    transition: none;
+  }
+}

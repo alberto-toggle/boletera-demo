@@ -2,16 +2,16 @@
 
 Recorrido conectado desde las cuatro propuestas de inicio:
 `/demo-{institucional|gala|editorial|inmersiva}/eventos/[eventId]`.
-Las vistas previas de eventos enlazan al mapa mediante **Elegir lugares y comprar**.
+El detalle presenta los datos esenciales y enlaza mediante **Elegir lugares** a la ruta `/compra`, dedicada al mapa.
 
 ## Responsabilidades
 
 - `event-page.tsx`: valida el identificador contra las fixtures; un evento desconocido devuelve 404.
 - `fixtures.ts`: recinto ficticio de 500 lugares: cinco secciones de 100, cincuenta mesas de diez (o filas para conferencias), dos niveles de precio y ocupación determinista.
 - `model.ts`: estados excluyentes de selección, checkout, procesamiento, rechazo, expiración y confirmación. Reglas de selección, importes en centavos, datos del comprador y emisión única de boletos.
-- `components/booking-flow.tsx`: composición, reducer local, temporizador limpiado al abandonar el checkout, foco al cambiar de paso e impresión.
+- `components/booking-flow.tsx`: composición, reducer local, temporizador limpiado al abandonar el checkout, foco al cambiar de paso y descarga de boletos.
 - `components/seat-map.tsx`: selector controlado adaptado del playground; no contiene disponibilidad ni importes propios.
-- `components/checkout.tsx`: comprador invitado o cuenta ficticia, resumen de lugares, validación y controles del resultado simulado.
+- `components/checkout.tsx`: identificación como invitado, registro o cuenta ficticia; verificación de correo o teléfono, clasificación de comprador/asistentes, resumen y pago simulado.
 - `components/event-ticket.tsx`: un boleto por asiento, alimentado por la compra confirmada.
 - `booking.css`: temas heredados de cada propuesta, disposición de mesas, responsive e impresión de boletos.
 
@@ -36,7 +36,7 @@ Referencias: `Boleteria_MVP_Funcional.docx.pdf` y
 - Flujo de compra web (§6.1 del MVP): evento → mapa → lugares → comprador → pago → boletos.
 - RN-01/RN-02/RN-03: compra pendiente antes de pagar, confirmación completa y emisión de un boleto único por lugar; volver a enviar la acción de pago no duplica la emisión.
 - RN-05/RN-06: apartado al continuar, expiración y liberación al volver, rechazar o expirar. El temporizador no es el único control: pagar después del límite también expira la compra.
-- Datos del comprador: nombre, correo y teléfono, no un formulario por asistente.
+- Datos del comprador: nombre y correo o teléfono verificado. Clasificación público/militar, matrícula libre obligatoria para comprador militar y cantidad de asistentes militares; no un formulario por asistente.
 - Compra y asistencia separadas: los boletos nacen con estado válido de prueba; esta pantalla no marca asistencia.
 - Aclaración del usuario sobre cuentas: comprar como invitado es opcionalmente compatible con una sesión de cuenta ficticia. No se implementa autenticación real.
 
@@ -50,7 +50,7 @@ Toda la operación vive en memoria del navegador y se reinicia al recargar o sal
 de la ruta. La disponibilidad no se sincroniza entre pestañas, usuarios ni taquilla;
 no representa control real de concurrencia. No hay cobros ni correos enviados.
 Los controles de aprobar/rechazar/expirar son herramientas de la simulación.
-La confirmación permite imprimir o guardar PDF mediante el diálogo del navegador;
+La confirmación descarga PDF mediante jsPDF, uno por boleto o todos en un archivo;
 los boletos están marcados sin validez de acceso.
 
 Esta ampliación cubre el recorrido del comprador. Administración, venta presencial,
@@ -91,18 +91,22 @@ implica un boleto autorizado: los identificadores DEMO no validan acceso real.
 Referencias funcionales revisadas: RF-BOL-001 a RF-BOL-007 y RF-ACC-002 a
 RF-ACC-004. No se implementan envío de correo ni un sistema de validación de puerta.
 
-Verificado: nueve pruebas de dominio, compra de dos asientos en las cuatro
+Verificado: doce pruebas de dominio, compra de dos asientos en las cuatro
 propuestas, distintos QR por asiento, decodificación de los cuatro estilos y
 lectura del QR desde el PDF renderizado. Revisión visual de PDF con la guía PDF.
 
-
 ## Exploración por secciones
 
-`venue-selector.tsx` sustituye el mapa pequeño por un diálogo amplio: primero
-cinco secciones, luego los 100 lugares de la sección elegida. En móvil ocupa la
-pantalla; total y continuación permanecen visibles. Cambiar sección, cerrar o
-reabrir conserva la selección del reducer. Escape cierra el diálogo y devuelve
-el foco. El límite por compra sigue siendo ocho, independiente del aforo.
+`venue-selector.tsx` ocupa la ruta de compra. `venue-map.tsx` mantiene un único
+plano SVG: acercarse a una sección anima la cámara, sin cambiar de pantalla.
+`venue-layout.ts` calcula una sola geometría para las cinco secciones y sus 500
+lugares; las filas siguen siendo filas y las mesas conservan sus diez lugares a
+cualquier escala. El zoom revela números; la selección sigue en el reducer.
+
+Hay arrastre, rueda, pellizco de dos dedos, controles de zoom y ajuste del recinto,
+selector de secciones y teclado (flechas, +/−, Inicio). Se respeta movimiento
+reducido. Total y continuación permanecen visibles. Volver desde identificación
+conserva la selección. El límite por compra sigue siendo ocho.
 
 Se adapta el patrón controlado de `lavikatiyar/seat-selection` instalado en el
 playground, con una nueva composición de recinto y mesas de diez. `seat-map.tsx`
@@ -113,7 +117,25 @@ ni precio se guarda por duplicado dentro del mapa.
 del ejemplo RF-AFO-002; no un aforo confirmado de una sede. Los boletos identifican
 sección, mesa/fila y lugar. La prueba de importes combina Preferente A con General C.
 
-Validación de esta ampliación: TypeScript y ESLint sin errores; diez pruebas de
-dominio aprobadas. Chrome: compra cruzando secciones, reapertura con selección,
+Validación de esta ampliación: TypeScript y ESLint sin errores; doce pruebas de
+dominio aprobadas. Chrome: compra cruzando secciones, regreso con selección,
 importe y QR en las cuatro propuestas; teclado, Escape/retorno de foco, límite de
 ocho, retiro de lugares y vista por filas a 320 px. Sin errores de consola.
+
+## Entrega de simplificación del recorrido
+
+Inicio visual → detalle → mapa dedicado → contacto verificado → asistentes → pago → boletos. Reserva de cinco minutos desde «Reservar y continuar», con contador fijo y aviso al último minuto. Código de verificación simulado: `123456`. Registro y cuenta existente son simulaciones locales.
+
+`ticket-pdf.ts` genera una página por boleto con jsPDF y QR vectorial mediante uqr, sin servicios externos. Descarga conjunta e individual; QR contiene solo el identificador DEMO. PDF renderizado y códigos decodificados para verificar legibilidad.
+
+Validación: ocho compras completas (cuatro temas en escritorio y móvil), sin desbordamiento horizontal ni errores de ejecución. TypeScript, ESLint y doce pruebas de dominio.
+
+## Login y registro del Playground
+
+La identificación adapta Sign Up Split Panel (diarmuradi) y Modern & Stunning Sign In (preetsuthar17), conservando las fuentes en [auth/README.md](components/auth/README.md). Incluye acceso Google con selección de cuenta de prueba, contraseña visible/oculta, registro, login y compra como invitado. No usa OAuth real.
+
+Verificado en Chrome: compra completa por registro, login, invitado con teléfono y Google en los cuatro temas; cancelación de Google conserva datos, código incorrecto rechazado, contraseña alternable, sin desbordamiento móvil ni errores de ejecución.
+
+### PDF con el diseño seleccionado
+
+`ticket-pdf.ts` usa `html-to-image` para capturar los componentes actuales a 3× y `jsPDF` para colocar un boleto por página A4, conservando sus proporciones y el QR. La exportación usa gráficos rasterizados de alta resolución; el texto no es seleccionable. La previsualización y las descargas individual/completa usan el mismo generador. El selector queda bloqueado durante la captura; se eliminan transformaciones interactivas y se excluyen los controles de desprendimiento.

@@ -5,6 +5,13 @@
   --line: #d9d4e1;
   --accent-tone: #7150af;
   --muted: #e9e2f1;
+  --nav-paper: #faf8f2;
+  --on-dark: #fff9f1;
+  --hero-accent: #e2cdfa;
+  --hero-button: #eee1ff;
+  --hero-button-ink: #302442;
+  --image-shade: #171121e6;
+  --hero-overlay: linear-gradient(180deg, #130e2230, #120e2466 65%, #120e24a8);
 }
 .inmersiva [id] {
   scroll-margin-top: 110px;
@@ -25,8 +32,8 @@
   max-width: 1050px;
 }
 .mega-shell {
-  background: #faf8f2;
-  color: #24213b;
+  background: var(--nav-paper);
+  color: var(--ink);
   border: 1px solid #ffffff80;
   border-radius: 24px;
   box-shadow: 0 10px 45px #100d2926;
@@ -62,7 +69,7 @@
 }
 .mega-desktop a:hover,
 .mega-desktop button:hover {
-  color: #7150af;
+  color: var(--accent-tone);
 }
 .mega-desktop svg {
   transition: transform 0.25s;
@@ -71,7 +78,7 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  background: #24213b;
+  background: var(--ink);
   color: #fff;
   border-radius: 999px;
   padding: 12px 20px;
@@ -88,13 +95,13 @@
   grid-template-columns: 1fr 1.1fr 1.1fr;
   gap: 36px;
   padding: 30px;
-  border-top: 1px solid #e1dce8;
+  border-top: 1px solid var(--line);
 }
 .mega-eyebrow {
   display: block;
   font-size: 9px;
   letter-spacing: 0.14em;
-  color: #77717e;
+  color: var(--subtle);
   margin-bottom: 18px;
 }
 .mega-panel ul {
@@ -114,7 +121,7 @@
   margin-left: -8px;
 }
 .mega-panel li a:hover {
-  background: #ebe5f2;
+  background: var(--muted);
 }
 .mega-secondary {
   display: inline-flex;
@@ -142,7 +149,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(transparent, #171121e6);
+  background: linear-gradient(transparent, var(--image-shade));
   z-index: -1;
 }
 .mega-preview > div {
@@ -168,8 +175,8 @@
 }
 .immersive-hero {
   height: 165svh;
-  background: #24213b;
-  color: #fff9f1;
+  background: var(--ink);
+  color: var(--on-dark);
 }
 .immersive-hero-sticky {
   height: 100svh;
@@ -190,7 +197,7 @@
   inset: 0;
 }
 .hero-shade {
-  background: linear-gradient(180deg, #130e2230, #120e2466 65%, #120e24a8);
+  background: var(--hero-overlay);
 }
 .hero-coordinate,
 .hero-issue {
@@ -216,7 +223,7 @@
   width: 100%;
 }
 .immersive-hero-type .eyebrow {
-  color: #eee5d9;
+  color: var(--on-dark);
   margin-bottom: 23px;
   font-size: 10px;
 }
@@ -234,7 +241,7 @@
 .inmersiva .immersive-hero-type h1 em {
   font-family: Georgia, serif;
   font-size: 1.3em;
-  color: #e2cdfa;
+  color: var(--hero-accent);
   letter-spacing: -0.06em;
 }
 .immersive-hero-cta {
@@ -244,8 +251,8 @@
   padding: 15px 22px;
   margin-top: 36px;
   border-radius: 99px;
-  background: #eee1ff;
-  color: #302442;
+  background: var(--hero-button);
+  color: var(--hero-button-ink);
   font-size: 12px;
   transition:
     background 0.2s,
@@ -260,8 +267,8 @@
   bottom: 95px;
   left: 5%;
   right: 5%;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: end;
   gap: 25px;
   font-size: 9px;
@@ -274,7 +281,11 @@
   align-items: center;
   min-height: 44px;
 }
+.hero-bottom-line > span {
+  justify-self: end;
+}
 .hero-bottom-line > div {
+  grid-column: 2;
   text-align: center;
 }
 .hero-bottom-line strong {
@@ -286,7 +297,7 @@
 }
 .hero-bottom-line > div span {
   font-size: 8px;
-  color: #d9d1df;
+  color: var(--on-dark);
 }
 .immersive-curation {
   padding: 110px 5%;
@@ -315,32 +326,32 @@
   align-items: center;
   gap: 70px;
   padding: 100px 5%;
-  background: #24213b;
-  color: #f9f4eb;
+  background: var(--ink);
+  color: var(--on-dark);
 }
 .ticket-introduction .eyebrow {
-  color: #c6b4e2;
+  color: var(--hero-accent);
   margin-bottom: 24px;
 }
 .ticket-introduction h2 {
   font-size: clamp(48px, 5.5vw, 80px);
 }
 .ticket-introduction h2 em {
-  color: #d8c3f0;
+  color: var(--hero-accent);
 }
 .ticket-introduction > p:not(.eyebrow) {
   max-width: 310px;
-  color: #cec5db;
+  color: var(--on-dark);
   margin: 25px 0;
 }
 .ticket-introduction .demo-button {
-  background: #e5d0ff;
-  color: #2a2038;
+  background: var(--hero-button);
+  color: var(--hero-button-ink);
 }
 .ticket-introduction small {
   display: block;
   margin-top: 18px;
-  color: #b8b0c5;
+  color: var(--on-dark);
   font-size: 10px;
 }
 .statement-ticket {
@@ -357,7 +368,7 @@
 }
 .statement-preview .ticket-validity {
   text-align: center;
-  color: #c8bed5;
+  color: var(--on-dark);
   font-size: 9px;
   letter-spacing: 0.12em;
   margin-top: 20px;
@@ -373,7 +384,7 @@
   }
 }
 .inmersiva .experience-section {
-  background: #e9e2f1;
+  background: var(--muted);
 }
 .statement-issued {
   background: transparent;
@@ -440,7 +451,7 @@
     overflow: auto;
   }
   .mega-panel-grid > div:nth-child(2) {
-    border-top: 1px solid #e1dce8;
+    border-top: 1px solid var(--line);
     padding-top: 20px;
   }
   .mega-panel li a {
@@ -483,12 +494,14 @@
   .hero-bottom-line {
     bottom: 85px;
     align-items: start;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 150px) minmax(0, 1fr);
+    gap: 8px;
   }
   .hero-bottom-line > span {
     display: none;
   }
   .hero-bottom-line > div {
-    text-align: right;
+    text-align: center;
     max-width: 150px;
   }
   .hero-bottom-line strong {
@@ -561,5 +574,78 @@
   letter-spacing: 0.06em;
 }
 .inmersiva .proposal-switcher a[aria-current="page"] {
-  background: #24213b;
+  background: var(--ink);
 }
+
+/* Palette variants are scoped to the immersive route, including its purchase flow. */
+.immersive-palette[data-palette="institucional"] .discovery.inmersiva {
+  --paper: #f6f5ef;
+  --ink: #233d33;
+  --subtle: #657067;
+  --line: #d7dcd2;
+  --accent-tone: #a68b57;
+  --muted: #e9ece3;
+  --nav-paper: #f6f5ef;
+  --on-dark: #f6f5ef;
+  --hero-accent: #c9d3bc;
+  --hero-button: #e9ece3;
+  --hero-button-ink: #233d33;
+  --image-shade: #233d33e6;
+  --hero-overlay: linear-gradient(180deg, #233d3330, #233d3366 65%, #233d33a8);
+}
+.immersive-palette[data-palette="granate"] .discovery.inmersiva {
+  --paper: #fbf9f4;
+  --ink: #611232;
+  --subtle: #685b60;
+  --line: #ddc9a3;
+  --accent-tone: #a57f2c;
+  --muted: #f0e8da;
+  --nav-paper: #ffffff;
+  --on-dark: #ffffff;
+  --hero-accent: #ddc9a3;
+  --hero-button: #ddc9a3;
+  --hero-button-ink: #611232;
+  --image-shade: #13322ee6;
+  --hero-overlay: linear-gradient(180deg, #13322e30, #13322e66 65%, #13322ea8);
+}
+.immersive-palette[data-palette="institucional"] .immersive-hero-type h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(52px, 5.7vw, 84px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+.immersive-palette[data-palette="institucional"] .immersive-hero-type h1 em {
+  font-size: 1em;
+  letter-spacing: inherit;
+}
+.palette-control {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 30px;
+  border-top: 1px solid var(--line);
+  background: var(--muted);
+  color: var(--ink);
+  font-size: 12px;
+}
+.palette-control select {
+  min-height: 32px;
+  max-width: 140px;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+.palette-control select:focus-visible {
+  outline: 2px solid var(--accent-tone);
+  outline-offset: 2px;
+}
+@media print {
+  .palette-control {
+    display: none;
+  }
+}
+

@@ -98,6 +98,7 @@ export function EventCarousel({
                 <Image
                   src={event.image}
                   alt={event.imageAlt}
+                  style={{ objectPosition: event.imagePosition }}
                   fill
                   sizes="(max-width:700px) 85vw,33vw"
                 />

@@ -14,16 +14,8 @@ export function PastEvents() {
       <div className="section-heading">
         <div>
           <p className="eyebrow">LO QUE SE QUEDA CON NOSOTROS</p>
-          <h2>
-            Los encuentros pasan.
-            <br />
-            <em>Los recuerdos, no.</em>
-          </h2>
+          <h2>Eventos anteriores</h2>
         </div>
-        <p className="archive-note">
-          Ediciones ficticias de 2026. <br />
-          Un vistazo a cómo se verá nuestro archivo.
-        </p>
       </div>
       <div className="past-timeline">
         <div
