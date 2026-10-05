@@ -1,8 +1,17 @@
 import { jsPDF } from "jspdf";
 import { getFontEmbedCSS, toCanvas } from "html-to-image";
 
+// Give the browser a paint opportunity before CPU-heavy capture/compression.
+export const paintPdfProgress = () =>
+  new Promise<void>((resolve) =>
+    requestAnimationFrame(() => setTimeout(resolve, 0)),
+  );
+
 /** Capture the actual themed components, with a complete ticket on each page. */
-export async function createTicketPdf(elements: readonly HTMLElement[]) {
+export async function createTicketPdf(
+  elements: readonly HTMLElement[],
+  onProgress: (message: string) => void = () => {},
+) {
   if (!elements.length) throw new Error("No hay boletos para exportar");
   await document.fonts.ready;
   // Let React apply the export state, which removes transient hover/motion styles.
@@ -10,6 +19,8 @@ export async function createTicketPdf(elements: readonly HTMLElement[]) {
   const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
   const fontEmbedCSS = await getFontEmbedCSS(elements[0]);
   for (const [index, source] of elements.entries()) {
+    onProgress(`Generando boleto ${index + 1} de ${elements.length}…`);
+    await paintPdfProgress();
     // A small screen stacks the classic for readability; export its chosen
     // horizontal format on an offscreen layout without moving the visible UI.
     let exportLayout: HTMLElement | undefined;
@@ -64,6 +75,9 @@ export async function createTicketPdf(elements: readonly HTMLElement[]) {
         (pageHeight - drawHeight) / 2,
         drawWidth,
         drawHeight,
+        undefined,
+        // Lossless PNG, same pixels; avoid jsPDF's default SLOW compression.
+        "FAST",
       );
       canvas.width = 0;
       canvas.height = 0;
@@ -75,5 +89,7 @@ export async function createTicketPdf(elements: readonly HTMLElement[]) {
     title: "Tus boletos · Boletera",
     subject: "Boletos de demostración · Sin validez de acceso",
   });
+  onProgress("Finalizando PDF…");
+  await paintPdfProgress();
   return pdf;
 }

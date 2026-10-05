@@ -1726,6 +1726,24 @@ html:has(.venue-dialog[open]) {
 .ticket-downloads details {
   width: 100%;
 }
+.ticket-pdf-status:empty { display: none; }
+.ticket-pdf-status {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+  background: var(--paper);
+}
+.ticket-pdf-status small { display: block; margin-top: 4px; color: var(--subtle); }
+.ticket-pdf-status > svg { flex-shrink: 0; animation: ticket-pdf-spin 1s linear infinite; }
+@keyframes ticket-pdf-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .ticket-pdf-status > svg { animation: none; }
+}
 .ticket-downloads summary {
   cursor: pointer;
   padding: 14px 0;

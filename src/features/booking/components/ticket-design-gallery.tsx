@@ -139,6 +139,7 @@ export function TicketDesignGallery({
       </div>
       <TicketDownloads
         order={order}
+        documentKey={JSON.stringify({ event, order, venue, direction })}
         designName={`${active.label}${design === "clasico" ? `-${orientation}` : ""}`}
         onBusyChange={setExporting}
         getTicketElement={(ticket) => {
@@ -148,7 +149,9 @@ export function TicketDesignGallery({
           const element = ticketsRef.current?.children.item(index);
           if (!(element instanceof HTMLElement))
             throw new Error("Boleto no disponible");
-          return element.querySelector<HTMLElement>("[data-pdf-ticket]") ?? element;
+          return (
+            element.querySelector<HTMLElement>("[data-pdf-ticket]") ?? element
+          );
         }}
       />
     </section>
