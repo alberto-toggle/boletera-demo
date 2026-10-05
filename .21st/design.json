@@ -408,6 +408,10 @@
     {
       "date": "2026-10-04",
       "decision": "El PDF de confirmación captura el diseño seleccionado a resolución triple, con tipografías incrustadas en la captura, un boleto completo por página A4 y orientación según su proporción. Previsualización y descargas comparten generador. No incluye controles de desprendimiento del clásico."
+    },
+    {
+      "date": "2026-10-05",
+      "decision": "Las cuatro vistas de detalle unifican portada y galería: foto grande estática al entrar, reproducción voluntaria con franjas de soralabs y diálogo manual con flechas, miniaturas y swipe. Se elimina la sección La experiencia duplicada y se conservan detalles y compra junto a la portada."
     }
   ],
   "evidence": [

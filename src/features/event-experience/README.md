@@ -30,3 +30,9 @@ selección al principio y enlaces para saltar entre secciones.
 Galería/ampliación/Escape, selección de fechas, expansión del mapa y flujo completo
 comprobados en Chrome en las cuatro rutas; vistas de escritorio y móvil. Sin errores
 de consola. Estilos aislados del playground; no se sustituyen primitivas compartidas.
+
+## Portada y galería del evento
+
+`components/event-hero-gallery.tsx` unifica portada y fotos en las cuatro propuestas. Parte estática, reproducción voluntaria y regreso a portada. `gallery-strip-mask.ts` adapta las máscaras por franjas de [Scroll Gallery, soralabs](../../components/blocks/21st-dev/scroll-gallery/README.md), con GSAP temporal en lugar de ScrollTrigger. Se conserva la atribución y la nota de términos del origen.
+
+El diálogo adapta navegación, miniaturas, teclado y gesto táctil de [Carousel Gallery](../../components/blocks/shadcn-ui-blocks/marketing-gallery-carousel-gallery/README.md), con datos del evento y diálogo nativo. Se detiene la reproducción al abrirlo, al ocultar la pestaña o salir de la vista; se respeta movimiento reducido. No depende de rutas del Playground.

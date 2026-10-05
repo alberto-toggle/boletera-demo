@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { DiscoveryEvent } from "@/features/event-discovery/model";
 import { formatEventTime } from "@/features/event-discovery/model";
 import type { EventExperience } from "../model";
-import { PhotoGallery } from "./photo-gallery";
 import { VenueMap } from "./venue-map";
 export function EventDetails({
   event,
@@ -15,10 +14,6 @@ export function EventDetails({
 }) {
   return (
     <div className="event-details">
-      <section id="la-experiencia">
-        <h2>La experiencia</h2>
-        <PhotoGallery photos={experience.photos} />
-      </section>
       <details className="event-extra">
         <summary>Programa del evento</summary>
         <section className="event-program">

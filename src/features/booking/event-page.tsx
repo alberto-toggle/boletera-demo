@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { EventHeroGallery } from "../event-experience/components/event-hero-gallery";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, CalendarDays, MapPin } from "lucide-react";
@@ -29,6 +29,7 @@ export function EventPage({
   if (!event) notFound();
   if (purchase)
     return <BookingFlow key={event.id} event={event} direction={direction} />;
+  const experience = getEventExperience(event);
   const home = `/demo-${direction}`;
   const purchaseHref = `${home}/eventos/${event.id}/compra`;
   return (
@@ -46,16 +47,7 @@ export function EventPage({
       </header>
       <main className="booking-main event-detail-main">
         <section className="event-detail-hero">
-          <div className="event-detail-image">
-            <Image
-              src={event.image}
-              alt={event.imageAlt}
-              style={{ objectPosition: event.imagePosition }}
-              fill
-              sizes="(max-width: 700px) 100vw, 55vw"
-              priority
-            />
-          </div>
+          <EventHeroGallery event={event} photos={experience.photos} />
           <div className="event-detail-copy">
             <p className="eyebrow">{event.category}</p>
             <h1>{event.title}</h1>
@@ -87,7 +79,7 @@ export function EventPage({
         </section>
         <EventDetails
           event={event}
-          experience={getEventExperience(event)}
+          experience={experience}
           purchaseHref={purchaseHref}
         />
       </main>

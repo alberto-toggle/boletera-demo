@@ -2808,3 +2808,55 @@ html:has(.venue-workspace-shell.is-fullscreen) {
 .ticket-design-options:disabled { opacity: .65; }
 
 .ticket-design-preview.is-exporting [data-pdf-stub] { transform: none !important; }
+
+/* Shared event cover: optional Sora Labs strip playback, manual photo viewer. */
+.event-detail-hero { grid-template-columns: minmax(0, 1.45fr) minmax(300px, 1fr); gap: clamp(24px, 4vw, 56px); }
+.event-hero-gallery { min-width: 0; }
+.event-hero-photo { position: relative; height: clamp(440px, 65vh, 660px); border-radius: 18px; overflow: hidden; background: var(--muted); }
+.event-hero-open { position: absolute; inset: 0; width: 100%; cursor: zoom-in; }
+.event-hero-photo img { object-fit: cover; }
+.event-hero-reveal { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+.event-photo-caption { position: absolute; inset: auto 0 0; display: flex; justify-content: space-between; gap: 16px; padding: 52px 22px 22px; background: linear-gradient(transparent, #000b); color: white; font-size: 12px; pointer-events: none; }
+.event-photo-caption > span:last-child { flex-shrink: 0; }
+.event-gallery-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.event-gallery-controls button { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 24px; color: var(--ink); background: var(--paper); font-size: 12px; }
+.event-gallery-controls button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.event-gallery-controls button:disabled { opacity: .6; cursor: default; }
+.event-hero-gallery button:focus-visible { outline: 2px solid var(--accent-tone); outline-offset: -4px; }
+.gala .event-hero-photo { border-radius: 28px; }
+.editorial .event-hero-photo, .editorial .event-gallery-controls button { border-radius: 0; }
+.discovery .event-photo-dialog { position: fixed; inset: 0; margin: auto; width: min(1100px, 94vw); max-width: 94vw; max-height: 94dvh; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); color: var(--ink); overflow: auto; }
+.event-photo-dialog::backdrop { background: #000c; backdrop-filter: blur(8px); }
+.event-photo-dialog header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 12px; }
+.event-photo-dialog header h2 { font-size: 20px; }
+.event-photo-dialog button { min-width: 44px; min-height: 44px; display: grid; place-items: center; }
+.event-photo-dialog button:focus-visible { outline: 2px solid var(--accent-tone); outline-offset: 2px; }
+.event-photo-viewer { position: relative; height: min(60dvh, 640px); background: var(--muted); touch-action: pan-y; }
+.discovery .event-photo-viewer img { object-fit: contain; }
+.event-photo-viewer button { position: absolute; top: 50%; transform: translateY(-50%); border-radius: 50%; background: var(--paper); color: var(--ink); box-shadow: 0 2px 12px #0003; }
+.photo-prev { left: 12px; }.photo-next { right: 12px; }
+.event-dialog-caption { font-size: 12px; padding: 12px 0; }
+.event-photo-thumbnails { display: flex; gap: 10px; overflow-x: auto; padding: 4px; }
+.event-photo-thumbnails button { position: relative; width: 72px; height: 56px; flex-shrink: 0; overflow: hidden; border-radius: 6px; opacity: .6; }
+.event-photo-thumbnails button[aria-pressed="true"] { opacity: 1; outline: 2px solid var(--ink); outline-offset: 2px; }
+.event-photo-thumbnails img { object-fit: cover; }
+html:has(.event-photo-dialog[open]) { overflow: hidden; }
+@media (max-width: 760px) {
+ .event-detail-hero { grid-template-columns: minmax(0, 1fr); }
+ .event-hero-photo { height: 390px; height: clamp(300px, 48svh, 430px); }
+ .event-gallery-controls button { font-size: 11px; padding: 8px 10px; }
+ .discovery .event-photo-dialog { padding: 12px; }
+ .event-photo-viewer { height: 50dvh; }
+}
+
+.event-hero-layer { position: absolute; inset: 0; pointer-events: none; }
+.event-photo-caption { z-index: 3; }
+.event-cover-arrows { position: absolute; inset: 50% 12px auto; z-index: 3; display: flex; justify-content: space-between; pointer-events: none; transform: translateY(-50%); }
+.event-cover-arrows button { width: 44px; height: 44px; display: grid; place-items: center; pointer-events: auto; border-radius: 50%; background: var(--paper); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 2px 12px #0003; }
+
+.event-dialog-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 200ms ease; pointer-events: none; }
+.event-dialog-slide[data-active="true"] { opacity: 1; }
+.event-cover-arrows button:disabled { cursor: wait; }
+@media (prefers-reduced-motion: reduce) {
+  .event-dialog-slide { transition: none; }
+}
