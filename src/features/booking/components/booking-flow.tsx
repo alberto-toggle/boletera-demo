@@ -25,6 +25,8 @@ import {
 import { Checkout } from "./checkout";
 import { TicketDesignGallery } from "./ticket-design-gallery";
 import { ReservationClock } from "./reservation-clock";
+import { updateAccount, useAccount } from "@/features/account/store";
+import { pendingTransfer, recordPurchase } from "@/features/account/model";
 
 export function BookingFlow({
   event,
@@ -33,6 +35,7 @@ export function BookingFlow({
   event: DiscoveryEvent;
   direction: DemoDirection;
 }) {
+  const { state: accountState } = useAccount();
   const venue = useMemo(() => createDemoVenue(event), [event]);
   const [state, dispatch] = useReducer(
     (state: BookingState, action: BookingAction) =>
@@ -40,6 +43,13 @@ export function BookingFlow({
     initialBookingState,
   );
   const [now, setNow] = useState(0);
+  useEffect(() => {
+    if (state.step === "confirmed" && state.order.mode !== "guest") {
+      updateAccount((current) =>
+        recordPurchase(current, state.order, event, Date.now()),
+      );
+    }
+  }, [state, event]);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const previousStep = useRef(state.step);
   const expiresAt =
@@ -88,6 +98,26 @@ export function BookingFlow({
     });
   }
   const home = `/demo-${direction}`;
+  const savedOrder =
+    state.step === "confirmed"
+      ? accountState.orders.find((o) => o.id === state.order.id)
+      : undefined;
+  const confirmedOrder =
+    state.step === "confirmed"
+      ? savedOrder
+        ? {
+            ...state.order,
+            tickets: savedOrder.tickets
+              .filter(
+                (t) =>
+                  t.ownerEmail === accountState.session &&
+                  t.status === "valid" &&
+                  !pendingTransfer(accountState, t.id),
+              )
+              .map((t) => ({ ...t, id: t.accessId, status: "valid" as const })),
+          }
+        : state.order
+      : null;
   const theme = direction === "institucional" ? "institutional" : direction;
   return (
     <div
@@ -193,13 +223,23 @@ export function BookingFlow({
               Compra simulada · Sin cargos ni envíos reales. Boletos sin validez
               de acceso.
             </div>
-            <TicketDesignGallery
-              event={event}
-              order={state.order}
-              venue={venue}
-              direction={direction}
-            />
+            {confirmedOrder && confirmedOrder.tickets.length > 0 && (
+              <TicketDesignGallery
+                event={event}
+                order={confirmedOrder}
+                venue={venue}
+                direction={direction}
+              />
+            )}
             <div className="confirmation-actions">
+              {state.order.mode !== "guest" && (
+                <Link
+                  className="demo-button"
+                  href={`${home}/cuenta/boletos/${state.order.id}`}
+                >
+                  Ir a mis boletos <ArrowRight size={16} />
+                </Link>
+              )}
               <Button
                 variant="outline"
                 onClick={() => dispatch({ type: "reset" })}

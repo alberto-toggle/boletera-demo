@@ -20,6 +20,7 @@ import {
 } from "../model";
 import { PaymentDetails, type PaymentMethod } from "./payment/payment-details";
 import { BuyerIdentification } from "./buyer-identification";
+import { signIn, useAccount } from "@/features/account/store";
 
 type Stage = "identity" | "attendees" | "payment";
 interface CheckoutProps {
@@ -50,10 +51,13 @@ export function Checkout({
   onPay,
   onExpire,
 }: CheckoutProps) {
+  const { user } = useAccount();
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
-  const [stage, setStage] = useState<Stage>("identity");
-  const [buyer, setBuyer] = useState<Buyer>(emptyBuyer);
-  const [mode, setMode] = useState<DemoOrder["mode"]>("guest");
+  const [stage, setStage] = useState<Stage>(user ? "attendees" : "identity");
+  const [buyer, setBuyer] = useState<Buyer>(user ?? emptyBuyer);
+  const [mode, setMode] = useState<DemoOrder["mode"]>(
+    user ? "account" : "guest",
+  );
   const [outcome, setOutcome] = useState<"approved" | "declined">("approved");
   const [error, setError] = useState("");
   const heading = useRef<HTMLHeadingElement>(null);
@@ -106,6 +110,7 @@ export function Checkout({
               initialBuyer={buyer}
               initialMode={mode}
               onComplete={(buyer, mode) => {
+                if (mode !== "guest") signIn(buyer);
                 setBuyer(buyer);
                 setMode(mode);
                 setStage("attendees");

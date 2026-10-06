@@ -6,6 +6,7 @@ import { getEventExperience } from "../event-experience/fixtures";
 import { EventDetails } from "../event-experience/components/event-details";
 import { demoEvents } from "../event-discovery/fixtures";
 import { Brand } from "../event-discovery/components/chrome";
+import { AccountMenu } from "../account/components/account-menu";
 import {
   formatEventDate,
   formatEventTime,
@@ -43,7 +44,7 @@ export function EventPage({
         <Link href={`${home}#agenda`}>
           <ArrowLeft size={16} /> Cartelera
         </Link>
-        <span>DEMO · SIN COBROS REALES</span>
+        <AccountMenu />
       </header>
       <main className="booking-main event-detail-main">
         <section className="event-detail-hero">

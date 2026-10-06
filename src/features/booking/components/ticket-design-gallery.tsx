@@ -1,6 +1,8 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   formatEventDate,
   formatEventTime,
@@ -28,11 +30,13 @@ export function TicketDesignGallery({
   order,
   venue,
   direction,
+  compact = false,
 }: {
   event: DiscoveryEvent;
   order: DemoOrder;
   venue: DemoVenue;
   direction: DemoDirection;
+  compact?: boolean;
 }) {
   const ticketsRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
@@ -42,13 +46,22 @@ export function TicketDesignGallery({
   );
   const id = useId();
   const active = designs.find((item) => item.id === design) ?? designs[0];
-  return (
-    <section
-      className="ticket-design-gallery"
-      id="tus-boletos"
-      aria-labelledby={`${id}-title`}
-    >
-      <h2 id={`${id}-title`}>Tus boletos</h2>
+
+  const [ticketIndex, setTicketIndex] = useState(0);
+  function moveTicket(delta: number) {
+    const list = ticketsRef.current;
+    const target = list?.children.item(ticketIndex + delta);
+    const first = list?.children.item(0);
+    if (list && target instanceof HTMLElement && first instanceof HTMLElement)
+      list.scrollTo({
+        left: target.offsetLeft - first.offsetLeft,
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+      });
+  }
+  const controls = (
+    <>
       <fieldset className="ticket-design-options" disabled={exporting}>
         <legend>Explora los diseños</legend>
         {designs.map((item) => (
@@ -84,11 +97,83 @@ export function TicketDesignGallery({
       <p className="ticket-design-note">
         El PDF conserva el diseño elegido · Un boleto por página.
       </p>
+    </>
+  );
+  return (
+    <section
+      className={`ticket-design-gallery${compact ? " account-ticket-gallery" : ""}`}
+      id="tus-boletos"
+      aria-labelledby={`${id}-title`}
+    >
+      <h2 id={`${id}-title`} className={compact ? "sr-only" : undefined}>
+        Tus boletos
+      </h2>
+      {compact ? (
+        <details className="account-design-control">
+          <summary>Diseño del boleto · {active.label}</summary>
+          {controls}
+        </details>
+      ) : (
+        controls
+      )}
+      {compact && order.tickets.length > 1 && (
+        <div className="account-carousel-controls">
+          <span aria-live="polite">
+            Boleto {ticketIndex + 1} de {order.tickets.length}
+          </span>
+          <Button
+            variant="outline"
+            size="icon"
+            aria-label="Boleto anterior"
+            disabled={ticketIndex === 0 || exporting}
+            onClick={() => moveTicket(-1)}
+          >
+            <ArrowLeft size={18} />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            aria-label="Boleto siguiente"
+            disabled={ticketIndex === order.tickets.length - 1 || exporting}
+            onClick={() => moveTicket(1)}
+          >
+            <ArrowRight size={18} />
+          </Button>
+        </div>
+      )}
       <div
         className={`discovery booking ticket-design-preview ${active.theme}${exporting ? " is-exporting" : ""}`}
         data-ticket-design={design}
       >
-        <div className="issued-tickets" ref={ticketsRef}>
+        <div
+          className="issued-tickets"
+          ref={ticketsRef}
+          onScroll={
+            compact
+              ? (e) => {
+                  const list = e.currentTarget;
+                  const first = list.children.item(0);
+                  const second = list.children.item(1);
+                  if (
+                    first instanceof HTMLElement &&
+                    second instanceof HTMLElement
+                  )
+                    setTicketIndex(
+                      Math.max(
+                        0,
+                        Math.min(
+                          order.tickets.length - 1,
+                          Math.round(
+                            list.scrollLeft /
+                              (second.offsetLeft - first.offsetLeft),
+                          ),
+                        ),
+                      ),
+                    );
+                }
+              : undefined
+          }
+        >
           {order.tickets.map((ticket) => {
             const seat = venue.seats.find((item) => item.id === ticket.seatId);
             if (design === "inmersiva")

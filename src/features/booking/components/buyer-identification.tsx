@@ -16,6 +16,8 @@ import { FancyButton } from "./auth/fancy-button";
 import { GoogleIcon } from "./auth/google-icon";
 import { demoAccount } from "../fixtures";
 import { validateContact, type Buyer, type DemoOrder } from "../model";
+import { useAccount } from "@/features/account/store";
+import { normalizeEmail } from "@/features/account/model";
 
 export function BuyerIdentification({
   initialBuyer,
@@ -26,6 +28,7 @@ export function BuyerIdentification({
   initialMode: DemoOrder["mode"];
   onComplete: (buyer: Buyer, mode: DemoOrder["mode"]) => void;
 }) {
+  const { state: accountState } = useAccount();
   const id = useId();
   const [buyer, setBuyer] = useState(initialBuyer);
   const [mode, setMode] = useState(initialMode);
@@ -63,10 +66,17 @@ export function BuyerIdentification({
         setError("El código no coincide. En esta demo usa 123456.");
         return;
       }
-      onComplete({ ...buyer, verifiedContact: verification.contact }, mode);
+      onComplete(
+        {
+          ...buyer,
+          contactChannel: verification.channel,
+          verifiedContact: verification.contact,
+        },
+        mode,
+      );
       return;
     }
-    const channel = mode === "account" ? "email" : buyer.contactChannel;
+    const channel = mode !== "guest" ? "email" : buyer.contactChannel;
     if (
       !validateContact(channel, buyer[channel]) ||
       (mode !== "account" && buyer.name.trim().length < 3)
@@ -78,11 +88,29 @@ export function BuyerIdentification({
       setError("Usa una contraseña de prueba de al menos 6 caracteres.");
       return;
     }
+    if (
+      mode === "register" &&
+      accountState.users.some((u) => u.email === normalizeEmail(buyer.email))
+    ) {
+      setError("Esta cuenta ya existe. Selecciona Iniciar sesión.");
+      return;
+    }
     if (mode === "account") {
+      const existing = accountState.users.find(
+        (u) => u.email === normalizeEmail(buyer.email),
+      );
+      if (!existing) {
+        setError(
+          "Esta cuenta de prueba no existe. Crea una cuenta o usa los datos de ejemplo.",
+        );
+        return;
+      }
       onComplete(
         {
           ...buyer,
-          name: demoAccount.name,
+          ...existing,
+          name: existing?.name ?? demoAccount.name,
+          email: normalizeEmail(buyer.email),
           contactChannel: "email",
           verifiedContact: buyer.email.trim(),
         },
@@ -264,7 +292,7 @@ export function BuyerIdentification({
                       />
                     </div>
                   )}
-                  {mode !== "account" && (
+                  {mode === "guest" && (
                     <fieldset className="payment-scenario">
                       <legend>Verifica tu contacto con</legend>
                       {(
@@ -293,7 +321,7 @@ export function BuyerIdentification({
                   )}
                   {(() => {
                     const channel =
-                      mode === "account" ? "email" : buyer.contactChannel;
+                      mode !== "guest" ? "email" : buyer.contactChannel;
                     return (
                       <div>
                         <Label htmlFor={`${id}-contact`}>

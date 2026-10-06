@@ -439,4 +439,12 @@ export const playgroundBlocks = [
     kind: "credit-card",
     description: "Checkout con efecto de cristal, métodos de pago y campos de tarjeta de ejemplo.",
   },
+  {
+    title: "Card Folder",
+    category: "Checkout y pagos",
+    href: "/playground/beui/card-folder",
+    provider: "BE UI",
+    kind: "credit-card",
+    description: "Cartera animada con tarjetas y control de visibilidad de datos ficticios.",
+  },
 ] as const;
