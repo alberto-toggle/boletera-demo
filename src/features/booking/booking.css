@@ -2849,7 +2849,7 @@ html:has(.event-photo-dialog[open]) { overflow: hidden; }
 
 .event-dialog-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 200ms ease; pointer-events: none; }
 .event-dialog-slide[data-active="true"] { opacity: 1; }
-.event-cover-arrows button:disabled { cursor: wait; }
+.event-cover-arrows button:disabled { cursor: default; }
 @media (prefers-reduced-motion: reduce) {
   .event-dialog-slide { transition: none; }
 }

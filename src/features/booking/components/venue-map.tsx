@@ -170,7 +170,7 @@ export function VenueMap({
         >
           {atLimit ? <>
             <CircleAlert size={22} aria-hidden="true" />
-            <span><strong>Llegaste al máximo de {MAX_SEATS} lugares.</strong><span>Quita un lugar para cambiar tu selección.</span></span>
+            <span><strong>Llegaste al máximo de {MAX_SEATS} lugares.</strong><span>Quita un lugar si deseas cambiar tu selección.</span></span>
           </> : "Arrastra para explorar · + / − para acercar"}
         </span>
       </div>
@@ -446,7 +446,7 @@ export function VenueMap({
             style={{ left: limitHint.x, top: limitHint.y }}
           >
             <strong>Llegaste al máximo de {MAX_SEATS} lugares.</strong>
-            <span>Quita un lugar para cambiar tu selección.</span>
+            <span>Quita un lugar si deseas cambiar tu selección.</span>
             <button
               type="button"
               aria-label="Cerrar aviso de límite"

@@ -28,6 +28,9 @@ referencias visuales y verificaciones realizadas. El [flujo de compra](src/featu
 
 ## Playground de componentes
 
+La deuda pendiente para reutilizar los componentes públicos en operación u otros
+repositorios está registrada en [DT-001 · Separación y portabilidad de los componentes públicos](docs/deuda-tecnica/separacion-publico-operacion.md).
+
 ### Base visual
 
 shadcn está inicializado con Base UI, preset Nova, color Neutral e iconos Lucide.
