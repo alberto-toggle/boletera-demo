@@ -39,7 +39,7 @@ export function BuyerIdentification({
   const [password, setPassword] = useState("");
   const [verification, setVerification] = useState<{
     contact: string;
-    channel: Buyer["contactChannel"];
+    channel: "email";
   } | null>(null);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
@@ -76,12 +76,12 @@ export function BuyerIdentification({
       );
       return;
     }
-    const channel = mode !== "guest" ? "email" : buyer.contactChannel;
+    const channel = "email" as const;
     if (
       !validateContact(channel, buyer[channel]) ||
       (mode !== "account" && buyer.name.trim().length < 3)
     ) {
-      setError("Revisa tu nombre y el medio de contacto.");
+      setError("Revisa tu nombre y correo electrónico.");
       return;
     }
     if (mode !== "guest" && password.length < 6) {
@@ -204,7 +204,7 @@ export function BuyerIdentification({
                   ? "Tu próxima experiencia comienza aquí."
                   : mode === "account"
                     ? "Inicia sesión para continuar tu compra."
-                    : "Solo necesitamos tu nombre y un medio de contacto."}
+                    : "Solo necesitamos tu nombre y correo electrónico."}
           </p>
         </header>
         {google ? (
@@ -292,61 +292,25 @@ export function BuyerIdentification({
                       />
                     </div>
                   )}
-                  {mode === "guest" && (
-                    <fieldset className="payment-scenario">
-                      <legend>Verifica tu contacto con</legend>
-                      {(
-                        [
-                          ["email", "Correo electrónico"],
-                          ["phone", "Teléfono"],
-                        ] as const
-                      ).map(([value, label]) => (
-                        <label key={value}>
-                          <input
-                            type="radio"
-                            name={`${id}-channel`}
-                            checked={buyer.contactChannel === value}
-                            onChange={() =>
-                              setBuyer({
-                                ...buyer,
-                                contactChannel: value,
-                                verifiedContact: "",
-                              })
-                            }
-                          />
-                          {label}
-                        </label>
-                      ))}
-                    </fieldset>
-                  )}
-                  {(() => {
-                    const channel =
-                      mode !== "guest" ? "email" : buyer.contactChannel;
-                    return (
-                      <div>
-                        <Label htmlFor={`${id}-contact`}>
-                          {channel === "email"
-                            ? "Correo electrónico"
-                            : "Teléfono"}
-                        </Label>
-                        <Input
-                          id={`${id}-contact`}
-                          type={channel === "email" ? "email" : "tel"}
-                          autoComplete={channel === "email" ? "email" : "tel"}
-                          required
-                          maxLength={channel === "email" ? 120 : 18}
-                          value={buyer[channel]}
-                          onChange={(e) =>
-                            setBuyer({
-                              ...buyer,
-                              [channel]: e.target.value,
-                              verifiedContact: "",
-                            })
-                          }
-                        />
-                      </div>
-                    );
-                  })()}
+                  <div>
+                    <Label htmlFor={`${id}-contact`}>Correo electrónico</Label>
+                    <Input
+                      id={`${id}-contact`}
+                      type="email"
+                      autoComplete="email"
+                      required
+                      maxLength={120}
+                      value={buyer.email}
+                      onChange={(e) =>
+                        setBuyer({
+                          ...buyer,
+                          email: e.target.value,
+                          contactChannel: "email",
+                          verifiedContact: "",
+                        })
+                      }
+                    />
+                  </div>
                   {mode !== "guest" && (
                     <div>
                       <Label htmlFor={`${id}-password`}>
@@ -395,7 +359,7 @@ export function BuyerIdentification({
                   onClick={() => {
                     setBuyer({
                       ...demoAccount,
-                      contactChannel: buyer.contactChannel,
+                      contactChannel: "email",
                       verifiedContact: "",
                     });
                     setPassword("Demo2027");
@@ -417,10 +381,7 @@ export function BuyerIdentification({
               </>
             ) : (
               <div className="verification-step">
-                <p className="eyebrow">
-                  VERIFICA TU{" "}
-                  {verification.channel === "email" ? "CORREO" : "TELÉFONO"}
-                </p>
+                <p className="eyebrow">VERIFICA TU CORREO</p>
                 <ShieldCheck size={24} aria-hidden="true" />
                 <p>{verification.contact}</p>
                 <Label htmlFor={`${id}-code`}>Código de 6 dígitos</Label>

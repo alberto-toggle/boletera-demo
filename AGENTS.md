@@ -77,9 +77,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
   foco visible, estados de error comprensibles y comportamiento responsive.
   Respetar preferencias de movimiento reducido cuando haya animaciones.
 - Verificar los cambios de código con lint y comprobación de tipos dentro del
-  trabajo autorizado. Añadir pruebas de reglas y transiciones relevantes
-  (selección, importes, expiración, confirmación y acceso), sin pruebas que solo
-  repitan la implementación ni infraestructura de pruebas innecesaria.
+  trabajo autorizado. Por indicación del usuario, no añadir pruebas unitarias
+  durante esta etapa de demo; mantener lint, tipos y revisión de los flujos
+  en navegador. Retomar pruebas unitarias solo cuando el usuario lo solicite.
 - Revisar interacciones y presentación cuando haya un entorno disponible y
   autorizado. Informar qué se verificó y qué quedó sin verificar; no afirmar
   validación visual o funcional basándose solo en compilación.

@@ -2,6 +2,13 @@
 
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import Link from "next/link";
+import {
+  AnimatePresence,
+  motion,
+  useIsPresent,
+  useReducedMotion,
+} from "framer-motion";
+import type { ReactNode } from "react";
 import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Brand } from "@/features/event-discovery/components/chrome";
@@ -35,6 +42,7 @@ export function BookingFlow({
   event: DiscoveryEvent;
   direction: DemoDirection;
 }) {
+  const reduceMotion = useReducedMotion();
   const { state: accountState } = useAccount();
   const venue = useMemo(() => createDemoVenue(event), [event]);
   const [state, dispatch] = useReducer(
@@ -132,11 +140,6 @@ export function BookingFlow({
         </Link>
         <span>DEMOSTRACIÓN · SIN COBROS REALES</span>
       </header>
-      {expiresAt !== null && (
-        <ReservationClock
-          remainingSeconds={Math.max(0, Math.ceil((expiresAt - now) / 1000))}
-        />
-      )}
       <main className="booking-main">
         <nav className="booking-steps" aria-label="Pasos de compra">
           {["Elige tus lugares", "Identificación y pago", "Tus boletos"].map(
@@ -159,6 +162,12 @@ export function BookingFlow({
             ),
           )}
         </nav>
+        {expiresAt !== null && (
+          <ReservationClock
+            remainingSeconds={Math.max(0, Math.ceil((expiresAt - now) / 1000))}
+          />
+        )}
+
         <h1 className="booking-title" ref={headingRef} tabIndex={-1}>
           {state.step === "confirmed"
             ? "Tu próxima historia ya tiene lugar."
@@ -178,44 +187,83 @@ export function BookingFlow({
               eventTitle={event.title}
               selectedIds={state.selectedIds}
               onToggle={(seatId) => dispatch({ type: "toggle", seatId })}
+              onClear={() => dispatch({ type: "clear-selection" })}
               onContinue={reserve}
               notice={state.notice}
             />
           </>
         )}
-        {state.step === "checkout" && (
-          <Checkout
-            event={event}
-            seats={selectedSeats}
-            onBack={() => dispatch({ type: "back" })}
-            onExpire={() => dispatch({ type: "expire", now: state.expiresAt })}
-            onPay={(buyer, mode, outcome) =>
-              dispatch({
-                type: "start-payment",
-                now: Date.now(),
-                buyer,
-                mode,
-                outcome,
-              })
-            }
-          />
-        )}
-        {state.step === "processing" && <PaymentProcessing />}
-        {(state.step === "failed" || state.step === "expired") && (
-          <section className="booking-result checkout-panel" role="alert">
-            <RotateCcw size={38} />
-            <h2>
-              {state.step === "failed" ? "Pago rechazado" : "Apartado expirado"}
-            </h2>
-            <p>{state.message}</p>
-            <Button
-              className="demo-button"
-              onClick={() => dispatch({ type: "reset" })}
+        <AnimatePresence
+          mode="wait"
+          initial={false}
+          custom={state.step === "expired" && !reduceMotion}
+        >
+          {state.step === "checkout" && (
+            <CheckoutTransition key="checkout">
+              <Checkout
+                event={event}
+                seats={selectedSeats}
+                onBack={() => dispatch({ type: "back" })}
+                onExpire={() =>
+                  dispatch({ type: "expire", now: state.expiresAt })
+                }
+                onPay={(buyer, mode, outcome) =>
+                  dispatch({
+                    type: "start-payment",
+                    now: Date.now(),
+                    buyer,
+                    mode,
+                    outcome,
+                  })
+                }
+              />
+            </CheckoutTransition>
+          )}
+          {(state.step === "failed" || state.step === "expired") && (
+            <motion.section
+              key={state.step}
+              className="booking-result checkout-panel"
+              role="alert"
+              initial={
+                state.step === "expired" && !reduceMotion
+                  ? { opacity: 0, y: 24, scale: 0.98 }
+                  : false
+              }
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             >
-              Volver a elegir lugares
-            </Button>
-          </section>
-        )}
+              <motion.div
+                aria-hidden="true"
+                initial={
+                  state.step === "expired" && !reduceMotion
+                    ? { rotate: -70, scale: 0.7 }
+                    : false
+                }
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{
+                  duration: 0.55,
+                  delay: 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <RotateCcw size={38} />
+              </motion.div>
+              <h2>
+                {state.step === "failed"
+                  ? "Pago rechazado"
+                  : "Apartado expirado"}
+              </h2>
+              <p>{state.message}</p>
+              <Button
+                className="demo-button"
+                onClick={() => dispatch({ type: "reset" })}
+              >
+                Volver a elegir lugares
+              </Button>
+            </motion.section>
+          )}
+        </AnimatePresence>
+        {state.step === "processing" && <PaymentProcessing />}
         {state.step === "confirmed" && (
           <section className="booking-confirmation">
             <PaymentSuccess order={state.order} />
@@ -258,5 +306,26 @@ export function BookingFlow({
         validez de acceso.
       </footer>
     </div>
+  );
+}
+
+// An outgoing checkout must stop accepting input as soon as its reservation ends.
+function CheckoutTransition({ children }: { children: ReactNode }) {
+  const present = useIsPresent();
+  return (
+    <motion.div
+      inert={!present}
+      aria-hidden={!present ? true : undefined}
+      variants={{
+        exit: (animated: boolean) => ({
+          opacity: animated ? 0 : 1,
+          y: animated ? -10 : 0,
+          transition: { duration: animated ? 0.2 : 0 },
+        }),
+      }}
+      exit="exit"
+    >
+      {children}
+    </motion.div>
   );
 }

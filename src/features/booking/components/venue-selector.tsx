@@ -1,7 +1,13 @@
 "use client";
 // Selection remains controlled; the map shares one geometry at every scale.
-import { useEffect, useId, useRef, useState } from "react";
-import { ArrowRight, Map, Maximize2, Minimize2, X } from "lucide-react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useIsPresent,
+  useReducedMotion,
+} from "framer-motion";
+import { ArrowRight, Trash2, Map, Maximize2, Minimize2, X } from "lucide-react";
 import type { DemoVenue } from "../fixtures";
 import { VenueMap } from "./venue-map";
 import { MAX_SEATS, totalForSeats } from "../model";
@@ -12,6 +18,7 @@ interface Props {
   selectedIds: readonly string[];
   onToggle: (id: string) => void;
   onContinue: () => void;
+  onClear: () => void;
   notice: string | null;
 }
 function money(amountMinor: number) {
@@ -23,9 +30,11 @@ export function VenueSelector({
   selectedIds,
   onToggle,
   onContinue,
+  onClear,
   notice,
 }: Props) {
   const id = useId();
+  const reduceMotion = useReducedMotion();
   const [showSelection, setShowSelection] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const shell = useRef<HTMLDialogElement>(null);
@@ -89,6 +98,15 @@ export function VenueSelector({
               {selected.length}{" "}
               {selected.length === 1 ? "lugar elegido" : "lugares elegidos"}
             </h3>
+            <button
+              type="button"
+              className="venue-clear-selection"
+              disabled={!selected.length}
+              onClick={onClear}
+            >
+              <Trash2 size={15} aria-hidden="true" />
+              Limpiar selección
+            </button>
             <p>Puedes elegir hasta {MAX_SEATS} lugares.</p>
             <div className="seat-legend">
               <span>
@@ -104,34 +122,47 @@ export function VenueSelector({
                 Ocupado
               </span>
             </div>
-            {selected.length ? (
-              <ul>
-                {selected.map((seat) => (
-                  <li key={seat.id}>
-                    <div>
-                      <strong>{seat.label}</strong>
-                      <span>{money(seat.amountMinor)} MXN</span>
-                    </div>
-                    <button
-                      type="button"
-                      aria-label={`Quitar ${seat.label}`}
-                      onClick={() => onToggle(seat.id)}
-                    >
-                      <X size={16} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="venue-selection-empty">
-                <Map size={32} />
-                <p>
-                  Primero una sección.
-                  <br />
-                  Después, tu lugar favorito.
-                </p>
-              </div>
-            )}
+            <AnimatePresence mode="wait" initial={false}>
+              {selected.length ? (
+                <SelectionList key="selected">
+                  <ul>
+                    {selected.map((seat) => (
+                      <li key={seat.id}>
+                        <div>
+                          <strong>{seat.label}</strong>
+                          <span>{money(seat.amountMinor)} MXN</span>
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Quitar ${seat.label}`}
+                          onClick={() => onToggle(seat.id)}
+                        >
+                          <X size={16} />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </SelectionList>
+              ) : (
+                <motion.div
+                  key="empty"
+                  className="venue-selection-empty"
+                  initial={{
+                    opacity: reduceMotion ? 1 : 0,
+                    y: reduceMotion ? 0 : 10,
+                  }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: reduceMotion ? 0 : 0.25 }}
+                >
+                  <Map size={32} />
+                  <p>
+                    Primero una sección.
+                    <br />
+                    Después, tu lugar favorito.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
             <p role="status" className="venue-notice">
               {notice ??
                 `${selected.length} de ${MAX_SEATS} lugares seleccionados`}
@@ -174,5 +205,22 @@ export function VenueSelector({
         </div>
       </section>
     </dialog>
+  );
+}
+
+function SelectionList({ children }: { children: ReactNode }) {
+  const present = useIsPresent();
+  const reduce = useReducedMotion();
+  return (
+    <motion.div
+      className="venue-selected-list"
+      inert={!present}
+      aria-hidden={!present ? true : undefined}
+      initial={false}
+      exit={{ opacity: 0, y: reduce ? 0 : -10, scale: reduce ? 1 : 0.98 }}
+      transition={{ duration: reduce ? 0 : 0.2 }}
+    >
+      {children}
+    </motion.div>
   );
 }

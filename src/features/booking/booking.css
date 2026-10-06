@@ -2434,31 +2434,9 @@ html:has(.venue-workspace-shell.is-fullscreen) {
   inset: 0;
   width: 100vw;
   height: 100dvh;
-  overflow: auto;
+  overflow: hidden;
 }
-.venue-workspace-shell.is-fullscreen .venue-workspace {
-  min-height: 100%;
-  border: 0;
-  border-radius: 0;
-  display: flex;
-  flex-direction: column;
-}
-.venue-workspace-shell.is-fullscreen .venue-world {
-  height: calc(100dvh - 250px);
-  min-height: 350px;
-}
-.venue-workspace-shell.is-fullscreen .venue-dialog-header {
-  position: sticky;
-  top: 0;
-  z-index: 12;
-  background: var(--paper);
-}
-.venue-workspace-shell.is-fullscreen .venue-selection {
-  position: static;
-}
-.venue-workspace-shell.is-fullscreen .venue-dialog-footer {
-  padding-bottom: max(18px, env(safe-area-inset-bottom));
-}
+/* Fullscreen keeps the same map/sidebar grid; only the page header is removed. */
 @media (max-width: 700px) {
   .venue-workspace .venue-dialog-header {
     gap: 10px;
@@ -2473,9 +2451,6 @@ html:has(.venue-workspace-shell.is-fullscreen) {
   }
   .venue-expand svg {
     flex-shrink: 0;
-  }
-  .venue-workspace-shell.is-fullscreen .venue-world {
-    height: calc(100dvh - 280px);
   }
 }
 
@@ -2878,3 +2853,54 @@ html:has(.event-photo-dialog[open]) { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .event-dialog-slide { transition: none; }
 }
+
+/* Demo countdown controls; separate reservation and event clocks. */
+.purchase-clock { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: center; gap: 16px; padding: 14px 20px; margin: 20px 0; border: 1px solid var(--line); border-radius: 14px; color: var(--paper); background: var(--ink); animation: purchase-clock-enter .5s ease-out; }
+.purchase-clock strong { font-size: 14px; }
+.purchase-clock time { display: flex; align-items: center; flex-shrink: 0; font-size: 32px; font-weight: 650; line-height: 1; transform-origin: center; }
+.purchase-clock button, .event-countdown-demo > button { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; padding: 8px 10px; border: 1px solid currentColor; border-radius: 8px; cursor: pointer; background: transparent; color: inherit; }
+.purchase-clock button small, .event-countdown-demo > button small { font-size: 9px; text-transform: uppercase; opacity: .7; }
+/* Demo alert keeps the normal surface and pulses only the icon and digits. */
+.purchase-clock-alert time, .purchase-clock-alert .purchase-clock-icon { color: #f4c18b; animation: purchase-clock-content-pulse 1.8s ease-in-out infinite; }
+.gala .purchase-clock-alert time, .gala .purchase-clock-alert .purchase-clock-icon { color: #84401f; }
+.purchase-clock button[aria-pressed="true"] { box-shadow: inset 0 0 0 1px currentColor; background: color-mix(in srgb, currentColor 12%, transparent); }
+.purchase-clock button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.rolling-digits { display: flex; align-items: center; font-variant-numeric: tabular-nums; line-height: 1; }
+.rolling-digit { display: inline-block; position: relative; width: .65em; height: 1.2em; overflow: hidden; }
+.rolling-digit > span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.rolling-colon { display: flex; align-items: center; justify-content: center; width: .35em; height: 1.2em; }
+.event-countdown-demo { margin: 16px 0; }
+.event-countdown { margin-top: 16px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; }
+.event-countdown > p { margin: 0 0 12px; font-size: 13px; color: var(--subtle); }
+.event-countdown-units { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; text-align: center; }
+.event-countdown-units strong { display: block; font-size: clamp(22px, 3vw, 36px); font-variant-numeric: tabular-nums; }
+.event-countdown-units small { font-size: 11px; color: var(--subtle); }
+.map-dance-floor rect { fill: var(--paper); stroke: var(--accent-tone); stroke-width: 2; stroke-dasharray: 7 4; }
+.map-dance-floor text { fill: var(--ink); font-size: 15px; font-weight: 650; letter-spacing: 3px; }
+@keyframes purchase-clock-enter { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes purchase-clock-content-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .85; transform: scale(1.12); } }
+@media(max-width: 600px) { .purchase-clock { gap: 10px; flex-wrap: wrap; padding: 12px; } .purchase-clock strong { font-size: 12px; } .purchase-clock time { font-size: 28px; } }
+@media(prefers-reduced-motion: reduce) { .purchase-clock, .purchase-clock-alert time, .purchase-clock-alert .purchase-clock-icon { animation: none; } }
+@media print { .purchase-clock, .event-countdown-demo > button { display: none; } }
+
+.continuous-venue .venue-map-toolbar > .venue-limit-reached { display: flex; gap: 12px; padding: 12px 16px; color: var(--paper); background: var(--ink); border: 1px solid var(--accent-tone); border-radius: 10px; font-size: 13px; line-height: 1.45; }
+.venue-limit-reached > svg { flex-shrink: 0; }
+.venue-limit-reached strong, .venue-limit-reached > span > span { display: block; }
+.venue-limit-reached strong { font-weight: 700; }
+.venue-limit-hint { position: absolute; z-index: 10; width: min(260px, calc(100% - 24px)); padding: 14px 32px 14px 16px; border-radius: 12px; background: var(--ink); color: var(--paper); box-shadow: 0 6px 24px #0003; pointer-events: auto; }
+.venue-limit-hint strong, .venue-limit-hint span { display: block; font-size: 13px; line-height: 1.5; }
+.venue-limit-hint button { position: absolute; right: 4px; top: 4px; width: 28px; height: 28px; background: none; color: inherit; border: 0; cursor: pointer; font-size: 20px; }
+@media (max-width: 700px) {
+  .continuous-venue .venue-map-toolbar:has(.venue-limit-reached) { flex-wrap: wrap; }
+  .continuous-venue .venue-map-toolbar > .venue-limit-reached { display: flex; flex-basis: 100%; font-size: 12px; line-height: 1.4; }
+}
+
+.venue-map-toolbar > .venue-limit-reached { animation: venue-limit-enter .45s cubic-bezier(.22,1,.36,1); }
+.venue-clear-selection { display: inline-flex; align-items: center; gap: 7px; align-self: flex-start; margin: 8px 0 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: transparent; font-size: 12px; cursor: pointer; }
+.venue-clear-selection:hover:not(:disabled) { background: var(--soft); }
+.venue-clear-selection:disabled { opacity: .45; cursor: default; }
+.venue-clear-selection:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.venue-selected-list { min-height: 0; overflow-y: auto; }
+.map-seat circle { transition: fill .22s ease, stroke .22s ease; }
+@keyframes venue-limit-enter { from { opacity: 0; transform: translateY(-8px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (prefers-reduced-motion: reduce) { .venue-map-toolbar > .venue-limit-reached { animation: none; } .map-seat circle { transition: none; } }

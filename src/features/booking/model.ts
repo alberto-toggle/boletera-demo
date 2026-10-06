@@ -52,6 +52,7 @@ export type BookingState =
   | { step: "confirmed"; order: DemoOrder };
 export type BookingAction =
   | { type: "toggle"; seatId: string }
+  | { type: "clear-selection" }
   | { type: "reserve"; now: number; orderId: string }
   | {
       type: "pay";
@@ -91,7 +92,8 @@ export function validateContact(
 export function validateBuyer(buyer: Buyer, count?: number): boolean {
   return (
     buyer.name.trim().length >= 3 &&
-    validateContact(buyer.contactChannel, buyer[buyer.contactChannel]) &&
+    buyer.contactChannel === "email" &&
+    validateContact("email", buyer.email) &&
     buyer.verifiedContact === buyer[buyer.contactChannel].trim() &&
     (buyer.audience === "public" ||
       (buyer.audience === "military" &&
@@ -111,6 +113,8 @@ export function transitionBooking(
   event: DiscoveryEvent,
 ): BookingState {
   if (action.type === "reset") return initialBookingState;
+  if (action.type === "clear-selection" && state.step === "selection")
+    return { ...state, selectedIds: [], notice: "Selección vaciada. Puedes elegir nuevos lugares." };
   if (action.type === "back" && state.step === "checkout")
     return {
       step: "selection",

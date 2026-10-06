@@ -49,9 +49,6 @@ No hay dependencias de las rutas Playground.
 
 ## Verificación
 
-`node --test tests/account.test.mjs tests/booking.test.mjs` cubre 23 casos de
-compra, selección y transferencia: permisos, cancelación, aceptación única,
-renovación de códigos, expiración, boletos usados, retransferencia y datos corruptos.
 Prueba Chrome local: cuatro temas, desktop/móvil, entrada desde landing, Escape y
 foco, próximos/pasados, perfil, registro, aislamiento entre cuentas, compra con
 sesión, persistencia, aceptación/cancelación y PDF de cuatro boletos desde carrusel.

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { Minus, Plus, RotateCcw } from "lucide-react";
+import { CircleAlert, Minus, Plus, RotateCcw } from "lucide-react";
+import { MAX_SEATS } from "../model";
 import type { DemoVenue } from "../fixtures";
 import {
   constrainCamera,
@@ -20,6 +21,43 @@ export function VenueMap({
   selectedIds: readonly string[];
   onToggle: (id: string) => void;
 }) {
+  const [limitHint, setLimitHint] = useState<{ x: number; y: number } | null>(
+    null,
+  );
+  const hintTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const canvas = useRef<HTMLDivElement>(null);
+  const atLimit = selectedIds.length >= MAX_SEATS;
+  useEffect(
+    () => () => {
+      if (hintTimeout.current) clearTimeout(hintTimeout.current);
+    },
+    [],
+  );
+  function selectSeat(id: string, element: SVGGElement) {
+    if (hintTimeout.current) clearTimeout(hintTimeout.current);
+    if (atLimit && !selectedIds.includes(id)) {
+      const bounds = canvas.current?.getBoundingClientRect();
+      const seat = element.getBoundingClientRect();
+      if (bounds)
+        setLimitHint({
+          x: Math.max(
+            12,
+            Math.min(
+              bounds.width - 272,
+              seat.x + seat.width / 2 - bounds.x - 130,
+            ),
+          ),
+          y: Math.max(
+            12,
+            Math.min(bounds.height - 100, seat.y - bounds.y - 90),
+          ),
+        });
+      hintTimeout.current = setTimeout(() => setLimitHint(null), 4500);
+      return;
+    }
+    setLimitHint(null);
+    onToggle(id);
+  }
   const sections = useMemo(() => layoutVenue(venue), [venue]);
   const [camera, setCamera] = useState(VENUE_VIEW);
   const current = useRef(camera);
@@ -42,6 +80,7 @@ export function VenueMap({
       })
     : undefined;
   function move(next: MapBox, animate = false) {
+    setLimitHint(null);
     cancelAnimationFrame(frame.current);
     const target = constrainCamera(next);
     const start = current.current;
@@ -124,9 +163,18 @@ export function VenueMap({
             ))}
           </select>
         </label>
-        <span id={helpId}>Arrastra para explorar · + / − para acercar</span>
+        <span
+          id={helpId}
+          role="status"
+          className={atLimit ? "venue-limit-reached" : undefined}
+        >
+          {atLimit ? <>
+            <CircleAlert size={22} aria-hidden="true" />
+            <span><strong>Llegaste al máximo de {MAX_SEATS} lugares.</strong><span>Quita un lugar para cambiar tu selección.</span></span>
+          </> : "Arrastra para explorar · + / − para acercar"}
+        </span>
       </div>
-      <div className="venue-map-canvas">
+      <div className="venue-map-canvas" ref={canvas}>
         <svg
           ref={svg}
           className="venue-world"
@@ -250,9 +298,24 @@ export function VenueMap({
           <text x="500" y="79" textAnchor="middle" className="map-stage-label">
             ESCENARIO
           </text>
-          <text x="500" y="550" textAnchor="middle" className="map-aisle">
-            PASILLO CENTRAL
-          </text>
+          {venue.arrangement === "tables" ? (
+            <g
+              aria-label="Pista de baile, área no seleccionable"
+              className="map-dance-floor"
+            >
+              <rect x="360" y="150" width="280" height="360" rx="12" />
+              <text x="500" y="325" textAnchor="middle">
+                <tspan x="500">PISTA</tspan>
+                <tspan x="500" dy="26">
+                  DE BAILE
+                </tspan>
+              </text>
+            </g>
+          ) : (
+            <text x="500" y="550" textAnchor="middle" className="map-aisle">
+              PASILLO CENTRAL
+            </text>
+          )}
           <text x="500" y="979" textAnchor="middle" className="map-aisle">
             ↑ ACCESO PRINCIPAL
           </text>
@@ -314,9 +377,9 @@ export function VenueMap({
                         aria-pressed={chosen}
                         aria-label={`${seat.label}, ${seat.occupied ? "ocupado" : chosen ? "seleccionado" : "disponible"}, ${formatPrice({ amountMinor: seat.amountMinor, currency: "MXN" })} MXN`}
                         className={`map-seat${chosen ? " chosen" : ""}${seat.occupied ? " occupied" : ""}`}
-                        onClick={() => {
+                        onClick={(event) => {
                           if (!dragged.current && detailed && !seat.occupied)
-                            onToggle(seat.id);
+                            selectSeat(seat.id, event.currentTarget);
                         }}
                         onKeyDown={(event) => {
                           if (
@@ -324,7 +387,7 @@ export function VenueMap({
                             !seat.occupied
                           ) {
                             event.preventDefault();
-                            onToggle(seat.id);
+                            selectSeat(seat.id, event.currentTarget);
                           }
                         }}
                       >
@@ -376,6 +439,23 @@ export function VenueMap({
             </g>
           ))}
         </svg>
+        {atLimit && limitHint && (
+          <div
+            className="venue-limit-hint"
+            role="status"
+            style={{ left: limitHint.x, top: limitHint.y }}
+          >
+            <strong>Llegaste al máximo de {MAX_SEATS} lugares.</strong>
+            <span>Quita un lugar para cambiar tu selección.</span>
+            <button
+              type="button"
+              aria-label="Cerrar aviso de límite"
+              onClick={() => setLimitHint(null)}
+            >
+              ×
+            </button>
+          </div>
+        )}
         <div className="venue-camera-controls" aria-label="Controles del mapa">
           <button
             type="button"

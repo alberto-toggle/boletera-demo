@@ -59,11 +59,7 @@ como implementados. Tampoco hay bandeja persistente de compras ni autenticación
 
 ## Pruebas
 
-`node --test tests/booking.test.mjs` ejecuta pruebas de las reglas reales del modelo
-con Node y TypeScript existentes: ocupados, límite, selección, importes de zonas,
-validación, rechazo, expiración, reintento, conflicto y emisión única.
-
-Las comprobaciones adicionales en Chrome usan el servidor iniciado por el usuario.
+Las comprobaciones en Chrome usan el servidor iniciado por el usuario.
 No iniciar otro servidor sin su autorización.
 
 La dirección `inmersiva` reutiliza las mismas reglas y formularios, y renderiza
@@ -139,3 +135,19 @@ Verificado en Chrome: compra completa por registro, login, invitado con teléfon
 ### PDF con el diseño seleccionado
 
 `ticket-pdf.ts` usa `html-to-image` para capturar los componentes actuales a 3× y `jsPDF` para colocar un boleto por página A4, conservando sus proporciones y el QR. La exportación usa gráficos rasterizados de alta resolución; el texto no es seleccionable. La previsualización y las descargas individual/completa usan el mismo generador. El selector queda bloqueado durante la captura; se eliminan transformaciones interactivas y se excluyen los controles de desprendimiento.
+
+## Ajustes de presentación de la demo (6 de octubre de 2026)
+
+- Los mapas con mesas incluyen una pista de baile central no seleccionable;
+  los mapas de filas conservan su pasillo. A y B tienen el mismo ancho que C, D y E;
+  la pista ocupa el bloque central sobre D, entre A y B.
+- Invitado y registro verifican exclusivamente correo electrónico; Google simulado
+  se conserva. El teléfono del perfil no es una vía de autenticación o verificación.
+- La reserva muestra un contador centrado con dígitos rodantes. «Alerta demo»
+  conserva el fondo y pulsa icono y números. Se desactiva al repetir el clic,
+  no altera el vencimiento y no se activa automáticamente por tiempo.
+- El detalle permite mostrar u ocultar la cuenta regresiva al inicio del evento.
+  Parte oculta y usa su fecha con zona horaria. Adapta el cálculo y NumberFlow del
+  bloque Music Concert Countdown de shadcn.io ya descargado en Playground;
+  los componentes de la demo no importan scaffolding del Playground.
+- Ambos contadores respetan movimiento reducido y evitan anuncios cada segundo.

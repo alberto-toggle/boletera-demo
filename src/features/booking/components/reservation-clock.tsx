@@ -1,31 +1,29 @@
+"use client";
+import { useState } from "react";
 import { Timer } from "lucide-react";
+import { RollingDigits } from "./countdown/rolling-digits";
 
 export function ReservationClock({
   remainingSeconds,
 }: {
   remainingSeconds: number;
 }) {
-  const urgent = remainingSeconds <= 60;
+  const [alert, setAlert] = useState(false);
+  const value = `${String(Math.floor(remainingSeconds / 60)).padStart(2, "0")}:${String(remainingSeconds % 60).padStart(2, "0")}`;
   return (
-    <div className={`reservation-banner${urgent ? " reservation-urgent" : ""}`}>
-      <Timer size={22} aria-hidden="true" />
-      <div>
-        <strong>Tus lugares están reservados</strong>
-        <span>
-          {urgent
-            ? "Queda menos de un minuto para completar tu compra."
-            : "Completa tu compra antes de que termine el tiempo."}
-        </span>
-      </div>
-      <time role="timer" aria-label="Tiempo restante de reserva">
-        {String(Math.floor(remainingSeconds / 60)).padStart(2, "0")}:
-        {String(remainingSeconds % 60).padStart(2, "0")}
+    <div
+      className={`purchase-clock${alert ? " purchase-clock-alert" : ""}`}
+    >
+      <Timer className="purchase-clock-icon" size={22} aria-hidden="true" />
+      <strong>Completa tu compra en</strong>
+      <time role="timer" aria-label={`Tiempo restante de reserva: ${value}`}>
+        <RollingDigits value={value} />
       </time>
-      <span className="sr-only" role="status">
-        {urgent
-          ? "Tu reserva está por vencer."
-          : "Reserva de demostración iniciada por cinco minutos."}
-      </span>
+      <button type="button" aria-pressed={alert}
+        title="Activar o desactivar el pulso en icono y números"
+        onClick={() => setAlert(!alert)}>
+        Alerta <small>Demo</small>
+      </button>
     </div>
   );
 }

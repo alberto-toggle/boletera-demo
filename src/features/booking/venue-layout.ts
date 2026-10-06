@@ -13,9 +13,11 @@ export function layoutVenue(venue: DemoVenue) {
   return venue.sections.map((section, index) => {
     const upper = index < 2;
     const box = {
-      x: upper ? 50 + index * 470 : 50 + (index - 2) * 310,
+      x: upper
+        ? 50 + index * (venue.arrangement === "tables" ? 620 : 470)
+        : 50 + (index - 2) * 310,
       y: upper ? 150 : 580,
-      width: upper ? 430 : 280,
+      width: upper && venue.arrangement !== "tables" ? 430 : 280,
       height: 360,
     };
     const seats = venue.seats.filter((seat) => seat.sectionId === section.id);

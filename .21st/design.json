@@ -420,6 +420,22 @@
     {
       "date": "2026-10-05",
       "decision": "Mis métodos de pago comparte cartera por usuario entre las cuatro propuestas. Animación Card Folder de BE UI adaptada a metadatos enmascarados; agregar ejemplos, predeterminada y eliminación con confirmación. Diálogo centrado desktop e inferior móvil."
+    },
+    {
+      "date": "2026-10-06",
+      "decision": "En las cuatro demos: pista central en mapas con mesas; identificación solo por correo conservando Google; reserva centrada con dígitos rodantes y alerta pulsante activada manualmente; countdown del evento opcional oculto al entrar, adaptado de Music Concert Countdown."
+    },
+    {
+      "date": "2026-10-06",
+      "decision": "Mapa con mesas: cinco secciones del mismo ancho, pista amplia entre A y B y sobre D. Reserva con dos alertas demo excluyentes: fondo contrastante por propuesta o pulso suave solo de icono y dígitos sobre el fondo normal; sin destellos ni pulso de toda la franja."
+    },
+    {
+      "date": "2026-10-06",
+      "decision": "Alerta 1 usa ámbar warning (oscuro sobre propuestas claras, claro en Gala), halo pulsante y pulso de icono/dígitos. Ambas alertas pulsan a 1.8 s y escala máxima 1.12 sin variar el brillo del fondo; movimiento reducido desactiva animaciones."
+    },
+    {
+      "date": "2026-10-06",
+      "decision": "Se elimina la alerta con cambio de fondo y halo. Solo queda Alerta demo: conserva la superficie normal y pulsa icono y dígitos, con activación/desactivación manual y respeto por movimiento reducido."
     }
   ],
   "evidence": [

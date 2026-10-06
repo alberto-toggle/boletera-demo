@@ -1,3 +1,4 @@
+import { EventCountdown } from "./components/countdown/event-countdown";
 import { EventHeroGallery } from "../event-experience/components/event-hero-gallery";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -52,6 +53,7 @@ export function EventPage({
           <div className="event-detail-copy">
             <p className="eyebrow">{event.category}</p>
             <h1>{event.title}</h1>
+            <EventCountdown startsAt={event.startsAt} />
             <p>{event.description}</p>
             <div className="event-detail-facts">
               <p>
