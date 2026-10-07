@@ -34,7 +34,7 @@ export function SellerShell({
             aria-current={active === "sales" ? "page" : undefined}
             href="/operacion/vendedor/ventas"
           >
-            Mis ventas
+            Mis operaciones
           </Link>
         </nav>
         <div className="seller-user">

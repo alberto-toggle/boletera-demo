@@ -16,10 +16,19 @@ export function PaymentCollection({
   sale: Sale;
   onAction: (action: SaleAction) => boolean;
 }) {
-  const [method, setMethod] = useState<"cash" | "terminal">("cash");
-  const [amount, setAmount] = useState((balance(sale) / 100).toFixed(2));
-  const [received, setReceived] = useState("");
-  const [reference, setReference] = useState("");
+  const method = sale.paymentDraft?.method ?? "cash";
+  const amount = sale.paymentDraft?.amount ?? (balance(sale) / 100).toFixed(2);
+  const received = sale.paymentDraft?.received ?? "";
+  const reference = sale.paymentDraft?.reference ?? "";
+  const saveDraft = (patch: Partial<import("../model").PaymentDraft>) =>
+    onAction({
+      type: "payment-draft",
+      draft: { method, amount, received, reference, ...patch },
+    });
+  const setMethod = (method: "cash" | "terminal") => saveDraft({ method });
+  const setAmount = (amount: string) => saveDraft({ amount });
+  const setReceived = (received: string) => saveDraft({ received });
+  const setReference = (reference: string) => saveDraft({ reference });
   const [confirmed, setConfirmed] = useState(false);
   const inTerminal = sale.status === "terminal" || sale.status === "review";
   const amountMinor = parseCash(amount);

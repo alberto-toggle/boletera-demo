@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { remainingHoldSeconds } from "../operations";
 import { HoldClock } from "./hold-clock";
 import { CustomerForm } from "./customer-form";
 import { EmailVerification } from "./email-verification";
@@ -28,6 +29,7 @@ const emptyCustomer: Customer = {
   militaryCount: 0,
 };
 export function SaleCheckout({
+  now,
   information,
   accounts,
   sale,
@@ -36,6 +38,7 @@ export function SaleCheckout({
   onSendCode,
   onVerifyCode,
 }: {
+  now: number;
   information: ReactNode;
   accounts: BuyerAccountOption[];
   sale: Sale;
@@ -45,22 +48,24 @@ export function SaleCheckout({
   onVerifyCode: (email: string, code: string) => string | null;
 }) {
   const [customer, setCustomer] = useState<Customer>(
-    sale.customer ?? emptyCustomer,
+    sale.customerDraft ?? sale.customer ?? emptyCustomer,
   );
   const [step, setStep] = useState<"customer" | "payment">(
-    sale.customer && (paid(sale) > 0 || !needsEmailVerification(sale.customer))
+    !sale.customerDraft &&
+      sale.customer &&
+      (paid(sale) > 0 || !needsEmailVerification(sale.customer))
       ? "payment"
       : "customer",
   );
   const [error, setError] = useState("");
-  const [now, setNow] = useState(sale.createdAt);
-  useEffect(() => {
-    const timer = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const updateCustomer = (next: Customer) => {
+    setCustomer(next);
+    if (sale.status === "pending" && paid(sale) === 0)
+      onAction({ type: "customer-draft", customer: next });
+  };
   const held = ["partial", "terminal", "review"].includes(sale.status);
   const collecting = sale.status === "terminal" || sale.status === "review";
-  const remaining = Math.max(0, Math.ceil((sale.expiresAt - now) / 1000));
+  const remaining = remainingHoldSeconds(sale.expiresAt, now);
   const run = (action: SaleAction) => {
     const problem = onAction(action);
     setError(problem ?? "");
@@ -70,7 +75,7 @@ export function SaleCheckout({
     <main className="seller-main">
       <Link className="seller-back" href="/operacion/vendedor/ventas">
         <ArrowLeft size={16} />
-        Mis ventas
+        Mis operaciones
       </Link>
       <div className="seller-heading">
         <div>
@@ -89,7 +94,6 @@ export function SaleCheckout({
         extended={!!sale.holdExtended}
         onExtend={() => run({ type: "extend" })}
         onDemoShorten={() => {
-          setNow(Date.now());
           run({ type: "demo-shorten-hold" });
         }}
       />
@@ -125,7 +129,7 @@ export function SaleCheckout({
               onVerify={(code) => {
                 const error = onVerifyCode(customer.email.trim(), code);
                 if (!error)
-                  setCustomer({
+                  updateCustomer({
                     ...customer,
                     verifiedEmail: customer.email.trim(),
                   });
@@ -138,7 +142,7 @@ export function SaleCheckout({
               customer={customer}
               count={sale.seats.length}
               onChange={(next) => {
-                setCustomer({
+                updateCustomer({
                   ...next,
                   verifiedEmail:
                     next.email.trim() === customer.email.trim() &&
@@ -156,7 +160,7 @@ export function SaleCheckout({
                       customer.accountEmail ? customer.name : undefined
                     }
                     onCorrect={() => {
-                      setCustomer({
+                      updateCustomer({
                         ...customer,
                         email: "",
                         verifiedEmail: undefined,
@@ -171,7 +175,7 @@ export function SaleCheckout({
                     onVerify={(code) => {
                       const problem = onVerifyCode(customer.email.trim(), code);
                       if (!problem)
-                        setCustomer({
+                        updateCustomer({
                           ...customer,
                           verifiedEmail: customer.email.trim(),
                         });

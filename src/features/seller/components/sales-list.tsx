@@ -1,11 +1,16 @@
 "use client";
+import { OperationRow } from "./operation-row";
+import {
+  operationGroups,
+  operationGroup,
+  type OperationGroup,
+} from "../operations";
 import { SalesDateRange } from "./sales-date-range";
 import { mexicoDay, paymentKind, type DateRange } from "../sales-filters";
 import { useState } from "react";
 import Link from "next/link";
 import { Search, ArrowUpRight } from "lucide-react";
 import {
-  date,
   paid,
   balance,
   money,
@@ -15,12 +20,15 @@ import {
   type SellerEvent,
 } from "../model";
 export function SalesList({
+  now,
   sales,
   events,
 }: {
+  now: number;
   sales: Sale[];
   events: SellerEvent[];
 }) {
+  const [group, setGroup] = useState<OperationGroup>("active");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
   const [range, setRange] = useState<DateRange>({ from: "", to: "" });
@@ -29,12 +37,13 @@ export function SalesList({
   const visible = sales.filter((s) => {
     const day = mexicoDay(s.createdAt);
     return (
+      operationGroup(s, now) === group &&
       (!range.from || day >= range.from) &&
       (!range.to || day <= range.to) &&
       (filter === "all" || s.status === filter) &&
       (eventFilter === "all" || s.eventId === eventFilter) &&
       (methodFilter === "all" || paymentKind(s) === methodFilter) &&
-      `${s.id} ${s.customer?.name ?? ""} ${s.customer?.email ?? ""} ${events.find((e) => e.id === s.eventId)?.title ?? ""}`
+      `${s.id} ${(s.customerDraft ?? s.customer)?.name ?? ""} ${(s.customerDraft ?? s.customer)?.email ?? ""} ${events.find((e) => e.id === s.eventId)?.title ?? ""}`
         .toLocaleLowerCase()
         .includes(query.toLocaleLowerCase())
     );
@@ -57,13 +66,34 @@ export function SalesList({
       <div className="seller-heading">
         <div>
           <p className="seller-eyebrow">TU ACTIVIDAD</p>
-          <h1>Mis ventas</h1>
+          <h1>Mis operaciones</h1>
           <p>Consulta boletos y da seguimiento a tus operaciones.</p>
         </div>
         <Link className="seller-primary" href="/operacion/vendedor">
           Nueva venta <ArrowUpRight size={17} />
         </Link>
       </div>
+      <nav className="seller-operation-tabs" aria-label="Tipos de operación">
+        {operationGroups.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            aria-pressed={group === item.id}
+            onClick={() => {
+              setGroup(item.id);
+              setFilter("all");
+            }}
+          >
+            {item.label}{" "}
+            <span>
+              {
+                sales.filter((sale) => operationGroup(sale, now) === item.id)
+                  .length
+              }
+            </span>
+          </button>
+        ))}
+      </nav>
       <div className="seller-metrics">
         <div>
           <small>Importe confirmado</small>
@@ -106,13 +136,16 @@ export function SalesList({
           </strong>
         </span>
       </div>
-      <section className="seller-filters-panel" aria-label="Filtros de ventas">
+      <section
+        className="seller-filters-panel"
+        aria-label="Filtros de operaciones"
+      >
         <SalesDateRange value={range} onChange={setRange} />
         <div className="seller-list-filters">
           <label className="seller-search">
             <Search size={17} />
             <input
-              aria-label="Buscar ventas"
+              aria-label="Buscar operaciones"
               placeholder="Folio, comprador o evento"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -124,11 +157,21 @@ export function SalesList({
             onChange={(e) => setFilter(e.target.value)}
           >
             <option value="all">Todos los estados</option>
-            {Object.entries(statusLabels).map(([value, label]) => (
-              <option value={value} key={value}>
-                {label}
-              </option>
-            ))}
+            {Object.entries(statusLabels)
+              .filter(([status]) =>
+                group === "completed"
+                  ? status === "confirmed"
+                  : group === "closed"
+                    ? ["cancelled", "expired"].includes(status)
+                    : ["pending", "partial", "terminal", "review"].includes(
+                        status,
+                      ),
+              )
+              .map(([value, label]) => (
+                <option value={value} key={value}>
+                  {label}
+                </option>
+              ))}
           </select>
         </div>
         <div className="seller-extra-filters">
@@ -168,46 +211,14 @@ export function SalesList({
       </section>
       <div className="seller-sales-list">
         {visible.map((s) => (
-          <Link
-            className="seller-sale-row"
-            href={`/operacion/vendedor/venta/${s.id}`}
+          <OperationRow
             key={s.id}
-          >
-            <div>
-              <span className={`seller-status ${s.status}`}>
-                {statusLabels[s.status]}
-              </span>
-              <h2>{events.find((e) => e.id === s.eventId)?.title}</h2>
-              <p>
-                {s.customer?.name ?? "Datos del comprador pendientes"} ·{" "}
-                {s.seats.length} boletos
-              </p>
-              <small>
-                {s.id} · {date(new Date(s.createdAt).toISOString())}
-              </small>
-            </div>
-            <div>
-              <strong>{money(total(s))}</strong>
-              <small>
-                {paymentKind(s) === "mixed"
-                  ? "Pago mixto"
-                  : paymentKind(s) === "cash"
-                    ? "Efectivo"
-                    : paymentKind(s) === "terminal"
-                      ? "Terminal"
-                      : "Sin cobros"}{" "}
-                · {s.payments.length}{" "}
-                {s.payments.length === 1 ? "cobro" : "cobros"}
-              </small>
-              {paid(s) > 0 && s.status !== "confirmed" && (
-                <small>Pendiente: {money(balance(s))}</small>
-              )}
-              <span>
-                {s.status === "confirmed" ? "Ver boletos" : "Ver operación"}{" "}
-                <ArrowUpRight size={15} />
-              </span>
-            </div>
-          </Link>
+            sale={s}
+            eventTitle={
+              events.find((e) => e.id === s.eventId)?.title ?? "Evento"
+            }
+            now={now}
+          />
         ))}
       </div>
       {!visible.length && (

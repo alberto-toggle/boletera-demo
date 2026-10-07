@@ -481,6 +481,11 @@
       "scope": "Herramientas de demo / color",
       "decision": "Sustituir lila por azul saturado sobrio #204e91 y texto blanco en widget, botones y ayudas. Mantener etiqueta DEMO y borde discontinuo.",
       "source": "Corrección explícita del usuario, 2026-10-06"
+    },
+    {
+      "scope": "Taquilla / operaciones en curso",
+      "decision": "Mis operaciones separa en curso, completadas y canceladas/vencidas. Lista y detalle comparten vencimiento absoluto; último minuto ámbar sin pulso. Borradores persisten sin registrar pagos. Rechazar terminal no renueva el plazo.",
+      "source": "Acuerdo con el usuario, 2026-10-06"
     }
   ],
   "evidence": [

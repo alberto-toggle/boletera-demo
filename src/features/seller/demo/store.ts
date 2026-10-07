@@ -72,6 +72,37 @@ function validSale(value: unknown): value is Sale {
   )
     return false;
   if (new Set(seats.map((s) => s.id)).size !== seats.length) return false;
+  const draft = value.customerDraft;
+  if (
+    draft !== undefined &&
+    (!isRecord(draft) ||
+      !["name", "email", "registration"].every(
+        (k) => typeof draft[k] === "string",
+      ) ||
+      !["print", "email", "both"].includes(String(draft.delivery)) ||
+      !["public", "military"].includes(String(draft.audience)) ||
+      !Number.isInteger(draft.militaryCount) ||
+      typeof draft.militaryCount !== "number" ||
+      draft.militaryCount < 0 ||
+      draft.militaryCount > seats.length ||
+      !["noEmail", "accountRequested"].every(
+        (k) => draft[k] === undefined || typeof draft[k] === "boolean",
+      ) ||
+      !["verifiedEmail", "accountEmail"].every(
+        (k) => draft[k] === undefined || typeof draft[k] === "string",
+      ))
+  )
+    return false;
+  const paymentDraft = value.paymentDraft;
+  if (
+    paymentDraft !== undefined &&
+    (!isRecord(paymentDraft) ||
+      !["cash", "terminal"].includes(String(paymentDraft.method)) ||
+      !["amount", "received", "reference"].every(
+        (k) => typeof paymentDraft[k] === "string",
+      ))
+  )
+    return false;
   const c = value.customer;
   if (
     c !== null &&

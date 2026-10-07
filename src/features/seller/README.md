@@ -61,7 +61,7 @@ No son autenticación ni permisos reales.
    diseños compartidos (clásico horizontal por defecto). Descargar PDF, imprimir
    o simular envío de correo. Nunca se realiza un envío o cobro real ni se registra
    asistencia como efecto de vender.
-8. Mis ventas permite buscar por folio, comprador o correo; filtrar por estado,
+8. Mis operaciones permite buscar por folio, comprador o correo; filtrar por estado,
    evento, método y fecha de creación (zona Ciudad de México, días inclusivos).
    Incluye calendario de rango Ark UI, atajos semanales/mensuales y resúmenes
    derivados de los mismos resultados. El efectivo/terminal registrado incluye
@@ -84,10 +84,9 @@ También puede marcarse pendiente de revisión manualmente.
 
 Desde terminal o revisión, el vendedor confirma la aprobación con referencia o
 confirma que **este cobro no se realizó**. Si hay cobros anteriores conserva
-`partial`, sus lugares y pagos; si no hay pagos, abre un nuevo apartado de
-diez minutos y permite reintentar, cambiar a efectivo o cancelar. Esta renovación
-es una decisión de demo para mostrar la recuperación; la política real debe
-acordarse con el cliente. Una operación incierta nunca libera lugares automáticamente.
+`partial`, sus lugares y pagos; si no hay pagos, conserva el vencimiento original.
+Si ya venció, libera los lugares; si aún hay tiempo, permite reintentar, cambiar
+a efectivo o cancelar. Una operación incierta nunca libera lugares automáticamente.
 
 `partial` conserva lugares sin expiración. No permite cambiar comprador ni
 cancelar: hay dinero registrado y esta demo no simula devoluciones. Al cubrir el
@@ -133,7 +132,7 @@ en `docs/deuda-tecnica/separacion-publico-operacion.md`.
 
 - Efectivo: seleccionar lugares, continuar, comprador solo impreso sin correo,
   importe exacto o superior, confirmar y revisar cambio y PDF.
-- Terminal: iniciar cobro, salir a Mis ventas o recargar, revisar estado pendiente,
+- Terminal: iniciar cobro, salir a Mis operaciones o recargar, revisar estado pendiente,
   confirmar que no hubo cobro y reintentar; luego registrar una aprobación ficticia.
 - Cuenta: buscar Alex o Sofía, seleccionar, cobrar y abrir Mis boletos en la
   cuenta elegida; no se vinculan ventas de invitado por coincidencia de correo.
@@ -141,13 +140,13 @@ en `docs/deuda-tecnica/separacion-publico-operacion.md`.
   después elegir correo o ambos y usar envío simulado.
 - Multimétodo: efectivo parcial con cambio, dos terminales con referencias
   distintas, rechazo, recarga durante cobro y saldo cero antes de emitir.
-- Mis ventas: rango y presets, combinación de evento/estado/método/búsqueda,
+- Mis operaciones: rango y presets, combinación de evento/estado/método/búsqueda,
   calendario por teclado, resumen consistente y limpiar filtros.
 - Asistentes: comprador militar con matrícula, cantidades entre cero y boletos.
 - Cancelación: cancelar apartado pendiente y volver a seleccionar los lugares.
 - Expiración: esperar diez minutos antes de iniciar cobro; comprobar liberación.
 - Mapa: límite de ocho, aviso al noveno intento, quitar lugares y limpiar selección.
-- Persistencia: recargar Mis ventas en la misma pestaña; cerrar sesión y volver a entrar.
+- Persistencia: recargar Mis operaciones en la misma pestaña; cerrar sesión y volver a entrar.
 - Responsive: catálogo, mapa, formularios y boletos en escritorio y móvil.
 
 No se agregan pruebas unitarias durante esta etapa, por decisión del usuario.
@@ -172,3 +171,28 @@ reducido y no cambia el plazo. Al registrar cobros se muestra «Lugares retenido
 «Saltar a 00:10 · Demo» acorta el vencimiento del apartado activo a diez
 segundos como máximo y deja actuar la expiración normal. No prolonga el plazo
 ni está disponible durante el procesamiento/retención de un cobro.
+
+## Operaciones, borradores y vencimientos
+
+El acceso «Mis operaciones» conserva la ruta `/operacion/vendedor/ventas` para
+compatibilidad y separa En curso, Ventas completadas y Canceladas y vencidas.
+La clasificación y cálculo de segundos se encuentran en `operations.ts`.
+`OperationRow` y `OperationDeadline` reciben datos y hora, sin almacenamiento
+ni intervalos propios. Lista y detalle reciben la misma hora de SellerApp.
+
+La fecha límite no cambia por navegar, recargar, guardar un borrador o rechazar
+un cobro de terminal. Solo la extensión explícita puede prolongarla. La demo
+reconcilia vencimientos al cargar, cada segundo en taquilla y al recuperar foco.
+Sin backend no se ejecutan procesos cuando el navegador está cerrado.
+
+Los borradores de comprador y de cobro se guardan aparte de los datos confirmados;
+pueden estar incompletos, pero se valida su estructura al recuperar almacenamiento.
+Guardar datos no verifica un correo ni registra un pago. Se recuperan importe,
+efectivo y referencia escritos, pero la confirmación de recepción/aprobación se
+vuelve a solicitar. Los desafíos de correo pendientes requieren reenvío tras una
+recarga; una verificación completada se conserva en el borrador del comprador.
+Los cobros parciales o inciertos permanecen retenidos hasta resolverlos.
+
+Una operación vencida conserva su historial; no puede retomarse con los mismos
+lugares garantizados. El enlace de regreso lleva a elegirlos de nuevo y comprobar
+su disponibilidad. No se sincroniza inventario con la compra pública.

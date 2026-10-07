@@ -53,7 +53,15 @@ export type SaleStatus =
   | "confirmed"
   | "expired"
   | "cancelled";
+export interface PaymentDraft {
+  method: "cash" | "terminal";
+  amount: string;
+  received: string;
+  reference: string;
+}
 export interface Sale {
+  customerDraft?: Customer;
+  paymentDraft?: PaymentDraft;
   id: string;
   eventId: string;
   sellerId: string;
@@ -173,6 +181,8 @@ export function parseCash(value: string): number {
 }
 
 export type SaleAction =
+  | { type: "customer-draft"; customer: Customer }
+  | { type: "payment-draft"; draft: PaymentDraft }
   | { type: "customer"; customer: Customer }
   | { type: "terminal"; amountMinor: number }
   | { type: "cash"; amountMinor: number; receivedMinor: number }
@@ -196,6 +206,16 @@ export function transitionSale(
     return "El tiempo de apartado terminó.";
   const next: Sale = { ...sale };
   const canCollect = ["pending", "partial"].includes(sale.status);
+  if (action.type === "customer-draft") {
+    if (sale.status !== "pending" || paid(sale))
+      return "No puedes editar al comprador después de un cobro.";
+    next.customerDraft = action.customer;
+    return next;
+  }
+  if (action.type === "payment-draft") {
+    next.paymentDraft = action.draft;
+    return next;
+  }
   if (action.type === "customer") {
     if (sale.status !== "pending" || paid(sale))
       return "No puedes cambiar al comprador después de registrar un cobro.";
@@ -203,6 +223,7 @@ export function transitionSale(
     if (error) return error;
     if (needsEmailVerification(action.customer))
       return "Verifica el correo del comprador antes de continuar al cobro.";
+    delete next.customerDraft;
     next.customer = {
       ...action.customer,
       name: action.customer.name.trim(),
@@ -227,6 +248,7 @@ export function transitionSale(
       return "El importe debe ser mayor que cero y no superar el saldo pendiente.";
   }
   function addPayment(payment: SalePayment) {
+    delete next.paymentDraft;
     next.payments = [...sale.payments, payment];
     next.pendingTerminal = null;
     next.status = balance(next) === 0 ? "confirmed" : "partial";
@@ -297,7 +319,9 @@ export function transitionSale(
         return "No hay un cobro de terminal por aclarar.";
       next.pendingTerminal = null;
       next.status = paid(sale) ? "partial" : "pending";
-      next.expiresAt = now + SELLER_HOLD_MS;
+      delete next.paymentDraft;
+      if (next.status === "pending" && next.expiresAt <= now)
+        next.status = "expired";
       break;
     case "review":
       if (sale.status !== "terminal") return "No hay cobro en curso.";

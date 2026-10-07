@@ -35,7 +35,7 @@ export function SaleReceipt({
       </div>
       {information}
       <div className="seller-receipt-bar">
-        <Link href="/operacion/vendedor/ventas">Ver mis ventas</Link>
+        <Link href="/operacion/vendedor/ventas">Ver mis operaciones</Link>
       </div>
       <PaymentBreakdown sale={sale} />
       {sale.customer && (

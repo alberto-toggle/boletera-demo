@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Clock3, ArrowRight } from "lucide-react";
@@ -32,11 +32,22 @@ export function SellerApp({ path = [] }: { path?: string[] }) {
   const state = useSeller();
   const accounts = useBuyerAccounts();
   const router = useRouter();
+  const [now, setNow] = useState(() => Date.now());
   const viewedSaleId = path[0] === "venta" ? (path[1] ?? "") : "";
   useEffect(() => () => interruptTerminal(viewedSaleId), [viewedSaleId]);
   useEffect(() => {
-    const timer = setInterval(tick, 1000);
-    return () => clearInterval(timer);
+    const update = () => {
+      setNow(Date.now());
+      tick();
+    };
+    const timer = setInterval(update, 1000);
+    window.addEventListener("focus", update);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener("focus", update);
+      document.removeEventListener("visibilitychange", update);
+    };
   }, []);
   if (!state)
     return (
@@ -87,6 +98,7 @@ export function SellerApp({ path = [] }: { path?: string[] }) {
   else if (path[0] === "ventas" && path.length === 1)
     content = (
       <SalesList
+        now={now}
         sales={state.sales.filter((s) => s.sellerId === seller.id)}
         events={events}
       />
@@ -164,12 +176,15 @@ export function SellerApp({ path = [] }: { path?: string[] }) {
           >
             Elegir lugares nuevamente <ArrowRight size={17} />
           </Link>
-          <Link href="/operacion/vendedor/ventas">Volver a mis ventas</Link>
+          <Link href="/operacion/vendedor/ventas">
+            Volver a mis operaciones
+          </Link>
         </main>
       );
     else
       content = (
         <SaleCheckout
+          now={now}
           information={
             <EventInformationButton
               event={saleEvent}
