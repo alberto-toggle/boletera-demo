@@ -5,7 +5,6 @@ import { Agenda } from "@/features/event-discovery/components/agenda";
 import {
   Help,
   Footer,
-  ProposalSwitcher,
 } from "@/features/event-discovery/components/chrome";
 import { demoEvents, featuredEvent } from "@/features/event-discovery/fixtures";
 
@@ -36,7 +35,6 @@ export function ImmersiveHome() {
         <Help />
       </main>
       <Footer />
-      <ProposalSwitcher active="inmersiva" />
     </div>
   );
 }

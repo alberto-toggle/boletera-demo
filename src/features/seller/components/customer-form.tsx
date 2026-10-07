@@ -1,21 +1,25 @@
 "use client";
+import { useId, type ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BuyerAccountSearch } from "./buyer-account-search";
 import type { BuyerAccountOption, Customer } from "../model";
 export function CustomerForm({
+  verification,
   accounts,
   customer,
   count,
   onChange,
   onContinue,
 }: {
+  verification: ReactNode;
   accounts: BuyerAccountOption[];
   customer: Customer;
   count: number;
   onChange: (value: Customer) => void;
   onContinue: () => void;
 }) {
+  const emailId = useId();
   const change = <K extends keyof Customer>(key: K, value: Customer[K]) =>
     onChange({ ...customer, [key]: value });
   return (
@@ -57,32 +61,78 @@ export function CustomerForm({
                 type="radio"
                 name="delivery"
                 checked={customer.delivery === value}
-                onChange={() => change("delivery", value)}
+                onChange={() =>
+                  onChange({
+                    ...customer,
+                    delivery: value,
+                    noEmail: value === "print" ? customer.noEmail : false,
+                  })
+                }
               />
               {label}
             </label>
           ))}
         </div>
       </fieldset>
-      <label>
-        {customer.accountEmail
-          ? "Correo de la cuenta"
-          : `Correo electrónico ${customer.delivery === "print" ? "(opcional)" : ""}`}
-        <input
-          type="email"
-          readOnly={!!customer.accountEmail}
-          required={customer.delivery !== "print"}
-          autoComplete="email"
-          maxLength={180}
-          value={customer.email}
-          onChange={(e) => change("email", e.target.value)}
-        />
-      </label>
-      <small>
-        {customer.accountEmail
-          ? "Los boletos se guardarán en la cuenta seleccionada. También puedes entregarlos impresos o por correo."
-          : "No necesita cuenta. Confirma el correo con el comprador antes de continuar."}
-      </small>
+      {!customer.noEmail ? (
+        <>
+          <label htmlFor={emailId}>
+            {customer.accountEmail
+              ? "Correo de la cuenta"
+              : "Correo electrónico"}
+          </label>
+          <input
+            id={emailId}
+            type="email"
+            readOnly={!!customer.accountEmail}
+            required
+            autoComplete="email"
+            maxLength={180}
+            value={customer.email}
+            onChange={(e) => change("email", e.target.value)}
+          />
+          <small>
+            {customer.accountEmail
+              ? "Verifica la cuenta con el comprador antes de asociar los boletos."
+              : "Recomendado: guarda una copia de los boletos por correo, aunque también se entreguen impresos."}
+          </small>
+          {!customer.accountRequested && !customer.accountEmail && (
+            <button
+              type="button"
+              className="seller-text-button"
+              onClick={() =>
+                onChange({
+                  ...customer,
+                  noEmail: true,
+                  email: "",
+                  verifiedEmail: undefined,
+                  delivery: "print",
+                })
+              }
+            >
+              Continuar sin correo · Solo impresos
+            </button>
+          )}
+        </>
+      ) : (
+        <div className="seller-notice">
+          <div>
+            <strong>Entrega solo impresa, sin correo</strong>
+            <p>
+              Conserva tus boletos y el folio de compra. No recibirás una copia
+              por correo.
+            </p>
+            <button
+              type="button"
+              className="seller-text-button"
+              onClick={() => onChange({ ...customer, noEmail: false })}
+            >
+              Agregar correo electrónico
+            </button>
+          </div>
+        </div>
+      )}
+      {verification}
       <fieldset>
         <legend>El comprador es</legend>
         <div className="seller-options">

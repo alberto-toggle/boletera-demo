@@ -45,10 +45,7 @@ export function SellerLogin({
             e.preventDefault();
             if (user.trim().toLowerCase() === email && pass === password)
               onLogin();
-            else
-              setError(
-                "Usa las credenciales de ejemplo para entrar a esta demo.",
-              );
+            else setError("El correo o la contraseña no coinciden.");
           }}
         >
           <label>
@@ -80,6 +77,7 @@ export function SellerLogin({
             Iniciar sesión <ArrowRight size={17} />
           </Button>
           <button
+            data-demo
             type="button"
             className="seller-text-button"
             onClick={() => {

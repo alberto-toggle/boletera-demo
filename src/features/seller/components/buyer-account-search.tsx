@@ -44,6 +44,7 @@ export function BuyerAccountSearch({
                 ...customer,
                 accountEmail: undefined,
                 accountRequested: false,
+                verifiedEmail: undefined,
               });
             }}
           />
@@ -56,7 +57,12 @@ export function BuyerAccountSearch({
             checked={mode === "account"}
             onChange={() => {
               setMode("account");
-              onChange({ ...customer, accountRequested: true });
+              onChange({
+                ...customer,
+                accountRequested: true,
+                noEmail: false,
+                verifiedEmail: undefined,
+              });
             }}
           />
           Comprador con cuenta
@@ -80,6 +86,7 @@ export function BuyerAccountSearch({
                     onChange({
                       ...customer,
                       accountEmail: undefined,
+                      verifiedEmail: undefined,
                       name: "",
                       email: "",
                     });
@@ -103,7 +110,7 @@ export function BuyerAccountSearch({
                   onChange={(e) => setQuery(e.target.value)}
                 />
               </label>
-              <p className="seller-muted">
+              <p data-demo className="seller-muted">
                 Cuentas de ejemplo: Alex Hernández y Sofía Martínez.
               </p>
               <div
@@ -119,6 +126,8 @@ export function BuyerAccountSearch({
                         ...customer,
                         accountEmail: account.email,
                         accountRequested: true,
+                        verifiedEmail: undefined,
+                        noEmail: false,
                         name: account.name,
                         email: account.email,
                         audience: account.audience,

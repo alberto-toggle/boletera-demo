@@ -234,7 +234,7 @@ export function Checkout({
                       MXN
                     </Button>
                   </PaymentDetails>
-                  <details className="event-extra">
+                  <details data-demo className="event-extra">
                     <summary>Opciones de demostración</summary>
                     <fieldset className="payment-scenario">
                       <legend>Resultado del pago</legend>

@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { CheckCircle2, Mail, Printer, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PaymentBreakdown } from "./payment-breakdown";
 import { money, total, type Sale, type SellerEvent } from "../model";
 export function SaleReceipt({
   sale,
@@ -34,13 +35,9 @@ export function SaleReceipt({
       </div>
       {information}
       <div className="seller-receipt-bar">
-        <span>
-          {sale.payment?.method === "cash"
-            ? `Efectivo recibido: ${money(sale.payment.receivedMinor)} · Cambio: ${money(sale.payment.receivedMinor - total(sale))}`
-            : `Terminal independiente · Referencia ${sale.payment?.method === "terminal" ? sale.payment.reference : ""}`}
-        </span>
         <Link href="/operacion/vendedor/ventas">Ver mis ventas</Link>
       </div>
+      <PaymentBreakdown sale={sale} />
       {sale.customer && (
         <dl className="seller-buyer-summary">
           <div>
@@ -76,6 +73,7 @@ export function SaleReceipt({
 
         {sale.customer?.delivery !== "print" && sale.customer?.email && (
           <Button
+            data-demo
             className="seller-secondary"
             onClick={() =>
               setMessage(

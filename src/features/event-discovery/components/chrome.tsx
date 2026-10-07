@@ -1,5 +1,4 @@
 import { StickyHeader } from "./sticky-header";
-import { ProposalWidget } from "./proposal-widget";
 import {
   ArrowUpRight,
   Asterisk,
@@ -195,7 +194,3 @@ export const directions: readonly {
       "Una invitación a vivirlo. Menú flotante, fotografía en movimiento y boletos con carácter.",
   },
 ];
-
-export function ProposalSwitcher({ active }: { active: DemoDirection }) {
-  return <ProposalWidget active={active} options={directions} />;
-}

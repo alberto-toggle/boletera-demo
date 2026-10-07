@@ -35,7 +35,9 @@ export function publishSaleToAccount(sale: Sale): string | null {
           id: sale.id,
           eventId: event.id,
           event,
-          purchasedAt: new Date(sale.createdAt).toISOString(),
+          purchasedAt: new Date(
+            sale.payments.at(-1)?.recordedAt ?? sale.createdAt,
+          ).toISOString(),
           mode: "account",
           amountMinor: total(sale),
           buyer: {

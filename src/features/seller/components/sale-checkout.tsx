@@ -1,31 +1,28 @@
 "use client";
 import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { HoldClock } from "./hold-clock";
 import { CustomerForm } from "./customer-form";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Banknote,
-  CreditCard,
-  Timer,
-  ShieldCheck,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { EmailVerification } from "./email-verification";
+import { PaymentCollection } from "./payment-collection";
+import { PaymentBreakdown } from "./payment-breakdown";
 import {
   customerError,
+  needsEmailVerification,
   money,
-  parseCash,
+  paid,
   total,
   type BuyerAccountOption,
   type Customer,
   type Sale,
   type SellerEvent,
+  type SaleAction,
 } from "../model";
-import type { SaleAction } from "../model";
 const emptyCustomer: Customer = {
   name: "",
   email: "",
-  delivery: "print",
+  delivery: "email",
   audience: "public",
   registration: "",
   militaryCount: 0,
@@ -36,30 +33,33 @@ export function SaleCheckout({
   sale,
   event,
   onAction,
+  onSendCode,
+  onVerifyCode,
 }: {
   information: ReactNode;
   accounts: BuyerAccountOption[];
   sale: Sale;
   event: SellerEvent;
   onAction: (action: SaleAction) => string | null;
+  onSendCode: (email: string) => string | null;
+  onVerifyCode: (email: string, code: string) => string | null;
 }) {
   const [customer, setCustomer] = useState<Customer>(
     sale.customer ?? emptyCustomer,
   );
   const [step, setStep] = useState<"customer" | "payment">(
-    sale.customer ? "payment" : "customer",
+    sale.customer && (paid(sale) > 0 || !needsEmailVerification(sale.customer))
+      ? "payment"
+      : "customer",
   );
-  const [method, setMethod] = useState<"cash" | "terminal">("cash");
-  const [received, setReceived] = useState("");
-  const [reference, setReference] = useState("");
   const [error, setError] = useState("");
-  const [confirmed, setConfirmed] = useState(false);
   const [now, setNow] = useState(sale.createdAt);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(timer);
   }, []);
-  const held = ["terminal", "review"].includes(sale.status);
+  const held = ["partial", "terminal", "review"].includes(sale.status);
+  const collecting = sale.status === "terminal" || sale.status === "review";
   const remaining = Math.max(0, Math.ceil((sale.expiresAt - now) / 1000));
   const run = (action: SaleAction) => {
     const problem = onAction(action);
@@ -69,281 +69,132 @@ export function SaleCheckout({
   return (
     <main className="seller-main">
       <Link className="seller-back" href="/operacion/vendedor/ventas">
-        <ArrowLeft size={16} /> Mis ventas
+        <ArrowLeft size={16} />
+        Mis ventas
       </Link>
       <div className="seller-heading">
         <div>
           <p className="seller-eyebrow">{sale.id} · 02 / DATOS Y COBRO</p>
-          <h1>{held ? "Confirma el resultado." : "Completa la venta."}</h1>
+          <h1>
+            {collecting ? "Confirma el resultado." : "Completa la venta."}
+          </h1>
           <p>{event.title}</p>
           {information}
         </div>
-        <div
-          className="seller-clock"
-          role="timer"
-          aria-label={
-            held
-              ? "Lugares retenidos durante el cobro"
-              : `Tiempo restante ${Math.floor(remaining / 60)} minutos ${remaining % 60} segundos`
-          }
-        >
-          <Timer size={21} />
-          {held ? (
-            <span>
-              Lugares retenidos
-              <br />
-              <small>Hasta aclarar el cobro</small>
-            </span>
-          ) : (
-            <>
-              <span>Tiempo de apartado</span>
-              <strong>
-                {Math.floor(remaining / 60)
-                  .toString()
-                  .padStart(2, "0")}
-                :{(remaining % 60).toString().padStart(2, "0")}
-              </strong>
-            </>
-          )}
-        </div>
       </div>
+      <HoldClock
+        remainingSeconds={remaining}
+        held={held}
+        collecting={collecting}
+        extended={!!sale.holdExtended}
+        onExtend={() => run({ type: "extend" })}
+        onDemoShorten={() => {
+          setNow(Date.now());
+          run({ type: "demo-shorten-hold" });
+        }}
+      />
       <div className="seller-checkout-grid">
         <section className="seller-panel">
-          {held ? (
-            <>
-              <p className="seller-eyebrow">TERMINAL INDEPENDIENTE</p>
-              <h2>
-                {sale.status === "review"
-                  ? "Esta operación necesita revisión"
-                  : "Registra el cobro de tu terminal"}
-              </h2>
-              <p>
-                Cobra <strong>{money(total(sale))}</strong> en tu terminal. Esta
-                aplicación no está conectada con ella.
-              </p>
-              <div className="seller-notice">
-                <ShieldCheck size={22} />
-                <span>
-                  Los lugares permanecen retenidos. Verifica el comprobante
-                  antes de confirmar; no vuelvas a cobrar si el resultado es
-                  incierto.
-                </span>
-              </div>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (confirmed) run({ type: "approve", reference });
+          {!collecting && (
+            <div className="seller-tabs">
+              <button
+                aria-pressed={step === "customer"}
+                disabled={paid(sale) > 0}
+                onClick={() => setStep("customer")}
+              >
+                1. Comprador
+              </button>
+              <button
+                aria-pressed={step === "payment"}
+                disabled={!sale.customer || needsEmailVerification(customer)}
+                onClick={() => {
+                  if (paid(sale) > 0 || run({ type: "customer", customer }))
+                    setStep("payment");
                 }}
               >
-                <label>
-                  Referencia del comprobante
-                  <input
-                    required
-                    maxLength={80}
-                    value={reference}
-                    onChange={(e) => setReference(e.target.value)}
-                    placeholder="Folio o número de autorización"
-                  />
-                </label>
-                <button
-                  type="button"
-                  className="seller-text-button"
-                  onClick={() => setReference(`DEMO-${sale.id.slice(3)}`)}
-                >
-                  Usar referencia de ejemplo
-                </button>
-                <label className="seller-check">
-                  <input
-                    type="checkbox"
-                    required
-                    checked={confirmed}
-                    onChange={(e) => setConfirmed(e.target.checked)}
-                  />
-                  Confirmo que la terminal aprobó el cobro por{" "}
-                  {money(total(sale))}.
-                </label>
-                <Button
-                  className="seller-primary"
-                  type="submit"
-                  disabled={!confirmed || !reference.trim()}
-                >
-                  Registrar cobro aprobado <ArrowRight size={17} />
-                </Button>
-              </form>
-              <div className="seller-actions">
-                <button
-                  className="seller-secondary"
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        "¿Confirmas que no se realizó ningún cobro? Se abrirá un nuevo apartado de cinco minutos.",
-                      )
-                    ) {
-                      run({ type: "unpaid" });
-                      setMethod("terminal");
-                      setConfirmed(false);
+                2. Cobro
+              </button>
+            </div>
+          )}
+          {!collecting && paid(sale) > 0 && needsEmailVerification(customer) ? (
+            <EmailVerification
+              email={customer.email.trim()}
+              accountName={customer.accountEmail ? customer.name : undefined}
+              verified={false}
+              onSend={() => onSendCode(customer.email.trim())}
+              onVerify={(code) => {
+                const error = onVerifyCode(customer.email.trim(), code);
+                if (!error)
+                  setCustomer({
+                    ...customer,
+                    verifiedEmail: customer.email.trim(),
+                  });
+                return error;
+              }}
+            />
+          ) : !collecting && step === "customer" ? (
+            <CustomerForm
+              accounts={accounts}
+              customer={customer}
+              count={sale.seats.length}
+              onChange={(next) => {
+                setCustomer({
+                  ...next,
+                  verifiedEmail:
+                    next.email.trim() === customer.email.trim() &&
+                    next.accountEmail === customer.accountEmail
+                      ? next.verifiedEmail
+                      : undefined,
+                });
+                setError("");
+              }}
+              verification={
+                customer.email.trim() ? (
+                  <EmailVerification
+                    key={`${customer.accountEmail ?? "guest"}-${customer.email.trim()}`}
+                    accountName={
+                      customer.accountEmail ? customer.name : undefined
                     }
-                  }}
-                >
-                  Pago rechazado / no realizado
-                </button>
-                {sale.status === "terminal" && (
-                  <button
-                    className="seller-text-button"
-                    onClick={() => run({ type: "review" })}
-                  >
-                    Dejar pendiente de revisión
-                  </button>
-                )}
-              </div>
-            </>
+                    onCorrect={() => {
+                      setCustomer({
+                        ...customer,
+                        email: "",
+                        verifiedEmail: undefined,
+                        ...(customer.accountEmail
+                          ? { accountEmail: undefined, name: "" }
+                          : {}),
+                      });
+                    }}
+                    email={customer.email.trim()}
+                    verified={!needsEmailVerification(customer)}
+                    onSend={() => onSendCode(customer.email.trim())}
+                    onVerify={(code) => {
+                      const problem = onVerifyCode(customer.email.trim(), code);
+                      if (!problem)
+                        setCustomer({
+                          ...customer,
+                          verifiedEmail: customer.email.trim(),
+                        });
+                      return problem;
+                    }}
+                  />
+                ) : null
+              }
+              onContinue={() => {
+                const problem = customerError(customer, sale.seats.length);
+                if (problem) {
+                  setError(problem);
+                  return;
+                }
+                if (run({ type: "customer", customer })) setStep("payment");
+              }}
+            />
           ) : (
-            <>
-              <div className="seller-tabs">
-                <button
-                  aria-pressed={step === "customer"}
-                  onClick={() => setStep("customer")}
-                >
-                  1. Comprador
-                </button>
-                <button
-                  aria-pressed={step === "payment"}
-                  disabled={!sale.customer}
-                  onClick={() => setStep("payment")}
-                >
-                  2. Cobro
-                </button>
-              </div>
-              {step === "customer" ? (
-                <CustomerForm
-                  accounts={accounts}
-                  customer={customer}
-                  count={sale.seats.length}
-                  onChange={setCustomer}
-                  onContinue={() => {
-                    const problem = customerError(customer, sale.seats.length);
-                    if (problem) {
-                      setError(problem);
-                      return;
-                    }
-                    if (run({ type: "customer", customer })) setStep("payment");
-                  }}
-                />
-              ) : (
-                <>
-                  <h2>Elige cómo cobrar</h2>
-                  <p>
-                    {customer.name} ·{" "}
-                    {customer.delivery === "print"
-                      ? "Entrega impresa"
-                      : customer.email}
-                  </p>
-                  <div className="seller-payment-options">
-                    <button
-                      aria-pressed={method === "cash"}
-                      onClick={() => {
-                        setMethod("cash");
-                        setConfirmed(false);
-                      }}
-                    >
-                      <Banknote /> Efectivo
-                    </button>
-                    <button
-                      aria-pressed={method === "terminal"}
-                      onClick={() => {
-                        setMethod("terminal");
-                        setConfirmed(false);
-                      }}
-                    >
-                      <CreditCard /> Tarjeta en terminal
-                    </button>
-                  </div>
-                  {method === "cash" ? (
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        if (confirmed)
-                          run({
-                            type: "cash",
-                            customer,
-                            receivedMinor: parseCash(received),
-                          });
-                      }}
-                    >
-                      <label>
-                        Efectivo recibido (MXN)
-                        <input
-                          inputMode="decimal"
-                          required
-                          type="number"
-                          min={total(sale) / 100}
-                          step="0.01"
-                          value={received}
-                          onChange={(e) => setReceived(e.target.value)}
-                          placeholder="0.00"
-                        />
-                      </label>
-                      <button
-                        type="button"
-                        className="seller-text-button"
-                        onClick={() =>
-                          setReceived((total(sale) / 100).toFixed(2))
-                        }
-                      >
-                        Importe exacto
-                      </button>
-                      <div className="seller-change">
-                        <span>Cambio a entregar</span>
-                        <strong>
-                          {money(
-                            Math.max(0, parseCash(received) - total(sale)),
-                          )}
-                        </strong>
-                      </div>
-                      <label className="seller-check">
-                        <input
-                          type="checkbox"
-                          required
-                          checked={confirmed}
-                          onChange={(e) => setConfirmed(e.target.checked)}
-                        />
-                        Confirmo que recibí el efectivo y revisé los lugares.
-                      </label>
-                      <Button
-                        type="submit"
-                        className="seller-primary"
-                        disabled={
-                          !confirmed || parseCash(received) < total(sale)
-                        }
-                      >
-                        Confirmar venta · {money(total(sale))}
-                      </Button>
-                    </form>
-                  ) : (
-                    <>
-                      <div className="seller-notice">
-                        <CreditCard size={24} />
-                        <span>
-                          Captura el importe en tu terminal física. Después
-                          registra aquí el resultado y la referencia del
-                          comprobante.
-                        </span>
-                      </div>
-                      <Button
-                        className="seller-primary"
-                        onClick={() => run({ type: "terminal", customer })}
-                      >
-                        Iniciar cobro en terminal <ArrowRight size={17} />
-                      </Button>
-                      <p className="seller-muted">
-                        Los lugares se mantendrán retenidos hasta que registres
-                        el resultado.
-                      </p>
-                    </>
-                  )}
-                </>
-              )}
-            </>
+            <PaymentCollection
+              key={`${sale.id}-${sale.payments.length}-${sale.status}`}
+              sale={sale}
+              onAction={run}
+            />
           )}
           {error && (
             <p className="seller-error" role="alert">
@@ -356,10 +207,10 @@ export function SaleCheckout({
           <h2>{event.title}</h2>
           <p>{event.venue}</p>
           <div className="seller-summary-seats">
-            {sale.seats.map((s) => (
-              <div key={s.id}>
-                <span>{s.label}</span>
-                <strong>{money(s.amountMinor)}</strong>
+            {sale.seats.map((seat) => (
+              <div key={seat.id}>
+                <span>{seat.label}</span>
+                <strong>{money(seat.amountMinor)}</strong>
               </div>
             ))}
           </div>
@@ -368,6 +219,13 @@ export function SaleCheckout({
             <strong>{money(total(sale))}</strong>
           </div>
           <small>Sin cargos adicionales en esta demo.</small>
+          <PaymentBreakdown sale={sale} />
+          {sale.status === "partial" && (
+            <p className="seller-muted">
+              Hay pagos registrados. Puedes retomar esta operación desde Mis
+              ventas; los lugares permanecen retenidos.
+            </p>
+          )}
           {sale.status === "pending" && (
             <button
               className="seller-text-button seller-danger"

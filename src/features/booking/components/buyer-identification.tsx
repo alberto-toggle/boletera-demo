@@ -63,7 +63,7 @@ export function BuyerIdentification({
     setError("");
     if (verification) {
       if (code !== "123456") {
-        setError("El código no coincide. En esta demo usa 123456.");
+        setError("El código no coincide. Revisa los seis dígitos.");
         return;
       }
       onComplete(
@@ -101,7 +101,7 @@ export function BuyerIdentification({
       );
       if (!existing) {
         setError(
-          "Esta cuenta de prueba no existe. Crea una cuenta o usa los datos de ejemplo.",
+          "No encontramos esta cuenta. Revisa tu correo o crea una cuenta.",
         );
         return;
       }
@@ -313,9 +313,7 @@ export function BuyerIdentification({
                   </div>
                   {mode !== "guest" && (
                     <div>
-                      <Label htmlFor={`${id}-password`}>
-                        Contraseña de prueba
-                      </Label>
+                      <Label htmlFor={`${id}-password`}>Contraseña</Label>
                       <div className="auth-password">
                         <Input
                           id={`${id}-password`}
@@ -354,6 +352,7 @@ export function BuyerIdentification({
                   )}
                 </div>
                 <Button
+                  data-demo
                   variant="link"
                   type="button"
                   onClick={() => {
@@ -396,7 +395,7 @@ export function BuyerIdentification({
                   value={code}
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                 />
-                <small>
+                <small data-demo>
                   Simulación: no enviamos mensajes. Código de prueba:{" "}
                   <strong>123456</strong>.
                 </small>
@@ -426,7 +425,7 @@ export function BuyerIdentification({
                     variant="link"
                     onClick={() => {
                       setCode("");
-                      setNotice("Código de prueba renovado: 123456.");
+                      setNotice("Código renovado.");
                     }}
                   >
                     Reenviar código

@@ -43,6 +43,7 @@ export type BookingState =
   | { step: "failed" | "expired"; message: string }
   | { step: "confirmed"; order: DemoOrder };
 export type BookingAction =
+  | { type: "demo-shorten-hold"; now: number }
   | { type: "toggle"; seatId: string }
   | { type: "clear-selection" }
   | { type: "reserve"; now: number; orderId: string }
@@ -152,6 +153,11 @@ export function transitionBooking(
       orderId: action.orderId,
     };
   }
+  if (action.type === "demo-shorten-hold" && state.step === "checkout")
+    return {
+      ...state,
+      expiresAt: Math.min(state.expiresAt, action.now + 10_000),
+    };
   if (state.step === "processing") {
     if (action.type === "expire" && action.now >= state.expiresAt)
       return {

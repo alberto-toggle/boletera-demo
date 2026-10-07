@@ -45,7 +45,7 @@ export function PaletteSelector() {
     () => "institucional",
   );
   return (
-    <label className="palette-control">
+    <label data-demo className="palette-control">
       <Palette size={17} aria-hidden="true" />
       <span>Tema</span>
       <select

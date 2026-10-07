@@ -71,6 +71,7 @@ export function EventCountdown({ startsAt }: { startsAt: string }) {
   return (
     <div className="event-countdown-demo">
       <button
+        data-demo
         type="button"
         aria-expanded={visible}
         onClick={() => setVisible(!visible)}

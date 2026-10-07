@@ -1,7 +1,7 @@
 import { PastEvents } from "@/features/event-experience/components/past-events";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { Header, Footer, Help, ProposalSwitcher } from "../components/chrome";
+import { Header, Footer, Help } from "../components/chrome";
 import { EventPreview } from "../components/event-preview";
 import { Agenda } from "../components/agenda";
 import { demoEvents, featuredEvent } from "../fixtures";
@@ -75,7 +75,6 @@ export function GalaHome() {
         <Help />
       </main>
       <Footer />
-      <ProposalSwitcher active="gala" />
     </div>
   );
 }

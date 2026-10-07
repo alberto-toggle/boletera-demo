@@ -151,3 +151,7 @@ Verificado en Chrome: compra completa por registro, login, invitado con teléfon
   bloque Music Concert Countdown de shadcn.io ya descargado en Playground;
   los componentes de la demo no importan scaffolding del Playground.
 - Ambos contadores respetan movimiento reducido y evitan anuncios cada segundo.
+
+«Saltar a 00:10 · Demo» acorta el vencimiento del apartado activo a diez
+segundos como máximo y deja actuar la expiración normal. No prolonga el plazo
+ni está disponible durante el procesamiento/retención de un cobro.

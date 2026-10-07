@@ -2844,47 +2844,6 @@ html:has(.discovery .event-modal[open]) {
   }
 }
 
-/* Compact demo navigation, shared by the four visual proposals. */
-.discovery .proposal-widget {
-  position: fixed;
-  right: max(20px, env(safe-area-inset-right));
-  bottom: max(20px, env(safe-area-inset-bottom));
-  z-index: 80;
-  color: var(--ink);
-  font-family: var(--font-geist-sans), sans-serif;
-}
-.proposal-widget-trigger {
-  width: 50px;
-  height: 50px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--paper);
-  color: var(--ink);
-  border: 1px solid var(--line);
-  box-shadow: 0 4px 18px #0002;
-  cursor: pointer;
-}
-.proposal-widget-panel {
-  position: absolute;
-  right: 0;
-  bottom: 62px;
-  width: min(260px, calc(100vw - 40px));
-  padding: 12px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  box-shadow: 0 12px 40px #0003;
-}
-.proposal-widget-panel p { margin: 4px 10px 10px; color: var(--subtle); font-size: 11px; }
-.proposal-widget-panel a { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px; border-radius: 8px; font-size: 13px; }
-.proposal-widget-panel a:hover { background: var(--muted); }
-.proposal-widget-panel a[aria-current="page"] { background: var(--ink); color: var(--paper); }
-.proposal-widget-panel a svg { margin-left: auto; }
-.proposal-widget-number { opacity: .65; font-size: 10px; }
-.proposal-widget-panel .proposal-widget-all { margin-top: 8px; border-top: 1px solid var(--line); border-radius: 0; font-size: 11px; }
-.proposal-widget :focus-visible { outline: 2px solid var(--accent-tone); outline-offset: 3px; }
-
 /* Each proposal keeps its own header; only its compact positioning is shared. */
 .discovery [id] { scroll-margin-top: 100px; }
 .sticky-header-frame.is-compact {

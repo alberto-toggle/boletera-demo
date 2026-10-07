@@ -13,10 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Brand,
-  ProposalSwitcher,
-} from "@/features/event-discovery/components/chrome";
+import { Brand } from "@/features/event-discovery/components/chrome";
 import {
   formatEventDate,
   formatEventTime,
@@ -110,7 +107,6 @@ export function AccountPage({
       <footer className="account-footer">
         Demostración · Sin cobros, envíos ni accesos reales
       </footer>
-      <ProposalSwitcher active={direction} />
     </div>
   );
 }
@@ -498,7 +494,7 @@ function OrderDetail({
       {transfers.some(
         (t) => t.status === "pending" && t.from === state.session,
       ) && (
-        <details className="account-demo-tools">
+        <details data-demo className="account-demo-tools">
           <summary>Probar la recepción en otra cuenta</summary>
           <p>
             Esta demo no envía correos. Cambia a la cuenta destinataria para

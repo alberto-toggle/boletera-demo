@@ -644,26 +644,6 @@
   background: var(--muted);
   border-color: var(--ink);
 }
-.seller-clock {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 16px 22px;
-  border-radius: 10px;
-}
-.seller-clock strong {
-  font-variant-numeric: tabular-nums;
-  font-size: 28px;
-}
-.seller-clock span {
-  font-size: 12px;
-}
-.seller-clock small {
-  color: #d5dccf;
-  font-size: 10px;
-}
 .seller-summary-seats {
   margin: 24px 0;
 }
@@ -1454,3 +1434,279 @@
     display: none !important;
   }
 }
+
+.seller-email-verification {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--muted);
+  display: grid;
+  gap: 12px;
+}
+.seller-code-row {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+.seller-code-row input {
+  letter-spacing: 0.25em;
+}
+.seller-payment-breakdown {
+  margin: 24px 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.seller-payment-breakdown h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+.seller-payment-entry {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.seller-payment-entry > div {
+  flex: 1;
+  min-width: 0;
+}
+.seller-payment-entry small {
+  display: block;
+  overflow-wrap: anywhere;
+  margin-top: 5px;
+}
+.seller-payment-entry > strong {
+  white-space: nowrap;
+}
+.seller-balance,
+.seller-collection-summary {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+.seller-balance span,
+.seller-collection-summary span {
+  flex: 1;
+  min-width: 120px;
+  display: grid;
+  gap: 8px;
+}
+.seller-balance strong {
+  font-size: 22px;
+}
+.seller-status.partial {
+  background: var(--muted);
+  color: var(--ink);
+  border: 1px solid var(--accent-tone);
+}
+.seller-filters-panel {
+  margin: 16px 0 24px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.seller-date-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.seller-date-presets button {
+  min-height: 34px;
+  padding: 7px 12px;
+  font-size: 12px;
+}
+.seller-date-inputs,
+.seller-extra-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: end;
+  margin-bottom: 14px;
+}
+.seller-date-inputs > label,
+.seller-extra-filters > label {
+  flex: 1;
+  min-width: 160px;
+}
+.seller-calendar-popover {
+  position: relative;
+}
+.seller-calendar-popover summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+.seller-calendar {
+  position: absolute;
+  z-index: 20;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 330px;
+  max-width: calc(100vw - 64px);
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: 0 12px 35px rgb(20 30 20 / 15%);
+}
+.seller-calendar [data-part="view-control"] {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 12px 0;
+}
+.seller-app .seller-calendar select {
+  padding: 6px;
+  min-height: 32px;
+  font-size: 12px;
+}
+.seller-calendar table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.seller-calendar th {
+  font-size: 11px;
+  color: var(--subtle);
+  padding: 6px 0;
+}
+.seller-calendar td {
+  text-align: center;
+}
+.seller-calendar [data-part="table-cell-trigger"] {
+  width: 100%;
+  min-height: 36px;
+  border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.seller-calendar [data-in-range] {
+  background: var(--muted);
+}
+.seller-calendar [data-selected] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.seller-calendar [data-outside-range] {
+  opacity: 0.4;
+}
+.seller-calendar [data-today] {
+  box-shadow: inset 0 0 0 1px var(--accent-tone);
+}
+.seller-calendar [data-part="table-cell-trigger"]:hover {
+  outline: 1px solid var(--accent-tone);
+}
+@media (max-width: 700px) {
+  .seller-code-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .seller-filters-panel {
+    padding: 14px;
+  }
+  .seller-calendar {
+    left: 0;
+    right: auto;
+  }
+}
+
+.seller-filters-panel .seller-list-filters {
+  margin-top: 16px;
+}
+@media (max-width: 700px) {
+  .seller-sale-row > div:last-child {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+  .seller-sale-row > div:last-child small {
+    flex-basis: 100%;
+  }
+}
+@media print {
+  .seller-receipt > .seller-payment-breakdown {
+    display: none;
+  }
+}
+
+.seller-verification-dialog {
+  width: min(540px, calc(100vw - 32px));
+}
+.seller-verification-dialog .seller-information-scroll {
+  display: grid;
+  gap: 18px;
+}
+.seller-verification-recipient {
+  padding: 16px;
+  background: var(--muted);
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+.seller-verified-account {
+  display: block;
+  margin-top: 6px;
+}
+
+/* Full-width reservation bar; seller rules stay independent of public checkout. */
+.seller-clock {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px 24px;
+  margin-bottom: 28px;
+  padding: 14px 20px;
+  border: 1px solid var(--ink);
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--paper);
+  animation: seller-clock-enter .4s ease-out;
+}
+.seller-clock-time, .seller-clock-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.seller-clock-time { flex-shrink: 0; }
+.seller-clock-time strong { font-size: 14px; }
+.seller-clock time { display: flex; font-size: 32px; font-weight: 650; line-height: 1; }
+.seller-clock-actions { flex-wrap: wrap; gap: 12px; }
+.seller-app .seller-clock small { color: inherit; font-size: 11px; }
+.seller-clock button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 12px;
+}
+.seller-app .seller-clock button small { font-size: 9px; text-transform: uppercase; opacity: .75; }
+.seller-clock button[aria-pressed="true"] { background: #ffffff18; box-shadow: inset 0 0 0 1px currentColor; }
+.seller-clock button:focus-visible { outline-color: currentColor; }
+.seller-clock-alert time, .seller-clock-alert .seller-clock-icon {
+  color: #f4c18b;
+  animation: seller-clock-pulse 1.8s ease-in-out infinite;
+}
+@keyframes seller-clock-enter { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes seller-clock-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .85; transform: scale(1.12); } }
+@media (max-width: 600px) {
+  .seller-clock { padding: 12px; gap: 10px; }
+  .seller-clock-time { gap: 12px; }
+  .seller-clock-time strong { font-size: 12px; }
+  .seller-clock time { font-size: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .seller-clock, .seller-clock-alert time, .seller-clock-alert .seller-clock-icon { animation: none; }
+}
+@media print { .seller-clock { display: none; } }

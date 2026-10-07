@@ -10,7 +10,7 @@ let memory = "";
 let memoryOnly = false;
 function snapshot() {
   try {
-    if (!memoryOnly) memory = localStorage.getItem(key) ?? memory;
+    if (!memoryOnly) memory = localStorage.getItem(key) ?? "";
   } catch {
     /* Memory fallback in private mode. */
   }

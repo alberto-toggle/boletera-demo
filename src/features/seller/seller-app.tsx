@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Clock3, ArrowRight } from "lucide-react";
+import { sendEmailCode, verifyEmailCode } from "./demo/email-verification";
 import { useBuyerAccounts } from "./demo/account-bridge";
 import { SaleTicketDesigns } from "./components/sale-ticket-designs";
 import {
@@ -37,6 +38,21 @@ export function SellerApp({ path = [] }: { path?: string[] }) {
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, []);
+  if (!state)
+    return (
+      <div className="seller-app">
+        <main
+          className="seller-main seller-result"
+          role="status"
+          aria-live="polite"
+          aria-busy="true"
+        >
+          <p className="seller-eyebrow">BOLETERA · TAQUILLA</p>
+          <h1>Preparando tu espacio.</h1>
+          <p>Recuperando la sesión y tus ventas…</p>
+        </main>
+      </div>
+    );
   if (!state.signedIn)
     return (
       <SellerLogin
@@ -164,6 +180,14 @@ export function SellerApp({ path = [] }: { path?: string[] }) {
           key={sale.id}
           sale={sale}
           event={saleEvent}
+          onSendCode={(email) => sendEmailCode(sale.id, email)}
+          onVerifyCode={(email, code) => {
+            const error = verifyEmailCode(sale.id, email, code);
+            if (error) return error;
+            return sale.customer?.email.trim() === email
+              ? act(sale.id, { type: "verify-email", email })
+              : null;
+          }}
           onAction={(action) => act(sale.id, action)}
         />
       );

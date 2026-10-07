@@ -451,6 +451,36 @@
       "scope": "Taquilla / información del evento",
       "decision": "Ficha compacta antes de seleccionar lugares y consulta en diálogo durante selección, cobro y confirmación. Mismos datos del catálogo público, sin galería promocional ni dependencia de sus vistas.",
       "source": "Petición del usuario, 2026-10-06"
+    },
+    {
+      "scope": "Taquilla / historial y cobro",
+      "decision": "Historial con calendario Ark UI, presets y resúmenes filtrados. Correo de invitado verificado antes del cobro. Pagos parciales en efectivo y múltiples terminales con referencias; retención hasta cubrir saldo, sin emisión anticipada. Comprobantes adjuntos quedan como evaluación futura.",
+      "source": "Comentarios del equipo y petición del usuario, 2026-10-06"
+    },
+    {
+      "scope": "Taquilla / verificación y apartado",
+      "decision": "Diálogo común para confirmar correo y código de invitados y cuentas. Cambio de cuenta/correo invalida verificación. Correo recomendado con alternativa explícita solo impresa sin correo. Apartado inicial de 10 minutos y una extensión de 5, sin pausa al verificar.",
+      "source": "Propuesta aprobada por el usuario, 2026-10-06"
+    },
+    {
+      "scope": "Taquilla / contador de apartado",
+      "decision": "Barra sticky a todo el ancho antes de datos y resumen, dígitos rodantes compartidos con compra pública y alerta demo manual solo en icono y números, sin cambiar fondo. Mantiene extensión única de cinco minutos y estado de lugares retenidos durante el cobro.",
+      "source": "Petición explícita del usuario, 2026-10-06"
+    },
+    {
+      "scope": "Compra pública y taquilla / expiración demo",
+      "decision": "Saltar a 00:10 · Demo acorta el vencimiento del apartado activo sin reiniciar el flujo. Desactivado con diez segundos o menos; oculto durante procesamiento de pago público y retención por cobros en taquilla.",
+      "source": "Propuesta aprobada por el usuario, 2026-10-06"
+    },
+    {
+      "scope": "Herramientas de demo / público y taquilla",
+      "decision": "Widget único integra propuestas y visibilidad persistente de ayudas, ocultas inicialmente. Marcadores explícitos data-demo usan violeta, borde discontinuo y etiqueta DEMO. Ocultar conserva estado y no deja huecos. Diálogos ofrecen el mismo interruptor; avisos sin cobros reales permanecen.",
+      "source": "Propuesta aprobada por el usuario, 2026-10-06"
+    },
+    {
+      "scope": "Herramientas de demo / color",
+      "decision": "Sustituir lila por azul saturado sobrio #204e91 y texto blanco en widget, botones y ayudas. Mantener etiqueta DEMO y borde discontinuo.",
+      "source": "Corrección explícita del usuario, 2026-10-06"
     }
   ],
   "evidence": [

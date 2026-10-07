@@ -1,7 +1,7 @@
 import { PastEvents } from "@/features/event-experience/components/past-events";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
-import { Header, Footer, Help, ProposalSwitcher } from "../components/chrome";
+import { Header, Footer, Help } from "../components/chrome";
 import { Agenda } from "../components/agenda";
 import { EventPreview } from "../components/event-preview";
 import { demoEvents, featuredEvent } from "../fixtures";
@@ -107,7 +107,6 @@ export function InstitutionalHome() {
         <Help />
       </main>
       <Footer />
-      <ProposalSwitcher active="institucional" />
     </div>
   );
 }

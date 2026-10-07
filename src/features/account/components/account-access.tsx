@@ -29,7 +29,7 @@ export function AccountAccess() {
     const existing = state.users.find((u) => u.email === normalizeEmail(email));
     if (mode === "login" && !existing) {
       setError(
-        "Esta cuenta de demo no existe. Crea una cuenta o usa uno de los ejemplos.",
+        "No encontramos esta cuenta. Revisa tu correo o crea una cuenta.",
       );
       return;
     }
@@ -111,7 +111,7 @@ export function AccountAccess() {
           />
         </div>
         <div>
-          <Label htmlFor={`${id}-password`}>Contraseña de prueba</Label>
+          <Label htmlFor={`${id}-password`}>Contraseña</Label>
           <div className="auth-password">
             <Input
               id={`${id}-password`}
@@ -151,9 +151,9 @@ export function AccountAccess() {
         </Button>
         <p className="account-disclaimer">
           Acceso simulado. Usa datos de prueba; no se guardan contraseñas.
-          Google abre la cuenta de Alex.
         </p>
-        <div className="account-examples">
+        <p data-demo>Google abre la cuenta de Alex.</p>
+        <div data-demo className="account-examples">
           <span>Prueba la experiencia</span>
           {[demoAccount, companion].map((u) => (
             <Button

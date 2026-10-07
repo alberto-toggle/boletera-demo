@@ -66,3 +66,12 @@ No captura PAN/CVV, tokeniza tarjetas ni conecta esta cartera a cobros.
 (Saurabh), descargado de https://beui.dev/r/card-folder.json, sin depender del
 Playground. Conserva la cartera SVG y transición original, con contenido
 semántico y tokens propios; elimina controles de revelado de número/CVV.
+
+## Compras de taquilla en otra pestaña
+
+El adaptador `seller/demo/account-bridge.ts` publica únicamente ventas confirmadas
+con cuenta vinculada, conservando identificadores de compra y boletos. La cuenta
+se actualiza mediante el evento `storage`, sin recargar ni cambiar al comprador
+conectado. La fecha de compra corresponde al último cobro. La disponibilidad y
+la sesión del vendedor permanecen aisladas. El inicio permite restaurar la demo
+en todas las pestañas del mismo origen, sin borrar otros datos del navegador.

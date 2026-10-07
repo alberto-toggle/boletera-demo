@@ -137,6 +137,7 @@ export function TransferDialog({
             </div>
             {state.session !== companion.email && (
               <Button
+                data-demo
                 variant="link"
                 type="button"
                 onClick={() => {

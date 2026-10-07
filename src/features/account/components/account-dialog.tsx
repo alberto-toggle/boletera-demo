@@ -1,4 +1,5 @@
 "use client";
+import { DemoDialogTools } from "@/features/demo-tools/demo-tools";
 import {
   useEffect,
   useId,
@@ -73,6 +74,7 @@ export function AccountDialog({
         </Button>
       </header>
       {children}
+      <DemoDialogTools />
     </dialog>
   );
 }

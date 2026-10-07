@@ -1,5 +1,6 @@
 "use client";
 import { useSyncExternalStore } from "react";
+import { reconcileDemoReset } from "@/features/demo-tools/reset-data";
 import {
   availableVenue,
   customerError,
@@ -19,7 +20,7 @@ let state = empty;
 const listeners = new Set<() => void>();
 let loaded = false;
 const key = "boletera-seller-demo-v1";
-// Session-scoped on purpose: no synchronization with public checkout or other tabs.
+// Seller session and inventory stay tab-scoped; confirmed account purchases publish separately.
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -34,12 +35,15 @@ function validSale(value: unknown): value is Sale {
     !Number.isFinite(value.createdAt) ||
     typeof value.expiresAt !== "number" ||
     !Number.isFinite(value.expiresAt) ||
+    (value.holdExtended !== undefined &&
+      typeof value.holdExtended !== "boolean") ||
     !Array.isArray(value.seats) ||
     value.seats.length < 1 ||
     value.seats.length > SELLER_LIMIT ||
     typeof value.status !== "string" ||
     ![
       "pending",
+      "partial",
       "terminal",
       "review",
       "confirmed",
@@ -78,48 +82,134 @@ function validSale(value: unknown): value is Sale {
       !["print", "email", "both"].includes(String(c.delivery)) ||
       !["public", "military"].includes(String(c.audience)) ||
       typeof c.militaryCount !== "number" ||
+      (c.noEmail !== undefined && typeof c.noEmail !== "boolean") ||
+      (c.verifiedEmail !== undefined && typeof c.verifiedEmail !== "string") ||
       (c.accountEmail !== undefined && typeof c.accountEmail !== "string") ||
       (c.accountRequested !== undefined &&
         typeof c.accountRequested !== "boolean") ||
       customerError(c as unknown as Customer, seats.length))
   )
     return false;
-  const p = value.payment;
+  if (!Array.isArray(value.payments)) return false;
+  const sum = seats.reduce((n, s) => n + s.amountMinor, 0);
   if (
-    p !== null &&
-    (!isRecord(p) ||
-      (p.method === "cash"
-        ? typeof p.receivedMinor !== "number" ||
-          !Number.isSafeInteger(p.receivedMinor) ||
-          p.receivedMinor < seats.reduce((n, s) => n + s.amountMinor, 0)
-        : p.method !== "terminal" ||
-          typeof p.reference !== "string" ||
-          !p.reference.trim()))
+    !value.payments.every(
+      (p) =>
+        isRecord(p) &&
+        typeof p.id === "string" &&
+        typeof p.recordedAt === "number" &&
+        Number.isFinite(p.recordedAt) &&
+        typeof p.amountMinor === "number" &&
+        Number.isSafeInteger(p.amountMinor) &&
+        p.amountMinor > 0 &&
+        (p.method === "cash"
+          ? typeof p.receivedMinor === "number" &&
+            Number.isSafeInteger(p.receivedMinor) &&
+            p.receivedMinor >= p.amountMinor
+          : p.method === "terminal" &&
+            typeof p.reference === "string" &&
+            !!p.reference.trim()),
+    )
   )
     return false;
-  if (["terminal", "review", "confirmed"].includes(value.status) && !c)
+  const collected = value.payments.reduce((n, p) => n + p.amountMinor, 0);
+  if (
+    collected > sum ||
+    new Set(value.payments.map((p) => p.id)).size !== value.payments.length
+  )
     return false;
-  if (value.status === "confirmed" && !p) return false;
-  if (value.status !== "confirmed" && p !== null) return false;
+  const terminal = value.pendingTerminal;
+  if (
+    terminal !== null &&
+    (!isRecord(terminal) ||
+      typeof terminal.amountMinor !== "number" ||
+      !Number.isSafeInteger(terminal.amountMinor) ||
+      terminal.amountMinor <= 0 ||
+      terminal.amountMinor > sum - collected)
+  )
+    return false;
+  if (["terminal", "review"].includes(value.status) !== (terminal !== null))
+    return false;
+  if (
+    ["partial", "terminal", "review", "confirmed"].includes(value.status) &&
+    !c
+  )
+    return false;
+  if (value.status === "confirmed" && collected !== sum) return false;
+  if (value.status === "partial" && (collected <= 0 || collected >= sum))
+    return false;
+  if (
+    ["pending", "expired", "cancelled"].includes(value.status) &&
+    collected !== 0
+  )
+    return false;
   return true;
+}
+// Preserve earlier demo sales when upgrading from a single payment.
+function migrateSale(raw: unknown): unknown {
+  const value =
+    isRecord(raw) &&
+    isRecord(raw.customer) &&
+    raw.customer.delivery === "print" &&
+    !raw.customer.email &&
+    !raw.customer.accountRequested &&
+    !raw.customer.accountEmail &&
+    raw.customer.noEmail === undefined
+      ? { ...raw, customer: { ...raw.customer, noEmail: true } }
+      : raw;
+  if (
+    !isRecord(value) ||
+    Array.isArray(value.payments) ||
+    !Array.isArray(value.seats)
+  )
+    return value;
+  const amount = value.seats.reduce(
+    (sum, seat) =>
+      sum +
+      (isRecord(seat) && typeof seat.amountMinor === "number"
+        ? seat.amountMinor
+        : 0),
+    0,
+  );
+  const payment = value.payment;
+  return {
+    ...value,
+    payments: isRecord(payment)
+      ? [
+          {
+            ...payment,
+            id: `${value.id}-P1`,
+            amountMinor: amount,
+            recordedAt: value.createdAt,
+          },
+        ]
+      : [],
+    pendingTerminal: ["terminal", "review"].includes(String(value.status))
+      ? { amountMinor: amount }
+      : null,
+  };
 }
 function load() {
   if (loaded) return;
   loaded = true;
+  reconcileDemoReset();
   try {
     const raw: unknown = JSON.parse(sessionStorage.getItem(key) || "null");
     if (
       isRecord(raw) &&
       typeof raw.signedIn === "boolean" &&
       Array.isArray(raw.sales) &&
-      raw.sales.every(validSale)
+      raw.sales.map(migrateSale).every(validSale)
     )
       state = {
         signedIn: raw.signedIn,
         sales: expireSales(
-          raw.sales.map((s) =>
-            s.status === "terminal" ? { ...s, status: "review" } : s,
-          ),
+          raw.sales
+            .map(migrateSale)
+            .filter(validSale)
+            .map((s) =>
+              s.status === "terminal" ? { ...s, status: "review" } : s,
+            ),
           Date.now(),
         ),
       };
@@ -147,8 +237,8 @@ function subscribe(listener: () => void) {
 export function useSeller() {
   return useSyncExternalStore(
     subscribe,
-    () => state,
-    () => empty,
+    () => (loaded ? state : null),
+    () => null,
   );
 }
 export function signIn() {
@@ -188,7 +278,8 @@ export function reserve(eventId: string, ids: string[]): string | null {
         seats,
         customer: null,
         status: "pending",
-        payment: null,
+        payments: [],
+        pendingTerminal: null,
       },
       ...state.sales,
     ],

@@ -164,6 +164,15 @@ export function BookingFlow({
         </nav>
         {expiresAt !== null && (
           <ReservationClock
+            onDemoShorten={
+              state.step === "checkout"
+                ? () => {
+                    const time = Date.now();
+                    setNow(time);
+                    dispatch({ type: "demo-shorten-hold", now: time });
+                  }
+                : undefined
+            }
             remainingSeconds={Math.max(0, Math.ceil((expiresAt - now) / 1000))}
           />
         )}
@@ -289,6 +298,7 @@ export function BookingFlow({
                 </Link>
               )}
               <Button
+                data-demo
                 variant="outline"
                 onClick={() => dispatch({ type: "reset" })}
               >

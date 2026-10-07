@@ -109,12 +109,12 @@ export function TicketDesignGallery({
         Tus boletos
       </h2>
       {compact ? (
-        <details className="account-design-control">
+        <details data-demo className="account-design-control">
           <summary>Diseño del boleto · {active.label}</summary>
           {controls}
         </details>
       ) : (
-        controls
+        <div data-demo>{controls}</div>
       )}
       {compact && order.tickets.length > 1 && (
         <div className="account-carousel-controls">

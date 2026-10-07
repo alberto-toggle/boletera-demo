@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ResetDemo } from "@/features/demo-tools/reset-demo";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import {
@@ -61,7 +62,7 @@ export default function Home() {
         <Brand />
         <nav aria-label="Explorar demo" className="flex flex-wrap gap-5">
           <Link href="/operacion/vendedor">Abrir taquilla ↗</Link>
-          <Link href="/playground">Abrir playground ↗</Link>
+          <ResetDemo />
         </nav>
       </header>
       <section className="hub-intro">

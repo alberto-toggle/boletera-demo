@@ -1,7 +1,7 @@
 import { PastEvents } from "@/features/event-experience/components/past-events";
 import Image from "next/image";
 import { ArrowUpRight, Asterisk } from "lucide-react";
-import { Header, Footer, Help, ProposalSwitcher } from "../components/chrome";
+import { Header, Footer, Help } from "../components/chrome";
 import { EventPreview } from "../components/event-preview";
 import { Agenda } from "../components/agenda";
 import { demoEvents, featuredEvent } from "../fixtures";
@@ -130,7 +130,6 @@ export function EditorialHome() {
         <Help />
       </main>
       <Footer />
-      <ProposalSwitcher active="editorial" />
     </div>
   );
 }

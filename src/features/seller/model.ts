@@ -1,6 +1,7 @@
 import type { Venue, VenueSeat } from "../seating/model";
 export const SELLER_LIMIT = 8;
-export const SELLER_HOLD_MS = 300_000;
+export const SELLER_HOLD_MS = 600_000;
+export const SELLER_EXTENSION_MS = 300_000;
 export interface SellerEvent {
   id: string;
   title: string;
@@ -33,6 +34,8 @@ export interface BuyerAccountOption {
   registration: string;
 }
 export interface Customer {
+  noEmail?: boolean;
+  verifiedEmail?: string;
   accountEmail?: string;
   accountRequested?: boolean;
   name: string;
@@ -43,27 +46,46 @@ export interface Customer {
   militaryCount: number;
 }
 export type SaleStatus =
-  "pending" | "terminal" | "review" | "confirmed" | "expired" | "cancelled";
+  | "pending"
+  | "partial"
+  | "terminal"
+  | "review"
+  | "confirmed"
+  | "expired"
+  | "cancelled";
 export interface Sale {
   id: string;
   eventId: string;
   sellerId: string;
   createdAt: number;
   expiresAt: number;
+  holdExtended?: boolean;
   seats: VenueSeat[];
   customer: Customer | null;
   status: SaleStatus;
-  payment:
-    | { method: "cash"; receivedMinor: number }
-    | { method: "terminal"; reference: string }
-    | null;
+  payments: SalePayment[];
+  pendingTerminal: { amountMinor: number } | null;
 }
+export type SalePayment = {
+  id: string;
+  amountMinor: number;
+  recordedAt: number;
+} & (
+  | { method: "cash"; receivedMinor: number }
+  | { method: "terminal"; reference: string }
+);
+export const paid = (sale: Pick<Sale, "payments">) =>
+  sale.payments.reduce((sum, p) => sum + p.amountMinor, 0);
+export const balance = (sale: Sale) => total(sale) - paid(sale);
+export const needsEmailVerification = (customer: Customer) =>
+  !!customer.email.trim() && customer.verifiedEmail !== customer.email.trim();
 export interface SellerState {
   signedIn: boolean;
   sales: Sale[];
 }
 export const statusLabels: Record<SaleStatus, string> = {
   pending: "Apartado activo",
+  partial: "Pago parcial",
   terminal: "Cobro en terminal",
   review: "Pendiente de revisión",
   confirmed: "Venta confirmada",
@@ -87,6 +109,16 @@ export function customerError(customer: Customer, count: number) {
     return "Selecciona una cuenta o continúa como invitado.";
   if (customer.accountEmail && customer.accountEmail !== customer.email)
     return "El correo debe corresponder a la cuenta seleccionada.";
+  if (
+    customer.noEmail &&
+    (customer.accountEmail ||
+      customer.accountRequested ||
+      customer.email ||
+      customer.delivery !== "print")
+  )
+    return "La compra sin correo solo permite boletos impresos como invitado.";
+  if (!customer.accountEmail && !customer.email.trim() && !customer.noEmail)
+    return "Escribe un correo o elige continuar sin correo, solo con boletos impresos.";
   if (!customer.name.trim()) return "Escribe el nombre del comprador.";
   if (
     customer.delivery !== "print" &&
@@ -115,7 +147,9 @@ export function availableVenue(
       .filter(
         (s) =>
           s.eventId === eventId &&
-          ["pending", "terminal", "review", "confirmed"].includes(s.status),
+          ["pending", "partial", "terminal", "review", "confirmed"].includes(
+            s.status,
+          ),
       )
       .flatMap((s) => s.seats.map((x) => x.id)),
   );
@@ -140,24 +174,35 @@ export function parseCash(value: string): number {
 
 export type SaleAction =
   | { type: "customer"; customer: Customer }
-  | { type: "terminal"; customer: Customer }
-  | { type: "cash"; customer: Customer; receivedMinor: number }
+  | { type: "terminal"; amountMinor: number }
+  | { type: "cash"; amountMinor: number; receivedMinor: number }
   | { type: "approve"; reference: string }
   | { type: "unpaid" }
   | { type: "review" }
-  | { type: "cancel" };
+  | { type: "cancel" }
+  | { type: "extend" }
+  | { type: "demo-shorten-hold" }
+  | { type: "verify-email"; email: string };
 
-/** Pure transitions; persistence and clock are provided by the caller. */
+/** No confirmed payment can be removed or automatically expired. */
 export function transitionSale(
   sale: Sale,
   action: SaleAction,
   now: number,
 ): Sale | string {
+  if (["confirmed", "expired", "cancelled"].includes(sale.status))
+    return "Esta operación ya está cerrada.";
+  if (sale.status === "pending" && sale.expiresAt <= now)
+    return "El tiempo de apartado terminó.";
   const next: Sale = { ...sale };
-  if ("customer" in action) {
+  const canCollect = ["pending", "partial"].includes(sale.status);
+  if (action.type === "customer") {
+    if (sale.status !== "pending" || paid(sale))
+      return "No puedes cambiar al comprador después de registrar un cobro.";
     const error = customerError(action.customer, sale.seats.length);
     if (error) return error;
-    if (sale.status !== "pending") return "El apartado ya no está activo.";
+    if (needsEmailVerification(action.customer))
+      return "Verifica el correo del comprador antes de continuar al cobro.";
     next.customer = {
       ...action.customer,
       name: action.customer.name.trim(),
@@ -167,34 +212,91 @@ export function transitionSale(
           ? action.customer.registration.trim()
           : "",
     };
+    return next;
+  }
+  if (action.type === "cash" || action.type === "terminal") {
+    if (!canCollect || !sale.customer)
+      return "Primero completa los datos del comprador y aclara el cobro pendiente.";
+    if (needsEmailVerification(sale.customer))
+      return "Verifica el correo del comprador antes de cobrar.";
+    if (
+      !Number.isSafeInteger(action.amountMinor) ||
+      action.amountMinor <= 0 ||
+      action.amountMinor > balance(sale)
+    )
+      return "El importe debe ser mayor que cero y no superar el saldo pendiente.";
+  }
+  function addPayment(payment: SalePayment) {
+    next.payments = [...sale.payments, payment];
+    next.pendingTerminal = null;
+    next.status = balance(next) === 0 ? "confirmed" : "partial";
   }
   switch (action.type) {
-    case "customer":
+    case "verify-email":
+      if (!sale.customer || sale.customer.email.trim() !== action.email)
+        return "El correo no corresponde al comprador de esta operación.";
+      next.customer = { ...sale.customer, verifiedEmail: action.email };
       break;
-    case "terminal":
-      next.status = "terminal";
+    case "demo-shorten-hold":
+      if (sale.status !== "pending" || paid(sale))
+        return "Solo puedes adelantar un apartado activo sin cobros.";
+      next.expiresAt = Math.min(sale.expiresAt, now + 10_000);
+      break;
+    case "extend":
+      if (sale.status !== "pending" || paid(sale))
+        return "Solo puedes extender un apartado activo sin cobros.";
+      if (sale.holdExtended)
+        return "Ya utilizaste la extensión de este apartado.";
+      next.expiresAt = sale.expiresAt + SELLER_EXTENSION_MS;
+      next.holdExtended = true;
       break;
     case "cash":
       if (
         !Number.isSafeInteger(action.receivedMinor) ||
-        action.receivedMinor < total(sale)
+        action.receivedMinor < action.amountMinor
       )
-        return "El efectivo recibido no cubre el total.";
-      next.status = "confirmed";
-      next.payment = { method: "cash", receivedMinor: action.receivedMinor };
+        return "El efectivo recibido no cubre este importe.";
+      addPayment({
+        id: `${sale.id}-P${sale.payments.length + 1}`,
+        method: "cash",
+        amountMinor: action.amountMinor,
+        receivedMinor: action.receivedMinor,
+        recordedAt: now,
+      });
+      break;
+    case "terminal":
+      next.pendingTerminal = { amountMinor: action.amountMinor };
+      next.status = "terminal";
       break;
     case "approve":
-      if (!["terminal", "review"].includes(sale.status))
+      if (
+        !["terminal", "review"].includes(sale.status) ||
+        !sale.pendingTerminal
+      )
         return "No hay un cobro de terminal pendiente.";
       if (!action.reference.trim())
         return "Escribe la referencia del comprobante.";
-      next.status = "confirmed";
-      next.payment = { method: "terminal", reference: action.reference.trim() };
+      if (
+        sale.payments.some(
+          (p) =>
+            p.method === "terminal" &&
+            p.reference.toLowerCase() === action.reference.trim().toLowerCase(),
+        )
+      )
+        return "Esa referencia ya está registrada en esta venta. Revisa el comprobante.";
+      addPayment({
+        id: `${sale.id}-P${sale.payments.length + 1}`,
+        method: "terminal",
+        amountMinor: sale.pendingTerminal.amountMinor,
+        reference: action.reference.trim(),
+        recordedAt: now,
+      });
       break;
     case "unpaid":
       if (!["terminal", "review"].includes(sale.status))
-        return "La operación no está pendiente de aclaración.";
-      next.status = "pending";
+        return "No hay un cobro de terminal por aclarar.";
+      next.pendingTerminal = null;
+      next.status = paid(sale) ? "partial" : "pending";
       next.expiresAt = now + SELLER_HOLD_MS;
       break;
     case "review":
@@ -202,8 +304,8 @@ export function transitionSale(
       next.status = "review";
       break;
     case "cancel":
-      if (sale.status !== "pending")
-        return "Primero aclara si se realizó el cobro.";
+      if (sale.status !== "pending" || paid(sale))
+        return "No puedes cancelar una operación con cobros registrados o por aclarar.";
       next.status = "cancelled";
       break;
   }
