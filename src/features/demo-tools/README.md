@@ -1,6 +1,6 @@
 # Herramientas de demostración
 
-Widget compartido por las cuatro propuestas públicas y taquilla, montado una vez
+Widget compartido por las cuatro propuestas públicas, taquilla y administración, montado una vez
 por el layout raíz. Incluye navegación entre propuestas y un interruptor para
 mostrar controles y ayudas. Por defecto están ocultos; la preferencia persiste en
 `localStorage` con la clave `boletera-demo-tools-visible`, con sincronización entre
@@ -31,7 +31,25 @@ se debe retirar; no cambian los contratos de los componentes de negocio.
 ## Restablecer demo
 
 El inicio ofrece un reinicio confirmado de los datos propios de Boletera: cuentas,
-compras, transferencias, cartera, ventas de taquilla y preferencias. Conserva los
+compras, transferencias, cartera, ventas de taquilla, eventos de administración y preferencias. Conserva los
 ejemplos iniciales y no toca claves de otros proyectos. Se notifica mediante
 `boletera-demo-reset-v1`; las pestañas abiertas se recargan y las sesiones de
 taquilla antiguas se descartan al volver a abrirlas. No se usa `storage.clear()`.
+
+## Apariencia de las propuestas públicas
+
+El widget ofrece un interruptor compacto «Acabado glass» en todas las rutas de
+las cuatro propuestas: inicio, detalle, compra y cuenta. La capa vive en
+`features/demo-appearance` y usa tokens de superficie, transparencia, reflejo,
+borde, sombra y desenfoque derivados de cada tema. No duplica las vistas ni cambia
+taquilla o administración. Desactivarlo conserva los estilos originales.
+
+La clave `boletera-demo-appearance` conserva la elección entre rutas, propuestas,
+recargas y pestañas; el reinicio de demo la elimina. El atributo raíz se retira al
+salir de las propuestas públicas. Con transparencia reducida o sin soporte de
+backdrop-filter se utilizan superficies opacas. Los boletos y sus códigos QR
+conservan su diseño para lectura y exportación.
+
+En Inmersiva, el widget también incluye el selector compacto de paleta (Ciruela,
+Institucional y Granate), independiente de la visibilidad de ayudas y combinable
+con Glass. Reutiliza la preferencia del selector del menú de inicio.

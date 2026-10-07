@@ -1,6 +1,5 @@
 import type {
   DiscoveryEvent,
-  EventCategory,
 } from "@/features/event-discovery/model";
 import type { EventExperience, EventPhoto, PastEvent } from "./model";
 // Illustrative content for the demo; not confirmed venue policies or real archives.
@@ -26,8 +25,8 @@ const photos: readonly EventPhoto[] = [
     caption: "Una noche para recordar",
   },
 ];
-const profiles: Record<EventCategory, Omit<EventExperience, "photos">> = {
-  Celebraciones: {
+const profiles: Record<"dinner" | "ceremony" | "community", Omit<EventExperience, "photos">> = {
+  dinner: {
     introduction:
       "Una bienvenida cálida, buena mesa y música para acompañar el encuentro. La velada está pensada para disfrutar sin prisa, brindar y compartir con quienes eliges.",
     dressCode: "Formal o de cóctel, sugerido para esta demo.",
@@ -57,7 +56,7 @@ const profiles: Record<EventCategory, Omit<EventExperience, "photos">> = {
       },
     ],
   },
-  Ceremonias: {
+  ceremony: {
     introduction:
       "Un encuentro para reconocer historias, trayectorias y vocación de servicio. Un programa conmemorativo que pone a las personas y a sus familias en el centro.",
     dressCode: "Formal, sugerido para esta demo.",
@@ -87,7 +86,7 @@ const profiles: Record<EventCategory, Omit<EventExperience, "photos">> = {
       },
     ],
   },
-  Encuentros: {
+  community: {
     introduction:
       "Un espacio para conversar, compartir ideas y encontrarnos en comunidad. Actividades y momentos de convivencia en un ambiente cercano.",
     dressCode: "Cómodo o casual de vestir, sugerido para esta demo.",
@@ -120,7 +119,7 @@ const profiles: Record<EventCategory, Omit<EventExperience, "photos">> = {
 };
 export function getEventExperience(event: DiscoveryEvent): EventExperience {
   return {
-    ...profiles[event.category],
+    ...profiles[event.category === "Cena baile" ? "dinner" : ["dia-ejercito", "reconocimientos"].includes(event.id) ? "ceremony" : "community"],
     photos: [
       { src: event.image, alt: event.imageAlt, caption: event.title },
       ...(event.id === "dia-ejercito"

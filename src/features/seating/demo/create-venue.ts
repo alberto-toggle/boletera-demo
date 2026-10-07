@@ -1,10 +1,13 @@
+import { findVenue } from "@/domain/venues/catalog";
 import type { Venue, VenueSection, VenueSeat } from "../model";
 // 500 is an illustrative scenario from RF-AFO-002, not a confirmed venue capacity.
 export function createDemoVenue(event: {
-  category: string;
+  venue: string;
   price: { amountMinor: number };
 }): Venue {
-  const arrangement = event.category !== "Celebraciones" ? "rows" : "tables";
+  const definition = findVenue(event.venue);
+  if (!definition) throw new Error(`Recinto desconocido: ${event.venue}`);
+  const arrangement = definition.arrangement;
   const sections: VenueSection[] = ["A", "B", "C", "D", "E"].map(
     (id, index) => ({
       id,

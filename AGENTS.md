@@ -24,6 +24,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
   explícita del usuario. Respetar su instrucción de no ejecutar comandos sin
   autorización; limitar los comandos al trabajo autorizado.
 
+## Categorías de eventos
+
+- Las únicas categorías confirmadas son **Evento** y **Cena baile**, centralizadas
+  en `src/domain/events/category.ts`. No agregar categorías sin petición del usuario.
+- La categoría y la distribución del recinto son conceptos distintos.
+- Recintos de demo: **Gran Salón Boletera** (mesas y pista) y **Auditorio Boletera**
+  (filas). Usar `src/domain/venues/catalog.ts`; el recinto determina el mapa,
+  no la categoría. No ofrecer combinaciones independientes de recinto y distribución.
+
 ## TypeScript y modelado
 
 - Mantener `strict: true`. Escribir el código nuevo de la aplicación en

@@ -4,6 +4,7 @@ import { DemoMotion } from "@/features/event-discovery/components/demo-motion";
 import type { ReactNode } from "react";
 import "@/features/event-discovery/discovery.css";
 import "@/features/account/account.css";
+import "@/features/demo-appearance/appearance.css";
 
 export default function DemoLayout({ children }: { children: ReactNode }) {
   return (

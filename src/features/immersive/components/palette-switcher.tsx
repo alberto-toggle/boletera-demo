@@ -38,15 +38,18 @@ export function ImmersivePalette({ children }: { children: ReactNode }) {
   );
 }
 
-export function PaletteSelector() {
+export function PaletteSelector({ compact = false }: { compact?: boolean }) {
   const palette = useSyncExternalStore(
     subscribe,
     snapshot,
     () => "institucional",
   );
   return (
-    <label data-demo className="palette-control">
-      <Palette size={17} aria-hidden="true" />
+    <label
+      data-demo={compact ? undefined : ""}
+      className={compact ? "demo-palette-control" : "palette-control"}
+    >
+      {!compact && <Palette size={17} aria-hidden="true" />}
       <span>Tema</span>
       <select
         aria-label="Tema de la demo inmersiva"

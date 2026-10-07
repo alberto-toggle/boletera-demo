@@ -1,3 +1,4 @@
+import type { EventCategory } from "@/domain/events/category";
 import type { Venue, VenueSeat } from "../seating/model";
 export const SELLER_LIMIT = 8;
 export const SELLER_HOLD_MS = 600_000;
@@ -8,7 +9,7 @@ export interface SellerEvent {
   startsAt: string;
   venue: string;
   image: string;
-  category: string;
+  category: EventCategory;
   priceMinor: number;
   city: string;
   imageAlt: string;

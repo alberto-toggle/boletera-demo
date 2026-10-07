@@ -1,9 +1,5 @@
-export const eventCategories = [
-  "Celebraciones",
-  "Ceremonias",
-  "Encuentros",
-] as const;
-export type EventCategory = (typeof eventCategories)[number];
+import type { EventCategory } from "@/domain/events/category";
+export { eventCategories, type EventCategory } from "@/domain/events/category";
 export type EventFilter = EventCategory | "Todos";
 export type DemoDirection =
   "institucional" | "gala" | "editorial" | "inmersiva";

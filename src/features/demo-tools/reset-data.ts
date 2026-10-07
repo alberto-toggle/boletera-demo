@@ -3,9 +3,11 @@ export const DEMO_RESET_KEY = "boletera-demo-reset-v1";
 const resetSeenKey = "boletera-demo-reset-seen-v1";
 const sellerKey = "boletera-seller-demo-v1";
 const localKeys = [
+  "boletera-admin-demo-v1",
   "boletera-account-demo-v1",
   "boletera-immersive-palette",
   "boletera-demo-tools-visible",
+  "boletera-demo-appearance",
 ];
 
 export function reconcileDemoReset() {

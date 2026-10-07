@@ -1,4 +1,5 @@
 "use client";
+import { migrateDemoEvent } from "@/domain/venues/migrate-demo-event";
 import { useSyncExternalStore } from "react";
 import { reconcileDemoReset } from "@/features/demo-tools/reset-data";
 import {
@@ -225,7 +226,10 @@ function load() {
   loaded = true;
   reconcileDemoReset();
   try {
-    const raw: unknown = JSON.parse(sessionStorage.getItem(key) || "null");
+    const raw: unknown = JSON.parse(
+      sessionStorage.getItem(key) || "null",
+      migrateDemoEvent,
+    );
     if (
       isRecord(raw) &&
       typeof raw.signedIn === "boolean" &&

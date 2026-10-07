@@ -9,8 +9,10 @@ import {
 } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { PaletteSelector } from "@/features/immersive/components/palette-switcher";
+import { AppearanceToggle } from "@/features/demo-appearance/appearance-toggle";
 import { DEMO_RESET_KEY, reconcileDemoReset } from "./reset-data";
-import { FlaskConical, X } from "lucide-react";
+import { Check, FlaskConical, X } from "lucide-react";
 
 const key = "boletera-demo-tools-visible";
 const changed = "boletera-demo-tools-change";
@@ -34,22 +36,26 @@ function subscribe(callback: () => void) {
 export function DemoVisibilityToggle() {
   const visible = useSyncExternalStore(subscribe, snapshot, () => false);
   return (
-    <label className="demo-tools-toggle">
-      <input
-        type="checkbox"
-        checked={visible}
-        onChange={(e) => {
-          memory = e.target.checked;
-          try {
-            localStorage.setItem(key, String(memory));
-          } catch {
-            /* Keep preference for this tab if storage is unavailable. */
-          }
-          window.dispatchEvent(new Event(changed));
-        }}
-      />
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={visible}
+      className="demo-tools-toggle"
+      onClick={() => {
+        memory = !visible;
+        try {
+          localStorage.setItem(key, String(memory));
+        } catch {
+          /* Keep preference for this tab if storage is unavailable. */
+        }
+        window.dispatchEvent(new Event(changed));
+      }}
+    >
+      <span className="demo-tools-check" aria-hidden="true">
+        {visible && <Check size={14} strokeWidth={3} />}
+      </span>
       Mostrar controles y ayudas de demo
-    </label>
+    </button>
   );
 }
 export function DemoDialogTools() {
@@ -94,7 +100,9 @@ export function DemoTools() {
   const trigger = useRef<HTMLButtonElement>(null);
   const id = useId();
   const enabled =
-    pathname.startsWith("/demo-") || pathname.startsWith("/operacion/vendedor");
+    pathname.startsWith("/demo-") ||
+    pathname.startsWith("/operacion/vendedor") ||
+    pathname.startsWith("/admin");
   useEffect(() => {
     document.documentElement.dataset.demoTools = visible ? "visible" : "hidden";
     return () => {
@@ -158,6 +166,15 @@ export function DemoTools() {
         </h2>
         <p>Solo para explorar esta propuesta.</p>
         <DemoVisibilityToggle />
+        {proposals.some(
+          ([slug]) =>
+            pathname === `/demo-${slug}` ||
+            pathname.startsWith(`/demo-${slug}/`),
+        ) && <AppearanceToggle />}
+        {(pathname === "/demo-inmersiva" ||
+          pathname.startsWith("/demo-inmersiva/")) && (
+          <PaletteSelector compact />
+        )}
         <p>
           {visible
             ? "Las ayudas se distinguen por su etiqueta DEMO y borde discontinuo."

@@ -1,0 +1,168 @@
+/* A surface variant, scoped by the demo widget to public proposal routes. Original has no overrides. */
+.discovery {
+  --glass-tint: var(--paper);
+  --glass-opacity: 45%;
+  --glass-strong-opacity: 78%;
+  --glass-blur: 24px;
+  --glass-saturation: 150%;
+  --glass-border-opacity: 65%;
+  --glass-radius: 16px;
+  --glass-shadow-opacity: 12%;
+  --glass-highlight-opacity: 65%;
+  --glass-ambient-opacity: 32%;
+  --glass-surface: color-mix(
+    in srgb,
+    var(--glass-tint) var(--glass-opacity),
+    transparent
+  );
+  --glass-strong: color-mix(
+    in srgb,
+    var(--glass-tint) var(--glass-strong-opacity),
+    transparent
+  );
+  --glass-edge: color-mix(
+    in srgb,
+    white var(--glass-border-opacity),
+    transparent
+  );
+  --glass-shadow: 0 12px 32px
+    color-mix(in srgb, var(--ink) var(--glass-shadow-opacity), transparent);
+  --glass-highlight: inset 0 1px 0
+    color-mix(in srgb, white var(--glass-highlight-opacity), transparent);
+  --glass-reflection: linear-gradient(
+    125deg,
+    color-mix(in srgb, white var(--glass-highlight-opacity), transparent),
+    transparent 38%,
+    transparent 65%,
+    color-mix(in srgb, white 8%, transparent)
+  );
+  --glass-backdrop: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  --glass-ambient:
+    radial-gradient(
+      ellipse at 10% 12%,
+      color-mix(
+        in srgb,
+        var(--accent-tone) var(--glass-ambient-opacity),
+        transparent
+      ),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse at 95% 80%,
+      color-mix(in srgb, var(--ink) 9%, transparent),
+      transparent 60%
+    );
+}
+.discovery.gala {
+  --glass-opacity: 52%;
+  --glass-strong-opacity: 82%;
+  --glass-highlight-opacity: 15%;
+  --glass-border-opacity: 22%;
+  --glass-shadow-opacity: 3%;
+  --glass-ambient-opacity: 24%;
+}
+.discovery.editorial {
+  --glass-radius: 5px;
+  --glass-ambient-opacity: 24%;
+}
+.discovery.inmersiva {
+  --glass-radius: 24px;
+  --glass-tint: var(--nav-paper, var(--paper));
+}
+
+html[data-demo-appearance="glass"] .discovery {
+  background-image: var(--glass-ambient);
+  background-attachment: fixed;
+}
+html[data-demo-appearance="glass"]
+  .discovery
+  :is(.agenda-section, .immersive-curation) {
+  background-color: var(--paper);
+  background-image: var(--glass-ambient);
+  background-attachment: fixed;
+}
+html[data-demo-appearance="glass"]
+  .discovery
+  :is(
+    .discovery-header,
+    .booking-header,
+    .account-header,
+    .checkout-panel,
+    .venue-workspace,
+    .event-gallery-controls button:not([aria-pressed="true"]),
+    .event-cover-arrows button,
+    .order-summary,
+    .account-auth,
+    .account-order-card,
+    .account-profile,
+    .account-purchase-details,
+    .event-detail-copy,
+    .mega-shell,
+    .discovery-card,
+    .featured-ticket,
+    .agenda-row,
+    .event-search,
+    .category-filters button:not([aria-pressed="true"])
+  ) {
+  background: var(--glass-reflection), var(--glass-surface);
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  backdrop-filter: var(--glass-backdrop);
+}
+html[data-demo-appearance="glass"] .discovery .discovery-header {
+  color: var(--ink);
+}
+html[data-demo-appearance="glass"] .discovery .discovery-card {
+  overflow: hidden;
+}
+html[data-demo-appearance="glass"] .discovery .card-content {
+  padding: 20px;
+  background: transparent;
+}
+html[data-demo-appearance="glass"]
+  .discovery
+  :is(.photo-category, .image-label) {
+  background: var(--glass-strong);
+  color: var(--ink);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-highlight);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  backdrop-filter: var(--glass-backdrop);
+}
+html[data-demo-appearance="glass"] .discovery .agenda-row {
+  padding-inline: 16px;
+  margin-block: 10px;
+}
+/* Preserve readable content when blur or transparency is unavailable/undesired. */
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  html[data-demo-appearance="glass"] .discovery {
+    --glass-opacity: 100%;
+    --glass-strong-opacity: 100%;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html[data-demo-appearance="glass"] .discovery {
+    --glass-opacity: 100%;
+    --glass-strong-opacity: 100%;
+    --glass-backdrop: none;
+  }
+}
+@media (max-width: 700px) {
+  .discovery {
+    --glass-blur: 10px;
+  }
+}
+
+/* Information panes use the same material; forms and QR/ticket artwork remain legible. */
+html[data-demo-appearance="glass"] .discovery .event-detail-copy {
+  padding: clamp(20px, 3vw, 36px);
+}
+html[data-demo-appearance="glass"]
+  .discovery
+  :is(.booking-header, .account-header) {
+  border-radius: 0;
+}

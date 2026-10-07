@@ -486,6 +486,21 @@
       "scope": "Taquilla / operaciones en curso",
       "decision": "Mis operaciones separa en curso, completadas y canceladas/vencidas. Lista y detalle comparten vencimiento absoluto; último minuto ámbar sin pulso. Borradores persisten sin registrar pagos. Rechazar terminal no renueva el plazo.",
       "source": "Acuerdo con el usuario, 2026-10-06"
+    },
+    {
+      "date": "2026-10-07",
+      "scope": "Administración / primera propuesta",
+      "decision": "Ruta /admin en route group independiente. Sidebar compacto, verde profundo y superficies claras, métricas contenidas, filtros en barras compactas y formularios con vista previa. Adaptación selectiva de Dashboard + Landing a Base UI; catálogo, persistencia y lógica separados de componentes. Tres módulos: resumen, eventos y ventas. Sin editor libre de mapas ni administración de permisos en esta entrega."
+    },
+    {
+      "scope": "Cuatro propuestas / acabado Glass",
+      "decision": "Interruptor compacto Acabado glass disponible en todas las rutas públicas, incluyendo detalle, compra y cuenta. Superficies translúcidas con reflejos y desenfoque tokenizados; Gala conserva vidrio oscuro. Preferencia local compartida y reiniciable. No altera taquilla, administración ni el arte de boletos. Alternativa opaca con transparencia reducida.",
+      "source": "Petición explícita del usuario, 2026-10-07"
+    },
+    {
+      "scope": "Admin / estadísticas",
+      "decision": "Áreas animadas de ingresos, dona por canal, barras de pagos y mapa de actividad 2D/3D con filtro de vendedor; paleta propia azul, violeta y cian, separada de verde/dorado de marca. Adaptaciones aisladas de bloques descargados de Pace UI y 21st; datos derivados de ventas confirmadas. Tabla con ordenamiento y subtotal inspirados en Records Table.",
+      "source": "Petición del usuario, 2026-10-07"
     }
   ],
   "evidence": [

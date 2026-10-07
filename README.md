@@ -33,6 +33,13 @@ en el inicio. Usar **Usar datos de ejemplo** e **Iniciar sesión**. Incluye mapa
 cobro simulado en efectivo o terminal independiente, entrega de boletos y Mis ventas.
 Consulta [arquitectura, alcance y escenarios de validación](src/features/seller/README.md).
 
+## Administración
+
+La demo del panel está en `/admin`, accesible desde **Abrir administración**.
+Incluye resumen, gestión de eventos y consulta de ventas con datos ficticios.
+Tiene route group, layout y componentes propios, con primitivas Base UI.
+Consulta [alcance, arquitectura y validación](src/features/admin/README.md).
+
 ## Playground de componentes
 
 La deuda pendiente para reutilizar los componentes públicos en operación u otros
@@ -146,3 +153,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Admit One Ticket de larsen66 (21st.dev): `/playground/21st-dev/admit-one-ticket`. Código y auxiliares en `src/components/blocks/21st-dev/admit-one-ticket`.
 
 Event Registration Countdown: `/playground/shadcn-ui-blocks/marketing-hero-forms-event-registration-countdown`.
+
+### Gráficas y estadísticas de 21st.dev
+
+32 bloques adicionales, sin duplicar enlaces repetidos, disponibles desde las categorías Gráficas, Estadísticas, Tarjetas y Tablas del playground. Cada ruta sigue `/playground/21st-dev/<bloque>-<autor>`; su código, demo y procedencia viven juntos en `src/components/blocks/21st-dev/`. Los README locales describen las adaptaciones de compatibilidad y los auxiliares reconstruidos cuando el registro no los proporcionó.

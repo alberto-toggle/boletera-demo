@@ -1,4 +1,5 @@
 "use client";
+import { migrateDemoEvent } from "@/domain/venues/migrate-demo-event";
 import { useMemo, useSyncExternalStore } from "react";
 import type { Buyer } from "../booking/model";
 import { initialAccountState } from "./fixtures";
@@ -19,7 +20,7 @@ function snapshot() {
 }
 function decode(value: string): AccountState {
   try {
-    const parsed: unknown = JSON.parse(value);
+    const parsed: unknown = JSON.parse(value, migrateDemoEvent);
     if (isAccountState(parsed)) return parsed;
   } catch {
     /* Discard malformed demo data. */

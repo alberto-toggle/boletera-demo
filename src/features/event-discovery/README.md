@@ -56,8 +56,7 @@ bloquea el desplazamiento del fondo solo mientras hay una vista previa abierta.
 ## Datos y comportamiento
 
 - `DiscoveryEvent` define identificación, categoría, fecha, sede, precio, imagen,
-  descripción e inclusiones. Las tres categorías son Celebraciones, Ceremonias y
-  Encuentros. Los nombres, sedes, fechas, precios e inclusiones son ilustrativos.
+  descripción e inclusiones. Las dos categorías confirmadas son Evento y Cena baile. Los nombres, sedes, fechas, precios e inclusiones son ilustrativos.
 - El dinero se almacena como enteros en centavos (`amountMinor`) con moneda
   explícita `MXN`. El formato actual muestra pesos sin decimales; todos los
   precios de las fixtures son cantidades de pesos completas.

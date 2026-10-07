@@ -1,4 +1,397 @@
 export const playgroundBlocks = [
+  { title: "Records Table · theshanelevine", category: "Tablas", href: "/playground/21st-dev/records-table-theshanelevine", provider: "21st.dev", kind: "features", description: "Tabla compacta con selección, columnas ordenables y resumen de registros." },
+  {
+    "title": "Line Charts 4 · sean0205",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/line-charts-4-sean0205",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Line Charts 4: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Chart · shadcn",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/chart-shadcn",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Line Charts 8 · sean0205",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/line-charts-8-sean0205",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Line Charts 8: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Radar Chart · intentui",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/radar-chart-intentui",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Radar Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Area Charts 1 · sean0205",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/area-charts-1-sean0205",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Area Charts 1: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Line Charts 9 · sean0205",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/line-charts-9-sean0205",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Line Charts 9: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Candle Chart · ssychui",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/candle-chart-ssychui",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Candle Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Line Chart · LegionWebDev",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/line-chart-legionwebdev",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Line Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Funnel Chart · bklitai",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/funnel-chart-bklitai",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Funnel Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Line Charts 5 · sean0205",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/line-charts-5-sean0205",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Line Charts 5: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Chart Tooltip · uiable",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/chart-tooltip-uiable",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Chart Tooltip: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Pie chart · airbnb",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/pie-chart-airbnb",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Pie chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "GitHub Contribution Graph 3D Heatmap · kedhareswer",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/contribution-skyline-kedhareswer",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "GitHub Contribution Graph 3D Heatmap: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Funnel Chart Big · reaviz",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/funnel-chart-big-reaviz",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Funnel Chart Big: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Bar Chart · LegionWebDev",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/bar-chart-legionwebdev",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Bar Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Area Chart · SubframeApp",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/area-chart-subframeapp",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Area Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Glare Cards · daiwiikharihar",
+    "category": "Tarjetas",
+    "href": "/playground/21st-dev/glare-cards-daiwiikharihar",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Glare Cards: ejemplo interactivo de tarjetas con datos de muestra."
+  },
+  {
+    "title": "Area Chart · bklitai",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/area-chart-bklitai",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Area Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Line Charts 1 · sean0205",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/line-charts-1-sean0205",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Line Charts 1: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Line Graph Statistics · ravikatiyar162",
+    "category": "Estadísticas",
+    "href": "/playground/21st-dev/line-graph-statistics-ravikatiyar162",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Line Graph Statistics: ejemplo interactivo de estadísticas con datos de muestra."
+  },
+  {
+    "title": "Animated Card Diagram · badtzx0",
+    "category": "Tarjetas",
+    "href": "/playground/21st-dev/animated-card-diagram-badtzx0",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Animated Card Diagram: ejemplo interactivo de tarjetas con datos de muestra."
+  },
+  {
+    "title": "Progress Metric Card · makviesainte",
+    "category": "Estadísticas",
+    "href": "/playground/21st-dev/progress-metric-card-makviesainte",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Progress Metric Card: ejemplo interactivo de estadísticas con datos de muestra."
+  },
+  {
+    "title": "Bar Chart · intentui",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/bar-chart-intentui",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Bar Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Area Chart · reaviz",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/area-chart-1-reaviz",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Area Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Line Charts 6 · sean0205",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/line-charts-6-sean0205",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Line Charts 6: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Pie Chart · LegionWebDev",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/pie-chart-legionwebdev",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Pie Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Radar Chart · LegionWebDev",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/radar-chart-legionwebdev",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Radar Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Area Charts 2 · sean0205",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/area-charts-2-sean0205",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Area Charts 2: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Charts · lyanchouss",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/charts-lyanchouss",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Charts: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Interactive Logs Table · moumensoliman",
+    "category": "Tablas",
+    "href": "/playground/21st-dev/interactive-logs-table-shadcnui-moumensoliman",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Interactive Logs Table: ejemplo interactivo de tablas con datos de muestra."
+  },
+  {
+    "title": "Donut Chart · ravikatiyar162",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/donut-chart-ravikatiyar162",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Donut Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Area Chart · LegionWebDev",
+    "category": "Gráficas",
+    "href": "/playground/21st-dev/area-chart-legionwebdev",
+    "provider": "21st.dev",
+    "kind": "features",
+    "description": "Area Chart: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Chart 6",
+    "category": "Gráficas",
+    "href": "/playground/paceui/dashboard-chart-6",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Chart 6: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Chart 5",
+    "category": "Gráficas",
+    "href": "/playground/paceui/dashboard-chart-5",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Chart 5: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Chart 4",
+    "category": "Gráficas",
+    "href": "/playground/paceui/dashboard-chart-4",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Chart 4: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Chart 3",
+    "category": "Gráficas",
+    "href": "/playground/paceui/dashboard-chart-3",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Chart 3: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Chart 2",
+    "category": "Gráficas",
+    "href": "/playground/paceui/dashboard-chart-2",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Chart 2: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Chart 1",
+    "category": "Gráficas",
+    "href": "/playground/paceui/dashboard-chart-1",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Chart 1: ejemplo interactivo de gráficas con datos de muestra."
+  },
+  {
+    "title": "App Analytics 3",
+    "category": "Dashboards",
+    "href": "/playground/paceui/app-analytics-3",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "App Analytics 3: ejemplo interactivo de dashboards con datos de muestra."
+  },
+  {
+    "title": "App Analytics 2",
+    "category": "Dashboards",
+    "href": "/playground/paceui/app-analytics-2",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "App Analytics 2: ejemplo interactivo de dashboards con datos de muestra."
+  },
+  {
+    "title": "App Analytics 1",
+    "category": "Dashboards",
+    "href": "/playground/paceui/app-analytics-1",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "App Analytics 1: ejemplo interactivo de dashboards con datos de muestra."
+  },
+  {
+    "title": "App Education 1",
+    "category": "Dashboards",
+    "href": "/playground/paceui/app-education-1",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "App Education 1: ejemplo interactivo de dashboards con datos de muestra."
+  },
+  {
+    "title": "App Finance 1",
+    "category": "Dashboards",
+    "href": "/playground/paceui/app-finance-1",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "App Finance 1: ejemplo interactivo de dashboards con datos de muestra."
+  },
+  {
+    "title": "App Health 1",
+    "category": "Dashboards",
+    "href": "/playground/paceui/app-health-1",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "App Health 1: ejemplo interactivo de dashboards con datos de muestra."
+  },
+  {
+    "title": "Dashboard Stat 4",
+    "category": "Estadísticas",
+    "href": "/playground/paceui/dashboard-stat-4",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Stat 4: ejemplo interactivo de estadísticas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Stat 3",
+    "category": "Estadísticas",
+    "href": "/playground/paceui/dashboard-stat-3",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Stat 3: ejemplo interactivo de estadísticas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Stat 2",
+    "category": "Estadísticas",
+    "href": "/playground/paceui/dashboard-stat-2",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Stat 2: ejemplo interactivo de estadísticas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Stat 1",
+    "category": "Estadísticas",
+    "href": "/playground/paceui/dashboard-stat-1",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Stat 1: ejemplo interactivo de estadísticas con datos de muestra."
+  },
+  {
+    "title": "Dashboard Table 3",
+    "category": "Tablas",
+    "href": "/playground/paceui/dashboard-table-3",
+    "provider": "Pace UI",
+    "kind": "features",
+    "description": "Dashboard Table 3: ejemplo interactivo de tablas con datos de muestra."
+  },
   {
     title: "Boleto clásico",
     category: "Boletos",

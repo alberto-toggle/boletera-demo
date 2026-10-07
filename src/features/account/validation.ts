@@ -1,3 +1,4 @@
+import { isEventCategory } from "@/domain/events/category";
 import type { AccountState } from "./model";
 const object = (v: unknown): v is Record<string, unknown> =>
   !!v && typeof v === "object" && !Array.isArray(v);
@@ -17,7 +18,7 @@ const event = (v: unknown) =>
   [v.id, v.title, v.venue, v.city, v.image, v.imageAlt, v.description].every(
     text,
   ) &&
-  ["Celebraciones", "Ceremonias", "Encuentros"].includes(String(v.category)) &&
+  isEventCategory(v.category) &&
   date(v.startsAt) &&
   strings(v.includes) &&
   object(v.price) &&
