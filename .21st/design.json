@@ -436,6 +436,21 @@
     {
       "date": "2026-10-06",
       "decision": "Se elimina la alerta con cambio de fondo y halo. Solo queda Alerta demo: conserva la superficie normal y pulsa icono y dígitos, con activación/desactivación manual y respeto por movimiento reducido."
+    },
+    {
+      "scope": "Operación / Vendedor",
+      "decision": "Una propuesta institucional clara, encabezado compacto sin sidebar, mapa protagonista y resumen lateral. Route group y estado de demo aislados. Efectivo y terminal independiente con registro manual; sin integración bancaria ni cuentas de comprador. Componentes y layout separados para extracción futura.",
+      "source": "Acuerdos explícitos del usuario, 2026-10-06"
+    },
+    {
+      "scope": "Taquilla / boletos y comprador con cuenta",
+      "decision": "Reutilizar los cinco diseños y PDF de la compra pública. Buscar cuentas de ejemplo por nombre o correo, seleccionar y asociar únicamente ventas confirmadas a Mis boletos mediante un adaptador explícito; conservar sesión y disponibilidad aisladas.",
+      "source": "Petición explícita del usuario, 2026-10-06"
+    },
+    {
+      "scope": "Taquilla / información del evento",
+      "decision": "Ficha compacta antes de seleccionar lugares y consulta en diálogo durante selección, cobro y confirmación. Mismos datos del catálogo público, sin galería promocional ni dependencia de sus vistas.",
+      "source": "Petición del usuario, 2026-10-06"
     }
   ],
   "evidence": [

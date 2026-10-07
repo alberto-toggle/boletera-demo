@@ -1,3 +1,4 @@
+import "@/features/tickets/design-gallery.css";
 import "@/features/event-experience/experience.css";
 import { DemoMotion } from "@/features/event-discovery/components/demo-motion";
 import type { ReactNode } from "react";

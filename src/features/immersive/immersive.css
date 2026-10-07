@@ -354,15 +354,6 @@
   color: var(--on-dark);
   font-size: 10px;
 }
-.statement-ticket {
-  transition: transform 0.25s ease;
-  filter: drop-shadow(0 20px 25px #0003);
-}
-.statement-ticket svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
 .statement-preview {
   transform: rotate(-5deg);
 }
@@ -373,30 +364,8 @@
   letter-spacing: 0.12em;
   margin-top: 20px;
 }
-.ticket-orbits {
-  transform-origin: 670px 105px;
-  animation: ticket-breathe 8s ease-in-out infinite alternate;
-}
-@keyframes ticket-breathe {
-  to {
-    transform: scale(1.15) translate(-15px, 8px);
-    opacity: 0.45;
-  }
-}
 .inmersiva .experience-section {
   background: var(--muted);
-}
-.statement-issued {
-  background: transparent;
-  border: 0;
-  display: block;
-  max-width: 741px;
-  padding: 0;
-}
-.statement-issued .ticket-validity {
-  text-align: center;
-  padding: 15px;
-  color: var(--ink);
 }
 @media (max-width: 1050px) {
   .mega-desktop {
@@ -547,31 +516,6 @@
     animation: none !important;
     transition: none !important;
   }
-}
-@media print {
-  .statement-issued {
-    break-inside: avoid;
-    margin: 15mm 0;
-  }
-  .statement-issued .statement-ticket {
-    filter: none;
-    transform: none !important;
-  }
-}
-.issued-ticket-details {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 20px 0 0;
-  font-size: 12px;
-  color: var(--ink);
-}
-.issued-ticket-details strong {
-  font-size: 15px;
-}
-.statement-issued .ticket-validity {
-  font-size: 10px;
-  letter-spacing: 0.06em;
 }
 .inmersiva .proposal-switcher a[aria-current="page"] {
   background: var(--ink);

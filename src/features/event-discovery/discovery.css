@@ -1414,7 +1414,7 @@ html:has(.discovery .event-modal[open]) {
   justify-content: space-between;
   gap: 20px;
 }
-.hub-header a:last-child {
+.hub-header nav a {
   font-size: 12px;
   border-bottom: 1px solid #8c9688;
   padding: 8px 0;

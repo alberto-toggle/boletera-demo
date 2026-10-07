@@ -26,6 +26,13 @@ detalla rutas, responsabilidades, datos, comportamiento, código reutilizado,
 referencias visuales y verificaciones realizadas. El [flujo de compra](src/features/booking/README.md) detalla los bloques adaptados del playground y las reglas simuladas. El
 [inventario de fotografías](public/images/events/README.md) registra sus fuentes.
 
+## Operación: vendedor
+
+Demo aislada en `/operacion/vendedor`, también accesible desde **Abrir taquilla**
+en el inicio. Usar **Usar datos de ejemplo** e **Iniciar sesión**. Incluye mapa,
+cobro simulado en efectivo o terminal independiente, entrega de boletos y Mis ventas.
+Consulta [arquitectura, alcance y escenarios de validación](src/features/seller/README.md).
+
 ## Playground de componentes
 
 La deuda pendiente para reutilizar los componentes públicos en operación u otros

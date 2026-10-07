@@ -1,15 +1,7 @@
 import type { DiscoveryEvent } from "../event-discovery/model";
 
-export interface BookingSeat {
-  id: string;
-  label: string;
-  group: string;
-  zone: string;
-  sectionId: string;
-  number: number;
-  amountMinor: number;
-  occupied: boolean;
-}
+import type { VenueSeat as BookingSeat } from "../seating/model";
+export type { VenueSeat as BookingSeat } from "../seating/model";
 export interface Buyer {
   name: string;
   email: string;
@@ -114,7 +106,11 @@ export function transitionBooking(
 ): BookingState {
   if (action.type === "reset") return initialBookingState;
   if (action.type === "clear-selection" && state.step === "selection")
-    return { ...state, selectedIds: [], notice: "Selección vaciada. Puedes elegir nuevos lugares." };
+    return {
+      ...state,
+      selectedIds: [],
+      notice: "Selección vaciada. Puedes elegir nuevos lugares.",
+    };
   if (action.type === "back" && state.step === "checkout")
     return {
       step: "selection",

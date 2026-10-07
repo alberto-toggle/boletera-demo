@@ -59,7 +59,10 @@ export default function Home() {
     <main className="proposal-hub">
       <header className="hub-header">
         <Brand />
-        <Link href="/playground">Abrir playground ↗</Link>
+        <nav aria-label="Explorar demo" className="flex flex-wrap gap-5">
+          <Link href="/operacion/vendedor">Abrir taquilla ↗</Link>
+          <Link href="/playground">Abrir playground ↗</Link>
+        </nav>
       </header>
       <section className="hub-intro">
         <p>BOLETERA · EXPLORACIÓN VISUAL 01</p>

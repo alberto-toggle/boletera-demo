@@ -1,0 +1,479 @@
+.issued-tickets {
+  display: grid;
+  gap: 18px;
+  max-width: 850px;
+  margin: 35px auto;
+}
+.booking .issued-ticket h2 {
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.1;
+}
+@media (max-width: 700px) {
+  .booking .issued-ticket h2 {
+    font-size: 32px;
+  }
+}
+@media print {
+  .issued-tickets {
+    margin: 0;
+  }
+  .issued-ticket {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .issued-ticket > div {
+    box-shadow: none;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .issued-ticket * {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+  }
+}
+.issued-tickets {
+  scroll-margin-top: 35px;
+}
+.ticket-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+.ticket-qr [data-scope="qr-code"] {
+  background: #fff;
+}
+.ticket-qr svg {
+  display: block;
+  width: 140px;
+  height: 140px;
+  padding: 12px;
+  background: white;
+  fill: black;
+  shape-rendering: crispEdges;
+}
+.ticket-qr > span {
+  font-size: 8px;
+  letter-spacing: 0.09em;
+}
+.ticket-qr code {
+  font-size: 10px;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+.statement-issued > .ticket-qr {
+  float: right;
+  margin: 18px 0 8px 20px;
+}
+.statement-issued .ticket-validity {
+  clear: both;
+}
+@media (max-width: 650px) {
+  .statement-issued > .ticket-qr {
+    float: none;
+    margin: 24px auto 0;
+  }
+}
+@media print {
+  .ticket-qr svg {
+    width: 35mm;
+    height: 35mm;
+    padding: 3mm;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .statement-issued > .ticket-qr {
+    float: right;
+  }
+  .ticket-qr {
+    break-inside: avoid;
+  }
+}
+.ticket-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.ticket-downloads details {
+  width: 100%;
+}
+.ticket-pdf-status:empty {
+  display: none;
+}
+.ticket-pdf-status {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+  background: var(--paper);
+}
+.ticket-pdf-status small {
+  display: block;
+  margin-top: 4px;
+  color: var(--subtle);
+}
+.ticket-pdf-status > svg {
+  flex-shrink: 0;
+  animation: ticket-pdf-spin 1s linear infinite;
+}
+@keyframes ticket-pdf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticket-pdf-status > svg {
+    animation: none;
+  }
+}
+.ticket-downloads summary {
+  cursor: pointer;
+  padding: 14px 0;
+}
+.ticket-downloads li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  font-size: 13px;
+}
+@media (max-width: 700px) {
+  .ticket-downloads > button {
+    width: 100%;
+  }
+}
+@media print {
+  .ticket-downloads,
+  .reservation-banner {
+    display: none !important;
+  }
+}
+
+.ticket-pdf-preview {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(1100px, 96vw);
+  height: 90dvh;
+  max-height: 90dvh;
+  max-width: 96vw;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.ticket-pdf-preview[open] {
+  display: flex;
+  flex-direction: column;
+}
+.ticket-pdf-preview::backdrop {
+  background: #0009;
+}
+.ticket-pdf-preview header,
+.ticket-pdf-preview footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  flex-shrink: 0;
+}
+.booking .ticket-pdf-preview h2 {
+  font-size: 22px;
+  margin: 0;
+}
+.ticket-pdf-preview header p {
+  font-size: 11px;
+  color: var(--subtle);
+  overflow-wrap: anywhere;
+}
+.ticket-pdf-preview iframe {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: #525659;
+}
+.ticket-pdf-preview footer {
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.ticket-pdf-preview footer > a {
+  text-decoration: underline;
+}
+.ticket-pdf-preview .pdf-preview-download {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.ticket-design-gallery {
+  margin-top: 32px;
+}
+.ticket-design-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  margin: 16px 0;
+}
+.ticket-design-options legend {
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.ticket-design-options label {
+  position: relative;
+  cursor: pointer;
+}
+.ticket-design-options input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+}
+.ticket-design-options span {
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 13px;
+}
+.ticket-design-options input:checked + span {
+  color: var(--paper);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.ticket-design-options input:focus-visible + span {
+  outline: 2px solid var(--accent-tone);
+  outline-offset: 3px;
+}
+.ticket-orientation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+}
+.ticket-orientation select {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.ticket-design-note {
+  font-size: 12px;
+  color: var(--subtle);
+  margin: 12px 0;
+}
+.discovery.booking.ticket-design-preview {
+  min-height: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.ticket-design-preview .issued-tickets {
+  margin: 0 auto;
+}
+.classic-ticket-preview {
+  container-type: inline-size;
+  font-family: var(--font-geist-mono), monospace;
+}
+.classic-ticket-preview[data-orientation="horizontal"] > div {
+  max-width: 960px;
+}
+.ticket-design-preview .statement-ticket {
+  transition: transform 0.25s ease;
+}
+.ticket-design-preview .statement-ticket svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.ticket-design-preview .statement-issued {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  display: block;
+  max-width: 741px;
+  padding: 0;
+  margin: auto;
+}
+.ticket-design-preview .issued-ticket-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 0 0;
+  font-size: 12px;
+  color: var(--ink);
+}
+.ticket-design-preview .ticket-validity {
+  font-size: 10px;
+  text-align: center;
+  padding: 15px;
+}
+@media (max-width: 600px) {
+  .discovery.booking.ticket-design-preview {
+    padding: 10px;
+  }
+}
+@media print {
+  .ticket-design-options,
+  .ticket-orientation,
+  .ticket-design-note {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticket-design-preview * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.ticket-design-gallery > .ticket-downloads {
+  margin-top: 24px;
+}
+.ticket-design-preview.is-exporting *,
+.ticket-design-preview.is-exporting *::before,
+.ticket-design-preview.is-exporting *::after {
+  animation: none !important;
+  transition: none !important;
+}
+.ticket-design-preview.is-exporting [style*="opacity"] {
+  opacity: 1 !important;
+}
+.ticket-design-preview.is-exporting [style*="transform"],
+.ticket-design-preview.is-exporting .statement-ticket {
+  transform: none !important;
+}
+.ticket-design-options:disabled {
+  opacity: 0.65;
+}
+
+.ticket-design-preview.is-exporting [data-pdf-stub] {
+  transform: none !important;
+}
+
+.statement-ticket {
+  transition: transform 0.25s ease;
+  filter: drop-shadow(0 20px 25px #0003);
+}
+
+.statement-ticket svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ticket-orbits {
+  transform-origin: 670px 105px;
+  animation: ticket-breathe 8s ease-in-out infinite alternate;
+}
+
+@keyframes ticket-breathe {
+  to {
+    transform: scale(1.15) translate(-15px, 8px);
+    opacity: 0.45;
+  }
+}
+
+.statement-issued {
+  background: transparent;
+  border: 0;
+  display: block;
+  max-width: 741px;
+  padding: 0;
+}
+
+.statement-issued .ticket-validity {
+  text-align: center;
+  padding: 15px;
+  color: var(--ink);
+}
+
+@media print {
+  .statement-issued {
+    break-inside: avoid;
+    margin: 15mm 0;
+  }
+  .statement-issued .statement-ticket {
+    filter: none;
+    transform: none !important;
+  }
+}
+
+.issued-ticket-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 0 0;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.issued-ticket-details strong {
+  font-size: 15px;
+}
+
+.statement-issued .ticket-validity {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+/* Self-contained palette boundary: no dependency on public landing layouts. */
+.discovery.booking.ticket-design-preview {
+  --paper: #f6f5ef;
+  --ink: #233d33;
+  --subtle: #657067;
+  --line: #d7dcd2;
+  --accent-tone: #a68b57;
+  --muted: #e9ece3;
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --muted-foreground: var(--subtle);
+  --border: var(--line);
+  --ring: var(--accent-tone);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--ink);
+  --accent: var(--muted);
+  --accent-foreground: var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+.discovery.booking.ticket-design-preview.gala {
+  --paper: #171814;
+  --ink: #ece6d6;
+  --subtle: #b2b3a4;
+  --line: #3f4136;
+  --accent-tone: #c5ac7b;
+  --muted: #2a2b22;
+}
+.discovery.booking.ticket-design-preview.editorial {
+  --paper: #f4f1e9;
+  --ink: #25251f;
+  --subtle: #716e64;
+  --line: #cbc7bc;
+  --accent-tone: #b73b2a;
+  --muted: #eae5d9;
+}

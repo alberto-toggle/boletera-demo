@@ -96,3 +96,19 @@ La deuda pública se resolverá únicamente en las piezas cuya reutilización lo
 requiera, con el alcance de cada cambio explícito. Este documento no autoriza una
 reestructuración total de las landings. En esta entrega solo se documenta la deuda;
 el código de vendedor queda pendiente de la revisión del usuario.
+
+## Avance al incorporar vendedor (2026-10-06)
+
+Se extrajeron contratos, geometría y cámara de mapa a `features/seating`, y el
+generador PDF a `features/tickets`, con reexports compatibles desde booking.
+El generador de recintos ficticios reside en `seating/demo`, fuera del contrato.
+Vendedor tiene route group, layout, UI, modelo y almacenamiento propios. Su único
+adaptador hacia el catálogo público es `seller/demo/fixtures.ts`. La disponibilidad permanece aislada. El adaptador explícito
+`seller/demo/account-bridge.ts` permite buscar cuentas y asociar únicamente ventas
+confirmadas a su historial, sin cambiar la sesión del comprador.
+
+También se extrajeron los cinco diseños, su galería y exportación a
+`features/tickets`, con contratos mínimos y estilos propios, reutilizados por
+público y taquilla. La deuda no se cierra: el checkout público y la coordinación
+de cuenta siguen pendientes de extracción gradual. Consultar
+`src/features/seller/README.md` para límites y dependencias de la entrega actual.

@@ -1,0 +1,222 @@
+/* Continuous venue camera: every scale uses the same seat coordinates. */
+.continuous-venue .venue-map-toolbar {
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.continuous-venue .venue-map-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.continuous-venue select {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 42px;
+  padding: 8px;
+  max-width: 235px;
+}
+.venue-map-canvas {
+  position: relative;
+  background: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.venue-world {
+  display: block;
+  width: 100%;
+  height: clamp(360px, calc(100svh - 440px), 700px);
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+.venue-world:active {
+  cursor: grabbing;
+}
+.venue-shell {
+  fill: var(--paper);
+  stroke: var(--line);
+  stroke-width: 2;
+}
+.map-stage {
+  fill: var(--ink);
+}
+.map-stage-label {
+  fill: var(--paper);
+  font-size: 18px;
+  font-weight: 700;
+}
+.map-aisle {
+  fill: var(--subtle);
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+.map-section-ground {
+  fill: var(--muted);
+  stroke: var(--line);
+}
+.map-section-label {
+  fill: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+.map-group-label {
+  fill: var(--subtle);
+  font-size: 8px;
+  pointer-events: none;
+}
+.map-table {
+  fill: var(--paper);
+  stroke: var(--line);
+}
+.map-seat {
+  fill: var(--accent-tone);
+  cursor: pointer;
+  outline: none;
+}
+.map-seat.chosen {
+  fill: var(--ink);
+}
+.map-seat.occupied {
+  fill: var(--line);
+  cursor: default;
+}
+.map-seat text {
+  fill: var(--paper);
+  font-size: 7px;
+  pointer-events: none;
+  font-weight: 700;
+}
+.map-seat-hit {
+  fill: transparent;
+}
+.map-seat:not(.occupied):hover > circle:not(.map-seat-hit),
+.map-seat:focus > circle:not(.map-seat-hit) {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.map-section-target {
+  fill: transparent;
+  cursor: pointer;
+}
+.map-section-target:hover,
+.map-section-target:focus {
+  stroke: var(--accent-tone);
+  stroke-width: 3;
+  outline: none;
+}
+.venue-camera-controls {
+  position: absolute;
+  right: 12px;
+  bottom: 45px;
+  display: grid;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 3px 12px #0001;
+  overflow: hidden;
+}
+.venue-camera-controls button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--ink);
+}
+.venue-camera-controls button + button {
+  border-top: 1px solid var(--line);
+}
+.venue-camera-controls button:disabled {
+  opacity: 0.35;
+}
+.venue-camera-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  padding: 5px 9px;
+  background: var(--paper);
+  color: var(--subtle);
+  border-radius: 6px;
+  font-size: 11px;
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  .venue-world {
+    height: 460px;
+  }
+  .continuous-venue .venue-map-toolbar > span {
+    display: none;
+  }
+}
+
+.map-section-price {
+  fill: var(--subtle);
+  font-size: 10px;
+  pointer-events: none;
+}
+
+.map-dance-floor rect {
+  fill: var(--paper);
+  stroke: var(--accent-tone);
+  stroke-width: 2;
+  stroke-dasharray: 7 4;
+}
+.map-dance-floor text {
+  fill: var(--ink);
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: 3px;
+}
+.continuous-venue .venue-map-toolbar > .venue-limit-reached {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--paper);
+  background: var(--ink);
+  border: 1px solid var(--accent-tone);
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.venue-limit-reached > svg {
+  flex-shrink: 0;
+}
+.venue-limit-reached strong,
+.venue-limit-reached > span > span {
+  display: block;
+}
+.venue-limit-reached strong {
+  font-weight: 700;
+}
+.venue-limit-hint {
+  position: absolute;
+  z-index: 10;
+  width: min(260px, calc(100% - 24px));
+  padding: 14px 32px 14px 16px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 0 6px 24px #0003;
+  pointer-events: auto;
+}
+.venue-limit-hint strong,
+.venue-limit-hint span {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.venue-limit-hint button {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  width: 28px;
+  height: 28px;
+  background: none;
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+  font-size: 20px;
+}
