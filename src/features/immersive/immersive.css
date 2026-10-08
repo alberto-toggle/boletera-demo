@@ -186,10 +186,19 @@
   display: grid;
   place-items: center;
   overflow: hidden;
+  /* Repaint the opaque hero surface when the animated photo contracts. */
+  background: var(--ink);
+  isolation: isolate;
+  contain: paint;
 }
 .expanding-photo {
   position: absolute;
   overflow: hidden;
+  /* Keep rounded clipping and the scaled image in one composited layer. */
+  isolation: isolate;
+  contain: paint;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 .parallax-photo,
 .hero-shade {
@@ -592,4 +601,3 @@
     display: none;
   }
 }
-
