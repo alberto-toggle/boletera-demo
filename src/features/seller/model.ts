@@ -86,6 +86,10 @@ export type SalePayment = {
 export const paid = (sale: Pick<Sale, "payments">) =>
   sale.payments.reduce((sum, p) => sum + p.amountMinor, 0);
 export const balance = (sale: Sale) => total(sale) - paid(sale);
+export const isCustomerEmailOptional = (customer: Customer) =>
+  customer.delivery === "print" &&
+  !customer.accountEmail &&
+  !customer.accountRequested;
 export const needsEmailVerification = (customer: Customer) =>
   !!customer.email.trim() && customer.verifiedEmail !== customer.email.trim();
 export interface SellerState {
@@ -126,8 +130,8 @@ export function customerError(customer: Customer, count: number) {
       customer.delivery !== "print")
   )
     return "La compra sin correo solo permite boletos impresos como invitado.";
-  if (!customer.accountEmail && !customer.email.trim() && !customer.noEmail)
-    return "Escribe un correo o elige continuar sin correo, solo con boletos impresos.";
+  if (!customer.email.trim() && !isCustomerEmailOptional(customer))
+    return "Escribe el correo electrónico del comprador.";
   if (!customer.name.trim()) return "Escribe el nombre del comprador.";
   if (
     customer.delivery !== "print" &&

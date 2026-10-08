@@ -3,7 +3,11 @@ import { useId, type ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BuyerAccountSearch } from "./buyer-account-search";
-import type { BuyerAccountOption, Customer } from "../model";
+import {
+  isCustomerEmailOptional,
+  type BuyerAccountOption,
+  type Customer,
+} from "../model";
 export function CustomerForm({
   verification,
   accounts,
@@ -20,6 +24,7 @@ export function CustomerForm({
   onContinue: () => void;
 }) {
   const emailId = useId();
+  const emailOptional = isCustomerEmailOptional(customer);
   const change = <K extends keyof Customer>(key: K, value: Customer[K]) =>
     onChange({ ...customer, [key]: value });
   return (
@@ -79,13 +84,15 @@ export function CustomerForm({
           <label htmlFor={emailId}>
             {customer.accountEmail
               ? "Correo de la cuenta"
-              : "Correo electrónico"}
+              : emailOptional
+                ? "Correo electrónico (opcional)"
+                : "Correo electrónico"}
           </label>
           <input
             id={emailId}
             type="email"
             readOnly={!!customer.accountEmail}
-            required
+            required={!emailOptional}
             autoComplete="email"
             maxLength={180}
             value={customer.email}
@@ -94,7 +101,9 @@ export function CustomerForm({
           <small>
             {customer.accountEmail
               ? "Verifica la cuenta con el comprador antes de asociar los boletos."
-              : "Recomendado: guarda una copia de los boletos por correo, aunque también se entreguen impresos."}
+              : emailOptional
+                ? "Puedes dejarlo vacío para recibir solo boletos impresos. Si agregas un correo, deberás verificarlo."
+                : "Verifica el correo para recibir tus boletos."}
           </small>
           {!customer.accountRequested && !customer.accountEmail && (
             <button
