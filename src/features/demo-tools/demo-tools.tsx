@@ -197,7 +197,7 @@ export function DemoTools() {
             Taquilla
           </Link>
           <Link href="/" onClick={() => setOpen(false)}>
-            Todas las propuestas
+            Ir al inicio
           </Link>
         </nav>
         <small>Demostración · Sin cobros reales</small>

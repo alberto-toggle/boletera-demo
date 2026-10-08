@@ -5,10 +5,14 @@ import { useEffect, useSyncExternalStore } from "react";
 const key = "boletera-demo-appearance";
 const changed = "boletera-demo-appearance-change";
 type Appearance = "original" | "glass";
-let fallback: Appearance = "original";
+const defaultAppearance: Appearance = "glass";
+let fallback: Appearance = defaultAppearance;
 function snapshot(): Appearance {
   try {
-    return localStorage.getItem(key) === "glass" ? "glass" : "original";
+    const stored = localStorage.getItem(key);
+    return stored === "original" || stored === "glass"
+      ? stored
+      : defaultAppearance;
   } catch {
     return fallback;
   }
@@ -35,7 +39,7 @@ export function AppearanceToggle() {
   const appearance = useSyncExternalStore(
     subscribe,
     snapshot,
-    () => "original" as const,
+    () => defaultAppearance,
   );
   useEffect(() => {
     document.documentElement.dataset.demoAppearance = appearance;
