@@ -1,5 +1,5 @@
 import { ReceiptTicket, type ReceiptTicketData } from "./receipt-ticket";
-import styles from "@/features/booking/components/receipt-ticket.module.css";
+import styles from "./receipt-ticket.module.css";
 
 const sampleTicket: ReceiptTicketData = {
   id: "DEMO-BOL-0028",
