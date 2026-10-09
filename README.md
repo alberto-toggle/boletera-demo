@@ -7,9 +7,9 @@ datos hardcodeados y flujos simulados. Los documentos de requerimientos son
 contexto del posible producto. Actualmente hay cuatro propuestas de página de inicio
 con un catálogo ficticio compartido; las cuatro conectan con selección de lugares, checkout simulado y boletos imprimibles.
 
-## Tres propuestas de inicio
+## Cuatro propuestas de inicio
 
-La ruta `/` permite compararlas y abrir el playground:
+La ruta `/` permite compararlas:
 
 | Ruta | Dirección |
 | --- | --- |
@@ -36,9 +36,16 @@ Consulta [arquitectura, alcance y escenarios de validación](src/features/seller
 ## Administración
 
 La demo del panel está en `/admin`, accesible desde **Abrir administración**.
-Incluye resumen, gestión de eventos y consulta de ventas con datos ficticios.
+Incluye acceso simulado con permisos, resumen, eventos, lugares individuales,
+apartados, ventas y asistencia con datos ficticios.
 Tiene route group, layout y componentes propios, con primitivas Base UI.
 Consulta [alcance, arquitectura y validación](src/features/admin/README.md).
+
+## Operación: staff de acceso
+
+Demo en `/operacion/staff`: selección de evento, lector QR, búsqueda manual y
+registro de ingreso. Comparte los ingresos con Asistencia del panel.
+Consulta [alcance y arquitectura](src/features/staff/README.md).
 
 ## Playground de componentes
 

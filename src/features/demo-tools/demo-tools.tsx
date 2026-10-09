@@ -102,6 +102,7 @@ export function DemoTools() {
   const enabled =
     pathname.startsWith("/demo-") ||
     pathname.startsWith("/operacion/vendedor") ||
+    pathname.startsWith("/operacion/staff") ||
     pathname.startsWith("/admin");
   useEffect(() => {
     document.documentElement.dataset.demoTools = visible ? "visible" : "hidden";
@@ -195,6 +196,12 @@ export function DemoTools() {
           ))}
           <Link href="/operacion/vendedor" onClick={() => setOpen(false)}>
             Taquilla
+          </Link>
+          <Link href="/admin" onClick={() => setOpen(false)}>
+            Administración
+          </Link>
+          <Link href="/operacion/staff" onClick={() => setOpen(false)}>
+            Staff de acceso
           </Link>
           <Link href="/" onClick={() => setOpen(false)}>
             Ir al inicio

@@ -1,3 +1,8 @@
+import {
+  eventSeats,
+  type SeatOverride,
+  type InventoryHold,
+} from "./inventory/model";
 import type { EventCategory } from "@/domain/events/category";
 import type { EventImage } from "./media/model";
 export type EventStatus = "published" | "draft" | "unpublished";
@@ -22,6 +27,7 @@ export interface AdminEvent {
   status: EventStatus;
   layout: VenueLayout;
   zones: EventZone[];
+  seatOverrides?: SeatOverride[];
   updatedAt: string;
 }
 export type SaleStatus = "confirmed" | "failed" | "expired";
@@ -38,6 +44,8 @@ export interface AdminSale {
   tickets: {
     id: string;
     zoneId: string;
+    seatId?: string;
+    usedAt?: string;
     seat: string;
     priceMinor: number;
     used: boolean;
@@ -115,17 +123,28 @@ export function matchesQuery(value: string, query: string) {
 export function saleTotal(sale: AdminSale) {
   return sale.tickets.reduce((total, ticket) => total + ticket.priceMinor, 0);
 }
-export function eventInventory(event: AdminEvent, sales: readonly AdminSale[]) {
+export function eventInventory(
+  event: AdminEvent,
+  sales: readonly AdminSale[],
+  holds: readonly InventoryHold[] = [],
+  now = Date.now(),
+) {
   const confirmed = sales.filter(
     (sale) => sale.eventId === event.id && sale.status === "confirmed",
   );
   const sold = confirmed.reduce((sum, sale) => sum + sale.tickets.length, 0);
-  const capacity = event.zones.reduce((sum, zone) => sum + zone.capacity, 0);
+  const capacity = eventSeats(event).filter((s) => s.enabled).length;
+  const held = new Set(
+    holds
+      .filter((h) => h.eventId === event.id && h.expiresAt > now)
+      .flatMap((h) => h.seatIds),
+  ).size;
   const revenue = confirmed.reduce((sum, sale) => sum + saleTotal(sale), 0);
   return {
     sold,
     capacity,
-    available: capacity - sold,
+    available: Math.max(0, capacity - sold - held),
+    held,
     revenue,
     percentage: capacity ? Math.round((sold / capacity) * 100) : 0,
   };

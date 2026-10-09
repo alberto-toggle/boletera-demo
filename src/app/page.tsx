@@ -63,6 +63,7 @@ export default function Home() {
         <nav aria-label="Explorar demo" className="flex flex-wrap gap-5">
           <Link href="/operacion/vendedor">Abrir taquilla ↗</Link>
           <Link href="/admin">Abrir administración ↗</Link>
+          <Link href="/operacion/staff">Abrir control de acceso ↗</Link>
           <ResetDemo />
         </nav>
       </header>

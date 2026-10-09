@@ -1,0 +1,121 @@
+.internal-login {
+  --primary: #24483b;
+  --primary-foreground: #fff;
+  --foreground: #253c34;
+  --background: #fff;
+  --input: #dce3df;
+  --border: #dce3df;
+  --ring: #739181;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #f7f8f5;
+  color: var(--foreground);
+  font:
+    14px/1.6 var(--font-geist-sans),
+    sans-serif;
+}
+.internal-intro {
+  background: #233d33;
+  color: #f5f3e9;
+  padding: clamp(32px, 6vw, 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 60px;
+}
+.internal-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -1px;
+}
+.internal-intro h1 {
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -2px;
+  max-width: 12ch;
+  margin: 20px 0;
+}
+.internal-intro p {
+  max-width: 36ch;
+  opacity: 0.75;
+}
+.internal-kicker {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+.internal-login-panel {
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+.internal-login-panel form {
+  width: 100%;
+  max-width: 360px;
+  display: grid;
+  gap: 20px;
+}
+.internal-login-panel h2 {
+  font-size: 25px;
+  letter-spacing: -0.7px;
+  margin: 0;
+}
+.internal-login-panel p {
+  margin: 0;
+  color: #64736b;
+}
+.internal-login-panel label {
+  display: grid;
+  gap: 8px;
+}
+.internal-login-panel input {
+  height: 44px;
+  background: #fff;
+}
+.internal-demo {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  font-size: 12px;
+}
+.internal-demo button {
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.internal-loading {
+  padding: 60px;
+  text-align: center;
+}
+.internal-login-panel a {
+  font-size: 12px;
+}
+.internal-login button:focus-visible,
+.internal-login a:focus-visible {
+  outline: 2px solid #487ac2;
+  outline-offset: 4px;
+}
+@media (max-width: 700px) {
+  .internal-login {
+    grid-template-columns: 1fr;
+  }
+  .internal-intro {
+    padding: 24px;
+    gap: 24px;
+  }
+  .internal-intro h1 {
+    font-size: 32px;
+    max-width: 100%;
+  }
+  .internal-intro p,
+  .internal-intro > small {
+    display: none;
+  }
+  .internal-login-panel {
+    padding: 28px 24px;
+  }
+}

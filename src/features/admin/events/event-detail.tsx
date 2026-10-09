@@ -1,5 +1,6 @@
 "use client";
 import { ActionLink } from "../components/controls";
+import { eventSeats } from "../inventory/model";
 import { useState } from "react";
 import { EventImageGallery } from "../media/event-image-gallery";
 import Link from "next/link";
@@ -29,7 +30,7 @@ import { AdminDialog, EmptyState, StatusBadge } from "../components/controls";
 import { MetricCards } from "../components/metric-cards";
 import { VenuePreview } from "./venue-preview";
 export function EventDetail({ eventId }: { eventId: string }) {
-  const { events, sales, saveEvent } = useAdmin();
+  const { events, sales, saveEvent, holds, now, canEdit } = useAdmin();
   const event = events.find((item) => item.id === eventId);
   const [confirm, setConfirm] = useState(false);
   const [error, setError] = useState("");
@@ -42,7 +43,7 @@ export function EventDetail({ eventId }: { eventId: string }) {
         <ActionLink href="/admin/eventos">Volver a eventos</ActionLink>
       </EmptyState>
     );
-  const inventory = eventInventory(event, sales);
+  const inventory = eventInventory(event, sales, holds, now);
   const published = event.status === "published";
   return (
     <div className="admin-page">
@@ -67,22 +68,24 @@ export function EventDetail({ eventId }: { eventId: string }) {
             {event.category} · {event.venue}
           </p>
         </div>
-        <div className="admin-actions">
-          <ActionLink
-            variant="outline"
-            href={`/admin/eventos/${event.id}/editar`}
-          >
-            <Pencil />
-            Editar evento
-          </ActionLink>
-          <Button
-            variant={published ? "outline" : "default"}
-            onClick={() => setConfirm(true)}
-          >
-            {published ? <EyeOff /> : <Globe />}
-            {published ? "Retirar publicación" : "Publicar evento"}
-          </Button>
-        </div>
+        {canEdit && (
+          <div className="admin-actions">
+            <ActionLink
+              variant="outline"
+              href={`/admin/eventos/${event.id}/editar`}
+            >
+              <Pencil />
+              Editar evento
+            </ActionLink>
+            <Button
+              variant={published ? "outline" : "default"}
+              onClick={() => setConfirm(true)}
+            >
+              {published ? <EyeOff /> : <Globe />}
+              {published ? "Retirar publicación" : "Publicar evento"}
+            </Button>
+          </div>
+        )}
       </div>
       <MetricCards
         items={[
@@ -101,7 +104,7 @@ export function EventDetail({ eventId }: { eventId: string }) {
           {
             label: "Disponibles",
             value: String(inventory.available),
-            detail: "Inventario de esta demo",
+            detail: `${inventory.held} apartados · Excluidos del disponible`,
             icon: CalendarDays,
           },
           {
@@ -165,6 +168,12 @@ export function EventDetail({ eventId }: { eventId: string }) {
             Distribución de referencia · No está a escala
           </p>
           <div className="admin-panel-content admin-top-line">
+            <ActionLink
+              variant="outline"
+              href={`/admin/eventos/${event.id}/lugares`}
+            >
+              Consultar y configurar lugares
+            </ActionLink>
             <h3>Publicación</h3>
             <p className="admin-description">
               {published
@@ -213,7 +222,24 @@ export function EventDetail({ eventId }: { eventId: string }) {
                     </td>
                     <td>{zone.capacity}</td>
                     <td>{sold}</td>
-                    <td>{zone.capacity - sold}</td>
+                    <td>
+                      {Math.max(
+                        0,
+                        eventSeats(event).filter(
+                          (s) => s.zoneId === zone.id && s.enabled,
+                        ).length -
+                          sold -
+                          new Set(
+                            holds
+                              .filter(
+                                (h) =>
+                                  h.eventId === event.id && h.expiresAt > now,
+                              )
+                              .flatMap((h) => h.seatIds)
+                              .filter((id) => id.startsWith(`${zone.id}-`)),
+                          ).size,
+                      )}
+                    </td>
                     <td className="align-right admin-money">
                       {money(zone.priceMinor)}
                     </td>

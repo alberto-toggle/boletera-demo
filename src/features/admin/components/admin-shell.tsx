@@ -19,14 +19,20 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAdmin } from "../demo/provider";
+import {
+  useInternalAccess,
+  InternalSignOut,
+} from "@/features/internal-access/access";
 import { AdminDialog } from "./controls";
 const navigation = [
   { href: "/admin", label: "Resumen", icon: LayoutDashboard },
   { href: "/admin/eventos", label: "Eventos", icon: CalendarDays },
   { href: "/admin/ventas", label: "Ventas", icon: Ticket },
+  { href: "/admin/asistencia", label: "Asistencia", icon: CheckCircle2 },
 ];
 export function AdminShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const access = useInternalAccess();
   const [collapsed, setCollapsed] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [help, setHelp] = useState(false);
@@ -90,11 +96,14 @@ export function AdminShell({ children }: { children: ReactNode }) {
             <CircleHelp size={17} />
             <span>Acerca del panel</span>
           </button>
+          <InternalSignOut />
           <div className="admin-profile">
-            <span className="admin-avatar">AM</span>
+            <span className="admin-avatar">{access.name.split(" ").map(n=>n[0]).join("")}</span>
             <div>
-              <strong>Andrea Morales</strong>
-              <small>Administradora</small>
+              <strong>{access.name}</strong>
+              <small>
+                {access.canEdit ? "Administradora" : "Solo consulta"}
+              </small>
             </div>
           </div>
         </div>
@@ -130,9 +139,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
             <span className="admin-demo-label">Entorno de demostración</span>
             <span
               className="admin-avatar admin-avatar-small"
-              aria-label="Andrea Morales"
+              aria-label={access.name}
             >
-              AM
+              {access.name.split(" ").map(n=>n[0]).join("")}
             </span>
           </div>
         </header>
@@ -173,6 +182,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
               <ChevronRight size={16} />
             </Link>
           ))}
+          <InternalSignOut />
           <Link href="/">
             Volver a las propuestas
             <ArrowUpRight size={16} />

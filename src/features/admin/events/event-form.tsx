@@ -30,7 +30,14 @@ import {
   type Cover,
 } from "./event-form-sections";
 export function EventFormView({ eventId }: { eventId?: string }) {
-  const { events, sales, saveEvent } = useAdmin();
+  const { events, sales, saveEvent, canEdit } = useAdmin();
+  if (!canEdit)
+    return (
+      <EmptyState
+        title="Acceso de consulta"
+        description="Tu perfil no permite crear ni editar eventos."
+      />
+    );
   const event = eventId
     ? events.find((item) => item.id === eventId)
     : undefined;
@@ -215,6 +222,7 @@ function EventForm({
                     venue: venue.name,
                     layout: venue.layout,
                     zones: zonesForLayout(venue.layout),
+                    seatOverrides: [],
                   });
               }}
             />

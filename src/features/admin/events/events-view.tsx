@@ -22,7 +22,7 @@ import {
   StatusBadge,
 } from "../components/controls";
 export function EventsView() {
-  const { events, sales } = useAdmin();
+  const { events, sales, holds, now, canEdit } = useAdmin();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [category, setCategory] = useState("all");
@@ -53,10 +53,12 @@ export function EventsView() {
           <h1>Eventos</h1>
           <p>Prepara, publica y acompaña cada experiencia.</p>
         </div>
-        <ActionLink href="/admin/eventos/nuevo">
-          <Plus />
-          Crear evento
-        </ActionLink>
+        {canEdit && (
+          <ActionLink href="/admin/eventos/nuevo">
+            <Plus />
+            Crear evento
+          </ActionLink>
+        )}
       </div>
       <div className="admin-tabs" role="group" aria-label="Filtrar por estado">
         {[
@@ -134,7 +136,7 @@ export function EventsView() {
                 {filtered
                   .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                   .map((event) => {
-                    const stats = eventInventory(event, sales);
+                    const stats = eventInventory(event, sales, holds, now);
                     return (
                       <tr key={event.id}>
                         <td>

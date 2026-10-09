@@ -85,6 +85,7 @@ export function createAdminFixtures(): AdminData {
     const tickets = Array.from({ length: count }, (_, n) => ({
       id: `ADM-${i + 1001}-${n + 1}`,
       zoneId: zone.id,
+      seatId: `${zone.id}-${previous + n + 1}`,
       seat:
         event.layout === "banquet"
           ? `Mesa ${Math.floor((previous + n) / 10) + 1} · Lugar ${((previous + n) % 10) + 1}`
@@ -142,6 +143,50 @@ export function createAdminFixtures(): AdminData {
       status,
       tickets,
       payments,
+    });
+  }
+  const past: AdminEvent = {
+    ...events[0],
+    id: "encuentro-anual-2026",
+    title: "Encuentro anual 2026",
+    startsAt: "2026-08-22T18:00:00-06:00",
+    status: "unpublished",
+    updatedAt: "2026-08-23T10:00:00-06:00",
+  };
+  events.push(past);
+  for (let i = 0; i < 12; i++) {
+    const zone = past.zones[0];
+    sales.push({
+      id: `HIST-${i + 1}`,
+      eventId: past.id,
+      createdAt: "2026-08-01T12:00:00-06:00",
+      buyer: {
+        name: names[i % names.length],
+        email: `historial${i + 1}@example.com`,
+        kind: "general",
+      },
+      militaryCount: 0,
+      channel: "web",
+      status: "confirmed",
+      tickets: Array.from({ length: 2 }, (_, n) => ({
+        id: `HIST-${i + 1}-${n + 1}`,
+        seatId: `${zone.id}-${i * 2 + n + 1}`,
+        zoneId: zone.id,
+        seat: `Mesa ${Math.floor((i * 2 + n) / 10) + 1} · Lugar ${((i * 2 + n) % 10) + 1}`,
+        priceMinor: zone.priceMinor,
+        used: i < 9,
+        usedAt:
+          i < 9
+            ? new Date(Date.parse(past.startsAt) + i * 60000).toISOString()
+            : undefined,
+      })),
+      payments: [
+        {
+          method: "online",
+          amountMinor: zone.priceMinor * 2,
+          reference: `WEB-HIST-${i + 1}`,
+        },
+      ],
     });
   }
   return {

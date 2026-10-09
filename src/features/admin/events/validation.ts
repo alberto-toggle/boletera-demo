@@ -1,3 +1,4 @@
+import { validSeatOverrides } from "../inventory/model";
 import { findVenue } from "@/domain/venues/catalog";
 import { isEventCategory } from "@/domain/events/category";
 import { isImageSource, isImageCollection } from "../media/model";
@@ -7,6 +8,11 @@ export function validateEvent(
   sales: readonly AdminSale[],
 ): string[] {
   const errors: string[] = [];
+  if (
+    event.seatOverrides !== undefined &&
+    !validSeatOverrides(event.seatOverrides)
+  )
+    errors.push("Revisa la configuración individual de lugares.");
   if (!isEventCategory(event.category))
     errors.push("Selecciona Evento o Cena baile.");
   if (
@@ -59,6 +65,8 @@ export function isStoredEvent(value: unknown): value is AdminEvent {
   if (!value || typeof value !== "object") return false;
   const event = value as Record<string, unknown>;
   return (
+    (event.seatOverrides === undefined ||
+      validSeatOverrides(event.seatOverrides)) &&
     typeof event.id === "string" &&
     /^[a-zA-Z0-9-]+$/.test(event.id) &&
     typeof event.title === "string" &&

@@ -18,8 +18,10 @@ export function readAdminEvents(fallback: AdminEvent[]): AdminEvent[] {
       Array.isArray(raw.events) &&
       raw.events.every(isStoredEvent) &&
       new Set(raw.events.map((event) => event.id)).size === raw.events.length
-    )
-      return raw.events;
+    ) {
+      const storedEvents = raw.events;
+      return [...storedEvents, ...fallback.filter(event => !storedEvents.some(stored => stored.id === event.id))];
+    }
   } catch {
     /* Invalid/unavailable storage leaves the seeded demo usable. */
   }

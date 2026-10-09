@@ -22,7 +22,7 @@ import { StatusBadge } from "../components/controls";
 import { salesSummary } from "./selectors";
 import { SalesAnalytics } from "./sales-analytics";
 export function OverviewView() {
-  const { events, sales } = useAdmin();
+  const { events, sales, holds, now, canEdit } = useAdmin();
   const [range, setRange] = useState(initialRange);
   const [sort, setSort] = useState<{
     key: "revenue" | "sold";
@@ -37,14 +37,14 @@ export function OverviewView() {
   const summary = salesSummary(sales, range);
   const published = events.filter((event) => event.status === "published");
   const available = published.reduce(
-    (sum, event) => sum + eventInventory(event, sales).available,
+    (sum, event) => sum + eventInventory(event, sales, holds, now).available,
     0,
   );
   const relevant = [...published]
     .sort(
       (a, b) =>
-        (eventInventory(a, sales)[sort.key] -
-          eventInventory(b, sales)[sort.key]) *
+        (eventInventory(a, sales, holds, now)[sort.key] -
+          eventInventory(b, sales, holds, now)[sort.key]) *
         sort.direction,
     )
     .slice(0, 4);
@@ -56,10 +56,12 @@ export function OverviewView() {
           <h1>Todo listo para el próximo encuentro.</h1>
           <p>Un vistazo a tus eventos y al movimiento de tus ventas.</p>
         </div>
-        <ActionLink href="/admin/eventos/nuevo">
-          <Plus />
-          Crear evento
-        </ActionLink>
+        {canEdit && (
+          <ActionLink href="/admin/eventos/nuevo">
+            <Plus />
+            Crear evento
+          </ActionLink>
+        )}
       </div>
       <div className="admin-section-heading">
         <h2>
@@ -157,7 +159,7 @@ export function OverviewView() {
             </thead>
             <tbody>
               {relevant.map((event) => {
-                const stats = eventInventory(event, sales);
+                const stats = eventInventory(event, sales, holds, now);
                 return (
                   <tr key={event.id}>
                     <td>
@@ -220,7 +222,8 @@ export function OverviewView() {
                 <td>
                   {number(
                     relevant.reduce(
-                      (sum, event) => sum + eventInventory(event, sales).sold,
+                      (sum, event) =>
+                        sum + eventInventory(event, sales, holds, now).sold,
                       0,
                     ),
                   )}{" "}
@@ -230,7 +233,7 @@ export function OverviewView() {
                   {money(
                     relevant.reduce(
                       (sum, event) =>
-                        sum + eventInventory(event, sales).revenue,
+                        sum + eventInventory(event, sales, holds, now).revenue,
                       0,
                     ),
                   )}

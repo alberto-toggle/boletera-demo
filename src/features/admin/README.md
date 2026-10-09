@@ -2,8 +2,8 @@
 
 Ruta `/admin`, route group `(administracion)`. Acceso desde **Abrir administración**
 en el inicio. Una propuesta propia, sin layout ni dependencia de vistas de comprador
-ni de vendedor. Entrada directa al perfil ficticio de Andrea Morales; no implementa
-login, permisos ni autenticación real.
+ni de vendedor. Acceso simulado como Andrea Morales (administración) o Daniel Ríos (consulta).
+El widget DEMO permite completar credenciales. No implementa autenticación real.
 
 ## Alcance
 
@@ -56,7 +56,7 @@ a datos definitivo. No depende de páginas ni del estado de las otras demos.
 
 ## Datos y reglas
 
-- Nueve eventos del catálogo adaptados a contratos administrativos y 156 operaciones
+- Diez eventos (nueve del catálogo y uno histórico) y 768 operaciones
   ficticias. Los indicadores se derivan de esos mismos registros, no son cifras sueltas.
 - Ventas de ejemplo: 8 de septiembre a 7 de octubre de 2026. Los presets usan el
   7 de octubre como referencia fija de demo. Eventos programados en 2027.
@@ -65,8 +65,8 @@ a datos definitivo. No depende de páginas ni del estado de las otras demos.
 - Operaciones fallidas y expiradas no generan ingresos ni boletos emitidos.
   Los datos históricos de precio en cada compra no cambian al editar tarifas.
 - La distribución se bloquea si el evento ya tiene ventas. El aforo de una zona
-  no puede bajar de sus boletos vendidos. No se modelan apartados activos en admin.
-- Venta y asistencia son conceptos distintos: los ejemplos de acceso están sin usar.
+  no puede bajar de sus boletos vendidos. Los apartados de ejemplo conservan su vencimiento al recargar y liberan disponibilidad al expirar.
+- Venta y asistencia son conceptos distintos: el evento histórico incluye ingresos y boletos sin utilizar; los ingresos de staff actualizan Asistencia.
 - Eventos editados/creados persisten en `boletera-admin-demo-v1`, con versión y
   validación de estructura al leer. Se sincronizan entre pestañas de admin. Si falla
   la escritura, se informa que el cambio se conserva únicamente en la pestaña actual.
@@ -159,3 +159,34 @@ La actividad incluye total, día más activo, mayor racha y racha actual. Las fi
 conservan las 156 operaciones originales de septiembre/octubre y agregan 600
 operaciones históricas desde octubre de 2025. Los totales del rango inicial no
 cambian; las cifras acumuladas del catálogo sí incluyen el historial ampliado.
+
+## Ampliación de administración y acceso (2026-10-09)
+
+- `/admin/asistencia`: búsqueda por comprador/boleto, filtro de evento, entradas
+  registradas y boletos sin utilizar de eventos iniciados. Los pendientes futuros
+  no se presentan como ausencias definitivas.
+- `/admin/eventos/[eventId]/lugares`: consulta y edición individual de fila/mesa,
+  número y habilitación. Los lugares vendidos o apartados no pueden deshabilitarse,
+  renumerarse ni eliminarse. Los cambios se guardan en el evento administrativo.
+- El resumen contabiliza boletos por método: en línea, efectivo, terminal y mixto.
+  Una compra mixta pertenece a una sola categoría para no duplicar boletos.
+- `inventory/` separa reglas, reloj/persistencia de apartados y vista. `attendance/`
+  consume los mismos boletos confirmados y registros de acceso.
+- `features/internal-access` contiene el acceso simulado compartido con staff;
+  `features/access` define los contratos de ingreso y su adaptador local.
+  Estos módulos deben acompañar al panel al trasladarlo a otro repositorio.
+
+Las sesiones duran en la pestaña (`sessionStorage`). Credenciales de demo:
+`andrea@boletera.demo` y `daniel@boletera.demo`, contraseña `Demo2026!`.
+El perfil de consulta bloquea las acciones de escritura y las rutas directas de
+edición. Esto demuestra permisos de interfaz; no constituye seguridad de servidor.
+
+Los apartados usan `boletera-admin-holds-v1` y los ingresos
+`boletera-access-demo-v1`. Staff y Asistencia comparten estos últimos en el mismo
+origen, incluso entre pestañas. Publicación, mapas públicos y taquilla siguen
+independientes del inventario administrativo. Restablecer la demo limpia estos
+registros y las sesiones internas.
+
+Validación: login, perfil de consulta, persistencia de lugares, protección de
+vendidos/apartados, vencimiento sin reiniciar el plazo, ingreso, duplicado, boleto
+incorrecto y búsqueda; sincronización de asistencia y vistas a 390/1440 px.

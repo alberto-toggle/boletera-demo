@@ -63,3 +63,26 @@ export function activityRange(reference: string, days: number): DateRange {
     to: reference,
   };
 }
+
+/** Mixed purchases are a separate bucket: each ticket is counted exactly once. */
+export function paymentTicketCounts(sales: readonly AdminSale[]) {
+  return (["online", "cash", "terminal", "mixed"] as const).map((method) => {
+    const matching = sales.filter((s) => {
+      const methods = new Set(s.payments.map((p) => p.method));
+      return method === "mixed"
+        ? methods.size > 1
+        : methods.size === 1 && methods.has(method);
+    });
+    return {
+      method,
+      label: {
+        online: "En línea",
+        cash: "Efectivo",
+        terminal: "Terminal",
+        mixed: "Pago mixto",
+      }[method],
+      tickets: matching.reduce((sum, s) => sum + s.tickets.length, 0),
+      operations: matching.length,
+    };
+  });
+}

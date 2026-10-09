@@ -1,3 +1,4 @@
+import { InternalGate } from "@/features/internal-access/access";
 import type { ReactNode } from "react";
 import { AdminProvider } from "@/features/admin/demo/provider";
 import { AdminShell } from "@/features/admin/components/admin-shell";
@@ -7,8 +8,10 @@ export const metadata = {
 };
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <AdminProvider>
-      <AdminShell>{children}</AdminShell>
-    </AdminProvider>
+    <InternalGate area="admin">
+      <AdminProvider>
+        <AdminShell>{children}</AdminShell>
+      </AdminProvider>
+    </InternalGate>
   );
 }

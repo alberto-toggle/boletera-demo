@@ -13,7 +13,12 @@ import { DEMO_TODAY } from "../demo/fixtures";
 import { activityRange } from "./analytics-data";
 import { adminDemoSellers } from "../demo/sellers";
 import { salesSummary } from "./selectors";
-import { activitySeries, paymentSeries, revenueSeries } from "./analytics-data";
+import {
+  activitySeries,
+  paymentSeries,
+  revenueSeries,
+  paymentTicketCounts,
+} from "./analytics-data";
 const ActivitySkyline = dynamic(() => import("../charts/activity-skyline"), {
   ssr: false,
   loading: () => (
@@ -169,6 +174,19 @@ export function SalesAnalytics({
               </div>
             ))}
           </div>
+          <div className="admin-ticket-methods">
+            {paymentTicketCounts(summary.confirmed).map((item) => (
+              <div key={item.method}>
+                <span>{item.label}</span>
+                <strong>{number(item.tickets)} boletos</strong>
+                <small>{item.operations} compras</small>
+              </div>
+            ))}
+          </div>
+          <p className="admin-method-note">
+            Los boletos con pago mixto se cuentan una sola vez en su propia
+            categoría. Los importes de arriba se distribuyen por método.
+          </p>
         </section>
         <section className="admin-panel admin-insight-card">
           <div className="admin-panel-heading">
