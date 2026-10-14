@@ -2409,3 +2409,9 @@
 .admin-banquet-preview p {text-align:center;color:var(--muted-foreground);font-size:12px;}
 
 .admin-courtesy-form { margin-top:20px; }
+
+.admin-photo-caption-field { display: grid; gap: 6px; margin: 10px 0; font-size: 12px; }
+.admin-photo-caption-field > span { display: flex; justify-content: space-between; gap: 8px; }
+.admin-photo-caption-field small { color: var(--muted-foreground); font-weight: 400; }
+.admin-photo-caption-field input { font-size: 12px; }
+.admin-image-caption { margin-top: 10px; font-size: 13px; color: var(--muted-foreground); overflow-wrap: anywhere; }

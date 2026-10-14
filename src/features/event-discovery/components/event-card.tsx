@@ -20,7 +20,9 @@ export function EventCard({
           fill
           sizes="(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 33vw"
         />
-        <span className="photo-category">{event.category}</span>
+        <span className="photo-category" data-material="liquid">
+          {event.category}
+        </span>
         {index !== undefined && (
           <span className="card-number" aria-hidden="true">
             0{index + 1}

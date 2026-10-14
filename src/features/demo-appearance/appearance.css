@@ -90,7 +90,6 @@ html[data-demo-appearance="glass"]
     .checkout-panel,
     .venue-workspace,
     .event-gallery-controls button:not([aria-pressed="true"]),
-    .event-cover-arrows button,
     .order-summary,
     .account-auth,
     .account-order-card,
@@ -121,9 +120,7 @@ html[data-demo-appearance="glass"] .discovery .card-content {
   padding: 20px;
   background: transparent;
 }
-html[data-demo-appearance="glass"]
-  .discovery
-  :is(.photo-category, .image-label) {
+html[data-demo-appearance="glass"] .discovery :is(.image-label) {
   background: var(--glass-strong);
   color: var(--ink);
   border: 1px solid var(--glass-edge);
@@ -165,4 +162,56 @@ html[data-demo-appearance="glass"]
   .discovery
   :is(.booking-header, .account-header) {
   border-radius: 0;
+}
+
+/* Liquid accents: explicitly opted-in photo controls, hero links and category labels only.
+   All other surfaces retain the existing Glass material. */
+.discovery {
+  --liquid-tint: #171814;
+  --liquid-ink: #ece6d6;
+  --liquid-opacity: 58%;
+  --liquid-blur: 0.65px;
+  --liquid-backdrop: blur(var(--liquid-blur)) saturate(125%);
+  --liquid-edge: rgb(255 255 255 / 45%);
+  --liquid-reflection: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 35%),
+    transparent 25%,
+    transparent 75%,
+    rgb(255 255 255 / 18%)
+  );
+  --liquid-shadow:
+    inset 1px 1px 1px rgb(255 255 255 / 85%),
+    inset -1px -1px 1px rgb(255 255 255 / 55%),
+    inset 3px 3px 5px rgb(255 255 255 / 18%),
+    inset -3px -3px 5px rgb(0 0 0 / 12%), 0 3px 10px rgb(0 0 0 / 14%);
+}
+@supports (backdrop-filter: url("#liquid-material-refraction")) {
+  .discovery {
+    --liquid-backdrop: url("#liquid-material-refraction")
+      blur(var(--liquid-blur)) saturate(125%);
+  }
+}
+html[data-demo-appearance="glass"] .discovery [data-material="liquid"] {
+  background:
+    var(--liquid-reflection),
+    color-mix(in srgb, var(--liquid-tint) var(--liquid-opacity), transparent);
+  color: var(--liquid-ink);
+  border: 1px solid var(--liquid-edge);
+  box-shadow: var(--liquid-shadow);
+  -webkit-backdrop-filter: var(--liquid-backdrop);
+  backdrop-filter: var(--liquid-backdrop);
+}
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .discovery {
+    --liquid-opacity: 100%;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .discovery {
+    --liquid-opacity: 100%;
+    --liquid-backdrop: none;
+  }
 }

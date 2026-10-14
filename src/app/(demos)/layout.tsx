@@ -1,3 +1,4 @@
+import { LiquidGlassDefinitions } from "@/components/materials/liquid-glass-definitions";
 import "@/features/tickets/design-gallery.css";
 import "@/features/event-experience/experience.css";
 import { DemoMotion } from "@/features/event-discovery/components/demo-motion";
@@ -9,6 +10,7 @@ import "@/features/demo-appearance/appearance.css";
 export default function DemoLayout({ children }: { children: ReactNode }) {
   return (
     <>
+      <LiquidGlassDefinitions />
       {children}
       <DemoMotion />
     </>

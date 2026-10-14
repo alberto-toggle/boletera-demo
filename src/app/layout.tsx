@@ -1,3 +1,5 @@
+import { AppearanceBootstrap } from "@/features/demo-appearance/appearance-bootstrap";
+import { defaultAppearance } from "@/features/demo-appearance/appearance-config";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -24,8 +26,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es-MX"
+      data-demo-appearance={defaultAppearance}
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <AppearanceBootstrap />
+      </head>
       <body className="min-h-full flex flex-col">
         {children}
         <DemoTools />

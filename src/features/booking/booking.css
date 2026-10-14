@@ -2507,12 +2507,9 @@ html:has(.event-photo-dialog[open]) { overflow: hidden; }
 
 .event-hero-layer { position: absolute; inset: 0; pointer-events: none; }
 .event-photo-caption { z-index: 3; }
-.event-cover-arrows { position: absolute; inset: 50% 12px auto; z-index: 3; display: flex; justify-content: space-between; pointer-events: none; transform: translateY(-50%); }
-.event-cover-arrows button { width: 44px; height: 44px; display: grid; place-items: center; pointer-events: auto; border-radius: 50%; background: var(--paper); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 2px 12px #0003; }
 
 .event-dialog-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 200ms ease; pointer-events: none; }
 .event-dialog-slide[data-active="true"] { opacity: 1; }
-.event-cover-arrows button:disabled { cursor: default; }
 @media (prefers-reduced-motion: reduce) {
   .event-dialog-slide { transition: none; }
 }

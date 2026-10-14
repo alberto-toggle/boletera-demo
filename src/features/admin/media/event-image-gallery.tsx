@@ -15,7 +15,7 @@ export function EventImageGallery({
 }) {
   const [index, setIndex] = useState<number | null>(null);
   const gallery = [
-    { src: cover, name: title },
+    images.find((image) => image.src === cover) ?? { src: cover, name: title },
     ...images.filter((image) => image.src !== cover),
   ];
   return (

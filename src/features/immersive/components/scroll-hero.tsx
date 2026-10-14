@@ -79,6 +79,7 @@ export function ScrollHero({ event }: { event: DiscoveryEvent }) {
           <Link
             href={`/demo-inmersiva/eventos/${event.id}`}
             className="immersive-hero-cta"
+            data-material="liquid"
           >
             Tu lugar está aquí <ArrowUpRight size={20} />
           </Link>

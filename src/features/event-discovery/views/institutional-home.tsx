@@ -1,3 +1,4 @@
+import { eventCalendarParts, formatEventTime } from "../model";
 import { PastEvents } from "@/features/event-experience/components/past-events";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
@@ -7,6 +8,7 @@ import { EventPreview } from "../components/event-preview";
 import { demoEvents, featuredEvent } from "../fixtures";
 
 export function InstitutionalHome() {
+  const date = eventCalendarParts(featuredEvent.startsAt);
   return (
     <div className="discovery institutional" id="inicio">
       <a href="#contenido" className="skip-link">
@@ -51,26 +53,30 @@ export function InstitutionalHome() {
               />
               <span className="image-label">UNA NOCHE PARA RECORDAR</span>
               <span className="year-stamp">
-                20
+                {date.year.slice(0, 2)}
                 <br />
-                27
+                {date.year.slice(2)}
               </span>
             </div>
             <div className="featured-ticket event-hit-area">
               <div className="ticket-date">
-                <strong>15</strong>
-                <span>SEP</span>
+                <strong>{date.day}</strong>
+                <span>{date.month}</span>
               </div>
               <div>
                 <span className="eyebrow">EVENTO DESTACADO</span>
                 <h2>{featuredEvent.title}</h2>
-                <p>{featuredEvent.venue} · 19:00 h</p>
+                <p>
+                  {featuredEvent.venue} ·{" "}
+                  {formatEventTime(featuredEvent.startsAt)} h
+                </p>
               </div>
               <EventPreview
                 event={featuredEvent}
+                material="liquid"
                 className="card-open stretched-trigger"
               >
-                <span className="sr-only">Ver Noche de Independencia</span>
+                <span className="sr-only">Ver {featuredEvent.title}</span>
                 <ArrowUpRight aria-hidden="true" />
               </EventPreview>
             </div>

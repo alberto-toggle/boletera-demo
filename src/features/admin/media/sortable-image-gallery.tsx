@@ -21,7 +21,8 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import type { EventImage } from "./model";
+import { MAX_IMAGE_CAPTION_LENGTH, type EventImage } from "./model";
+import { Input } from "@/components/ui/input";
 
 interface GalleryProps {
   images: EventImage[];
@@ -31,6 +32,7 @@ interface GalleryProps {
   onCover: (image: EventImage) => void;
   onRemove: (image: EventImage) => void;
   onView: (index: number) => void;
+  onCaption: (image: EventImage, caption: string) => void;
 }
 
 export function SortableImageGallery({
@@ -41,6 +43,7 @@ export function SortableImageGallery({
   onCover,
   onRemove,
   onView,
+  onCaption,
 }: GalleryProps) {
   const id = useId();
   const reducedMotion = useReducedMotion();
@@ -120,6 +123,7 @@ export function SortableImageGallery({
                 onCover={() => onCover(image)}
                 onRemove={() => onRemove(image)}
                 onView={() => onView(index)}
+                onCaption={(caption) => onCaption(image, caption)}
               />
             ))}
           </div>
@@ -167,6 +171,7 @@ function SortablePhoto({
   onCover,
   onRemove,
   onView,
+  onCaption,
 }: {
   image: EventImage;
   index: number;
@@ -176,6 +181,7 @@ function SortablePhoto({
   onCover: () => void;
   onRemove: () => void;
   onView: () => void;
+  onCaption: (caption: string) => void;
 }) {
   const {
     attributes,
@@ -234,6 +240,18 @@ function SortablePhoto({
       <span className="admin-media-filename" title={image.name}>
         {image.name}
       </span>
+      <label className="admin-photo-caption-field">
+        <span>
+          Pie de foto <small>Opcional</small>
+        </span>
+        <Input
+          value={image.caption ?? ""}
+          maxLength={MAX_IMAGE_CAPTION_LENGTH}
+          disabled={disabled}
+          onChange={(event) => onCaption(event.target.value)}
+          placeholder="Describe brevemente esta foto"
+        />
+      </label>
       <div className="admin-photo-footer">
         <button
           type="button"

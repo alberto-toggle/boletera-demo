@@ -1,3 +1,4 @@
+import { eventCalendarParts } from "../model";
 import { PastEvents } from "@/features/event-experience/components/past-events";
 import Image from "next/image";
 import { ArrowUpRight, Asterisk } from "lucide-react";
@@ -7,6 +8,7 @@ import { Agenda } from "../components/agenda";
 import { demoEvents, featuredEvent } from "../fixtures";
 
 export function EditorialHome() {
+  const date = eventCalendarParts(featuredEvent.startsAt);
   const recognition = demoEvents.find(
     (event) => event.id === "reconocimientos",
   );
@@ -51,13 +53,16 @@ export function EditorialHome() {
                 sizes="(max-width: 800px) 100vw, 65vw"
               />
               <span className="editorial-cover-label">
-                EN PORTADA / SEPTIEMBRE
+                EN PORTADA / {date.monthLong}
               </span>
               <div>
-                <span className="eyebrow">15 SEP · CENA Y MÚSICA EN VIVO</span>
+                <span className="eyebrow">
+                  {date.day} {date.month} · CENA Y MÚSICA EN VIVO
+                </span>
                 <h2>{featuredEvent.title}</h2>
                 <EventPreview
                   event={featuredEvent}
+                  material="liquid"
                   className="demo-button stretched-trigger"
                 >
                   Quiero conocer el evento{" "}

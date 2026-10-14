@@ -33,6 +33,30 @@ export function formatEventDate(
   }).format(new Date(isoDate));
 }
 
+/** Calendar labels share the event timezone, including server-rendered heroes. */
+export function eventCalendarParts(isoDate: string) {
+  const date = new Date(isoDate);
+  const parts = new Intl.DateTimeFormat("es-MX", {
+    timeZone: EVENT_TIME_ZONE,
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).formatToParts(date);
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((value) => value.type === type)?.value ?? "";
+  return {
+    day: part("day"),
+    month: part("month").replace(/\.$/, "").toUpperCase(),
+    year: part("year"),
+    monthLong: new Intl.DateTimeFormat("es-MX", {
+      timeZone: EVENT_TIME_ZONE,
+      month: "long",
+    })
+      .format(date)
+      .toUpperCase(),
+  };
+}
+
 export function formatEventTime(isoDate: string): string {
   return new Intl.DateTimeFormat("es-MX", {
     timeZone: EVENT_TIME_ZONE,

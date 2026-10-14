@@ -49,6 +49,29 @@ export function EventMediaEditor({
         <div className="admin-media-cover">
           <Image
             src={value.image}
+            onLoad={(event) => {
+              if (
+                value.images.some((image) => image.src === value.image) ||
+                value.images.length >= MAX_EVENT_IMAGES
+              )
+                return;
+              const image = event.currentTarget;
+              onChange({
+                ...value,
+                images: [
+                  {
+                    id: crypto.randomUUID(),
+                    src: value.image,
+                    name:
+                      covers.find((cover) => cover.src === value.image)
+                        ?.label ?? "Portada",
+                    width: image.naturalWidth,
+                    height: image.naturalHeight,
+                  },
+                  ...value.images,
+                ],
+              });
+            }}
             alt="Portada del evento"
             fill
             sizes="(max-width: 760px) 90vw, 600px"
@@ -132,6 +155,14 @@ export function EventMediaEditor({
           cover={value.image}
           disabled={busy}
           onView={setViewing}
+          onCaption={(image, caption) =>
+            onChange({
+              ...value,
+              images: value.images.map((item) =>
+                item.id === image.id ? { ...item, caption } : item,
+              ),
+            })
+          }
           onReorder={(images) => onChange({ ...value, images })}
           onCover={(image) => onChange({ ...value, image: image.src })}
           onRemove={(image) => {

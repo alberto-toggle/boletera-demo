@@ -6,6 +6,7 @@ import { AdminDialog } from "../components/controls";
 export interface GalleryImage {
   src: string;
   name: string;
+  caption?: string;
 }
 export function ImageViewer({
   images,
@@ -41,6 +42,9 @@ export function ImageViewer({
               unoptimized
             />
           </div>
+          {selected.caption?.trim() && (
+            <p className="admin-image-caption">{selected.caption}</p>
+          )}
           <div className="admin-image-viewer-controls">
             <Button
               type="button"

@@ -2,6 +2,7 @@ export interface EventImage {
   id: string;
   src: string;
   name: string;
+  caption?: string;
   width: number;
   height: number;
 }
@@ -9,6 +10,7 @@ export interface EventMedia {
   image: string;
   images: EventImage[];
 }
+export const MAX_IMAGE_CAPTION_LENGTH = 160;
 export const MAX_EVENT_IMAGES = 6;
 export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 export const MAX_STORED_IMAGE_LENGTH = 300_000;
@@ -30,6 +32,9 @@ export function isEventImage(value: unknown): value is EventImage {
     typeof image.name === "string" &&
     image.name.length > 0 &&
     image.name.length <= 200 &&
+    (image.caption === undefined ||
+      (typeof image.caption === "string" &&
+        image.caption.length <= MAX_IMAGE_CAPTION_LENGTH)) &&
     isImageSource(image.src) &&
     typeof image.width === "number" &&
     Number.isInteger(image.width) &&

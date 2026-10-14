@@ -2,10 +2,12 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 
-const key = "boletera-demo-appearance";
+import {
+  appearanceStorageKey as key,
+  defaultAppearance,
+  type Appearance,
+} from "./appearance-config";
 const changed = "boletera-demo-appearance-change";
-type Appearance = "original" | "glass";
-const defaultAppearance: Appearance = "glass";
 let fallback: Appearance = defaultAppearance;
 function snapshot(): Appearance {
   try {
@@ -42,10 +44,7 @@ export function AppearanceToggle() {
     () => defaultAppearance,
   );
   useEffect(() => {
-    document.documentElement.dataset.demoAppearance = appearance;
-    return () => {
-      delete document.documentElement.dataset.demoAppearance;
-    };
+    document.documentElement.dataset.demoAppearance = snapshot();
   }, [appearance]);
   return (
     <label className="demo-appearance-control">

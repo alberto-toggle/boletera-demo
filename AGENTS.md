@@ -18,8 +18,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
   propuestas visuales en requisitos confirmados.
 - Trabajar dentro del alcance pedido. No implementar backend, autenticación,
   cobros reales ni publicación externa como consecuencia de una simulación.
-- Antes de comprobar la UI local, preguntar al usuario en qué puerto está corriendo
-  esta aplicación; no asumir el puerto 3000 ni reutilizar el de otra sesión.
+- Antes de comprobar la UI local, revisar si la aplicación está disponible en el
+  puerto 3000. Solo preguntar por el puerto si no hay una aplicación disponible
+  allí; no repetir la pregunta en cada ajuste.
 - No iniciar `next dev`, `next start` ni otros servidores sin autorización
   explícita del usuario. Respetar su instrucción de no ejecutar comandos sin
   autorización; limitar los comandos al trabajo autorizado.

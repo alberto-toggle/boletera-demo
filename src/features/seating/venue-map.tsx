@@ -346,7 +346,7 @@ export function VenueMap({
           }}
         >
           {tableMode ? (
-            <BanquetLandmarks />
+            <BanquetLandmarks showRestrooms={false} />
           ) : (
             <>
               <rect

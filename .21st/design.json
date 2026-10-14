@@ -506,6 +506,26 @@
       "scope": "Plano de cena baile / venta en línea y taquilla",
       "decision": "Reproducir la disposición del plano impreso del cliente: 66 mesas numeradas y A–H, márgenes interiores laterales amplios y pista cuadrada con circulación libre alrededor. Geometría compartida, sin alterar identidad ni capacidad de las mesas. Sustituye la distribución ilustrativa anterior de cinco secciones para cenas baile.",
       "source": "Ajuste explícito del usuario, 14 de octubre de 2026."
+    },
+    {
+      "scope": "Cuatro propuestas / acentos Liquid Glass",
+      "decision": "Integrar refracción únicamente en flechas de galería y etiquetas de categoría sobre fotografías, dentro de la opción Glass existente y con el mismo criterio en las cuatro propuestas. Navegación y demás superficies conservan Glass. Material reutilizable con tokens y alternativa opaca para transparencia reducida.",
+      "source": "Petición explícita del usuario, 2026-10-14"
+    },
+    {
+      "scope": "Galería pública / barra flotante",
+      "decision": "Agrupar anterior, contador y siguiente en una barra flotante sobre la foto; colocar Ver fotos a su lado como botón con el mismo material Liquid bajo la opción Glass. Sustituir los controles anteriores sin duplicarlos, conservar las etiquetas aprobadas y usar el mismo componente en las cuatro propuestas.",
+      "source": "Prueba solicitada por el usuario, 2026-10-14"
+    },
+    {
+      "scope": "Liquid Glass / tinte compartido y enlaces hero",
+      "decision": "Usar el tinte oscuro transparente y texto claro de Gala en los acentos Liquid de las cuatro propuestas, en lugar del tinte claro de cada tema. Extender el material a los enlaces del evento destacado en los cuatro heroes, conservando Glass en navegación y otras superficies.",
+      "source": "Ajuste explícito del usuario, 2026-10-14"
+    },
+    {
+      "scope": "Galería / controles y pies de foto",
+      "decision": "Navegación abajo a la izquierda, Ver fotos arriba a la derecha y pie de foto sobre la parte inferior de la imagen, siempre abajo a la derecha en móvil, tablet y escritorio, reservando a la izquierda el ancho de la navegación para evitar solapamientos. Flechas del modal con el mismo material Liquid. Administración permite editar pies opcionales por imagen, conservarlos al guardar y omitirlos cuando están vacíos.",
+      "source": "Aprobado por el usuario, 2026-10-14"
     }
   ],
   "evidence": [

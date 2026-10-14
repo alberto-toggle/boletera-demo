@@ -15,13 +15,13 @@ import gsap from "gsap";
 import {
   ChevronLeft,
   ChevronRight,
-  Images,
   Pause,
   Play,
   RotateCcw,
   X,
 } from "lucide-react";
 import type { DiscoveryEvent } from "@/features/event-discovery/model";
+import { GalleryPhotoControls } from "./gallery-photo-controls";
 import type { EventPhoto } from "../model";
 import { buildStripMask, createStripBounds } from "./gallery-strip-mask";
 
@@ -34,7 +34,12 @@ export function EventHeroGallery({
 }) {
   const slides = useMemo(
     () => [
-      { src: event.image, alt: event.imageAlt, caption: event.title },
+      {
+        src: event.image,
+        alt: event.imageAlt,
+        caption:
+          photos.find((photo) => photo.src === event.image)?.caption ?? "",
+      },
       ...photos.filter(
         (photo, index) =>
           photo.src !== event.image &&
@@ -188,33 +193,23 @@ export function EventHeroGallery({
             </div>
           ))}
         </button>
-        <div className="event-cover-arrows">
-          <button
-            type="button"
-            aria-label="Foto anterior de portada"
-            onClick={() => navigateCover(-1)}
-            disabled={slides.length < 2 || manualTarget !== null}
+        <GalleryPhotoControls
+          index={index}
+          count={slides.length}
+          disabled={slides.length < 2 || manualTarget !== null}
+          announcing={!active}
+          onPrevious={() => navigateCover(-1)}
+          onNext={() => navigateCover(1)}
+          onOpen={(e) => open(e.currentTarget)}
+        />
+        {slides[index].caption.trim() && (
+          <p
+            className="event-photo-caption"
+            aria-live={active ? "off" : "polite"}
           >
-            <ChevronLeft size={22} />
-          </button>
-          <button
-            type="button"
-            aria-label="Foto siguiente de portada"
-            onClick={() => navigateCover(1)}
-            disabled={slides.length < 2 || manualTarget !== null}
-          >
-            <ChevronRight size={22} />
-          </button>
-        </div>
-        <div
-          className="event-photo-caption"
-          aria-live={active ? "off" : "polite"}
-        >
-          <span>{slides[index].caption}</span>
-          <span>
-            {index + 1} / {slides.length}
-          </span>
-        </div>
+            {slides[index].caption}
+          </p>
+        )}
       </div>
       <div className="event-gallery-controls">
         <button
@@ -242,9 +237,6 @@ export function EventHeroGallery({
             <RotateCcw size={16} /> Portada
           </button>
         )}
-        <button type="button" onClick={(e) => open(e.currentTarget)}>
-          <Images size={16} /> Ver todas las fotos
-        </button>
       </div>
       {opened && (
         <PhotoDialog
@@ -339,6 +331,7 @@ function PhotoDialog({
         ))}
         <button
           className="photo-prev"
+          data-material="liquid"
           type="button"
           aria-label="Imagen anterior"
           onClick={() => navigate(-1)}
@@ -347,6 +340,7 @@ function PhotoDialog({
         </button>
         <button
           className="photo-next"
+          data-material="liquid"
           type="button"
           aria-label="Imagen siguiente"
           onClick={() => navigate(1)}
@@ -355,7 +349,8 @@ function PhotoDialog({
         </button>
       </div>
       <p className="event-dialog-caption" aria-live="polite">
-        {index + 1} de {slides.length} · {slides[index].caption}
+        {index + 1} de {slides.length}
+        {slides[index].caption.trim() ? ` · ${slides[index].caption}` : ""}
       </p>
       <div className="event-photo-thumbnails" aria-label="Seleccionar foto">
         {slides.map((photo, i) => (

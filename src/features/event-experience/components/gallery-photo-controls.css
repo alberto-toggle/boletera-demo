@@ -1,0 +1,87 @@
+.gallery-photo-controls {
+  position: absolute;
+  z-index: 4;
+  inset: 16px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: none;
+}
+.gallery-photo-navigation,
+.gallery-photo-open {
+  display: inline-flex;
+  align-items: center;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  pointer-events: auto;
+}
+.gallery-photo-navigation {
+  padding: 3px;
+}
+.gallery-photo-navigation button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.gallery-photo-count {
+  min-width: 52px;
+  text-align: center;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.gallery-photo-open {
+  position: absolute;
+  top: 0;
+  right: 0;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 18px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.gallery-photo-controls button:hover:not(:disabled) {
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+.gallery-photo-controls button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -5px;
+}
+.gallery-photo-controls button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+@media (max-width: 420px) {
+  .gallery-photo-controls {
+    inset-inline: 10px;
+    gap: 6px;
+  }
+  .gallery-photo-open {
+    padding-inline: 12px;
+  }
+}
+
+/* Reserve the navigation footprint at every viewport width. */
+.event-hero-photo:has(.gallery-photo-controls) > .event-photo-caption {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 84px;
+  margin: 0;
+  padding: 16px 20px 16px 184px;
+  text-align: right;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}

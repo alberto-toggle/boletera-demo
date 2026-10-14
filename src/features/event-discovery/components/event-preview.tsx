@@ -11,10 +11,12 @@ export function EventPreview({
   event,
   className = "demo-button",
   children,
+  material,
 }: {
   event: DiscoveryEvent;
   className?: string;
   children?: ReactNode;
+  material?: "liquid";
 }) {
   const pathname = usePathname();
   const parent = pathname.split("/")[1];
@@ -35,6 +37,7 @@ export function EventPreview({
   return className.includes("stretched-trigger") ? (
     <>
       <span
+        data-material={material}
         aria-hidden="true"
         className={buttonVariants({ variant: "ghost", className })}
       >
@@ -47,7 +50,7 @@ export function EventPreview({
       />
     </>
   ) : (
-    <Link href={href} className={className}>
+    <Link href={href} className={className} data-material={material}>
       {label}
     </Link>
   );

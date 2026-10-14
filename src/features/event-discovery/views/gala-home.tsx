@@ -37,7 +37,11 @@ export function GalaHome() {
             <p className="hero-description">
               Cena, música y una noche para recordar.
             </p>
-            <EventPreview event={featuredEvent} className="demo-button">
+            <EventPreview
+              event={featuredEvent}
+              material="liquid"
+              className="demo-button"
+            >
               Descubre tu próxima noche{" "}
               <ArrowUpRight size={18} aria-hidden="true" />
             </EventPreview>
