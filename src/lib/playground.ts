@@ -1,4 +1,5 @@
 export const playgroundBlocks = [
+  { title: "Liquid Glass", category: "Efectos visuales", href: "/playground/uilayouts/liquid-glass", provider: "UI Layouts", kind: "features", description: "Superficie de vidrio con distorsión, desenfoque, reflejos y movimiento interactivo." },
   { title: "Records Table · theshanelevine", category: "Tablas", href: "/playground/21st-dev/records-table-theshanelevine", provider: "21st.dev", kind: "features", description: "Tabla compacta con selección, columnas ordenables y resumen de registros." },
   {
     "title": "Line Charts 4 · sean0205",
