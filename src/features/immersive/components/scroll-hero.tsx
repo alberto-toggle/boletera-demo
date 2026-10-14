@@ -8,7 +8,10 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useMotionPreference } from "../use-motion-preference";
-import type { DiscoveryEvent } from "@/features/event-discovery/model";
+import {
+  formatEventDate,
+  type DiscoveryEvent,
+} from "@/features/event-discovery/model";
 
 export function ScrollHero({ event }: { event: DiscoveryEvent }) {
   const ref = useRef<HTMLElement>(null);
@@ -34,10 +37,10 @@ export function ScrollHero({ event }: { event: DiscoveryEvent }) {
         <span className="hero-coordinate">
           CIUDAD DE MÉXICO
           <br />
-          TEMPORADA 2027
+          TEMPORADA 2026–2027
         </span>
         <span className="hero-issue">
-          09 ENCUENTROS
+          AGENDA DE ENCUENTROS
           <br />
           INFINITOS RECUERDOS
         </span>
@@ -88,7 +91,7 @@ export function ScrollHero({ event }: { event: DiscoveryEvent }) {
             <span>NUESTRA PRÓXIMA GRAN NOCHE</span>
             <strong>{event.title}</strong>
           </div>
-          <span>15 / 09 / 2027</span>
+          <span>{formatEventDate(event.startsAt)}</span>
         </div>
       </div>
     </section>

@@ -45,6 +45,7 @@ export type BookingState =
 export type BookingAction =
   | { type: "demo-shorten-hold"; now: number }
   | { type: "toggle"; seatId: string }
+  | { type: "toggle-group"; seatIds: string[] }
   | { type: "clear-selection" }
   | { type: "reserve"; now: number; orderId: string }
   | {
@@ -66,7 +67,7 @@ export type BookingAction =
   | { type: "back" }
   | { type: "reset" };
 export const HOLD_MS = 5 * 60 * 1000;
-export const MAX_SEATS = 8;
+
 export const initialBookingState: BookingState = {
   step: "selection",
   selectedIds: [],
@@ -118,6 +119,22 @@ export function transitionBooking(
       selectedIds: state.seatIds,
       notice: "Apartado liberado. Puedes cambiar tus lugares.",
     };
+  if (action.type === "toggle-group" && state.step === "selection") {
+    const ids = [...new Set(action.seatIds)];
+    if (
+      !ids.length ||
+      ids.some((id) => !seats.some((s) => s.id === id && !s.occupied))
+    )
+      return state;
+    const removing = ids.every((id) => state.selectedIds.includes(id));
+    return {
+      ...state,
+      selectedIds: removing
+        ? state.selectedIds.filter((id) => !ids.includes(id))
+        : [...new Set([...state.selectedIds, ...ids])],
+      notice: null,
+    };
+  }
   if (action.type === "toggle" && state.step === "selection") {
     const seat = seats.find((item) => item.id === action.seatId);
     if (!seat || seat.occupied) return state;
@@ -126,11 +143,6 @@ export function transitionBooking(
         ...state,
         selectedIds: state.selectedIds.filter((id) => id !== seat.id),
         notice: null,
-      };
-    if (state.selectedIds.length >= MAX_SEATS)
-      return {
-        ...state,
-        notice: `Puedes elegir hasta ${MAX_SEATS} lugares por compra en esta demo.`,
       };
     return {
       ...state,

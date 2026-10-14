@@ -4,6 +4,7 @@ const resetSeenKey = "boletera-demo-reset-seen-v1";
 const sellerKey = "boletera-seller-demo-v1";
 const localKeys = [
   "boletera-admin-demo-v1",
+  "boletera-courtesies-demo-v1",
   "boletera-access-demo-v1",
   "boletera-admin-holds-v1",
   "boletera-account-demo-v1",

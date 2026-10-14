@@ -20,7 +20,7 @@ export function EditorialHome() {
         <section className="editorial-hero">
           <div className="editorial-kicker">
             <span>AGENDA CULTURAL & ENCUENTROS</span>
-            <span>EDICIÓN 2027 — CDMX</span>
+            <span>EDICIÓN 2026–2027 — CDMX</span>
           </div>
           <h1>
             Hay mucho

@@ -29,6 +29,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Las únicas categorías confirmadas son **Evento** y **Cena baile**, centralizadas
   en `src/domain/events/category.ts`. No agregar categorías sin petición del usuario.
 - La categoría y la distribución del recinto son conceptos distintos.
+- Para cenas baile, el plano confirmado está en `src/domain/venues/banquet.ts`:
+  58 mesas numeradas y A–H, diez lugares por mesa, 660 lugares. Precio único por
+  evento, sin descuentos ni límite de compra; se admiten mesas completas.
+- Las ventas confirmadas son finales. Esto no impide cancelar un apartado sin
+  pago. Solo administración emite e imprime cortesías. Un ingreso por boleto;
+  acceso principal único. Modo offline fuera del alcance de esta demo.
 - Recintos de demo: **Gran Salón Boletera** (mesas y pista) y **Auditorio Boletera**
   (filas). Usar `src/domain/venues/catalog.ts`; el recinto determina el mapa,
   no la categoría. No ofrecer combinaciones independientes de recinto y distribución.

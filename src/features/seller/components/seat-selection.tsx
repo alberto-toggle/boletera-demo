@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Trash2, Armchair } from "lucide-react";
 import { VenueMap } from "@/features/seating/venue-map";
 import type { Venue } from "@/features/seating/model";
-import { SELLER_LIMIT, date, money, type SellerEvent } from "../model";
+import { date, money, type SellerEvent } from "../model";
 import { Button } from "@/components/ui/button";
 export function SellerSelection({
   event,
@@ -38,15 +38,19 @@ export function SellerSelection({
         <section className="seller-map" aria-label="Mapa de selección">
           <VenueMap
             venue={venue}
-            maxSeats={SELLER_LIMIT}
             selectedIds={ids}
+            onToggleGroup={(groupIds) =>
+              setIds((current) =>
+                groupIds.every((id) => current.includes(id))
+                  ? current.filter((id) => !groupIds.includes(id))
+                  : [...new Set([...current, ...groupIds])],
+              )
+            }
             onToggle={(id) =>
               setIds((current) =>
                 current.includes(id)
                   ? current.filter((s) => s !== id)
-                  : current.length < SELLER_LIMIT
-                    ? [...current, id]
-                    : current,
+                  : [...current, id],
               )
             }
           />
@@ -77,8 +81,10 @@ export function SellerSelection({
             {!seats.length ? (
               <div className="seller-empty">
                 <Armchair size={36} />
-                <p>Elige una sección y después los lugares.</p>
-                <small>Hasta ocho boletos por venta.</small>
+                <p>Elige una mesa o sección y después los lugares.</p>
+                <small>
+                  Sin límite de boletos. Puedes elegir mesas completas.
+                </small>
               </div>
             ) : (
               seats.map((s) => (

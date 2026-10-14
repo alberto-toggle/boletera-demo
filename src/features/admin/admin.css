@@ -2398,3 +2398,14 @@
     transition: none;
   }
 }
+
+.admin-banquet-preview { --paper:var(--card); --ink:var(--foreground); --line:var(--border); --subtle:var(--muted-foreground); }
+.admin-banquet-preview svg { width:100%; max-height:540px; }
+.admin-banquet-preview .venue-shell,.admin-banquet-preview .map-table {fill:var(--card);stroke:var(--border);stroke-width:2;}
+.admin-banquet-preview .map-stage {fill:var(--foreground);}
+.admin-banquet-preview .map-stage-label {fill:var(--card);font-size:14px;font-weight:600;}
+.admin-banquet-preview .map-section-ground,.admin-banquet-preview .map-dance-floor rect {fill:var(--muted);stroke:var(--border);}
+.admin-banquet-preview text {fill:var(--foreground);font-size:14px;}
+.admin-banquet-preview p {text-align:center;color:var(--muted-foreground);font-size:12px;}
+
+.admin-courtesy-form { margin-top:20px; }

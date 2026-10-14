@@ -65,8 +65,15 @@ export function EventPage({
               </a>
             </div>
             <p>
-              Desde <strong>{formatPrice(event.price)} MXN</strong> / persona
+              {event.category === "Cena baile" ? "Precio único" : "Desde"}{" "}
+              <strong>{formatPrice(event.price)} MXN</strong> / persona
             </p>
+            <p>Ventas finales. No hay cancelaciones ni descuentos.</p>
+            {event.id === "dia-muertos-2026" && (
+              <p data-demo>
+                Hora, precio y fotografías ilustrativos para la demostración.
+              </p>
+            )}
             <Link href={purchaseHref} className="demo-button">
               Elegir lugares <ArrowRight size={18} />
             </Link>

@@ -1,3 +1,4 @@
+import { BANQUET_CAPACITY, banquetSeatIdentity } from "@/domain/venues/banquet";
 import { adminDemoSellers } from "./sellers";
 import { findVenue } from "@/domain/venues/catalog";
 // The public catalog is adapted here only. Admin components have no public-app dependencies.
@@ -6,29 +7,29 @@ import type { AdminData, AdminEvent, AdminSale, VenueLayout } from "../model";
 export const DEMO_TODAY = "2026-10-07";
 export const initialRange = { from: "2026-09-08", to: DEMO_TODAY };
 export function zonesForLayout(layout: VenueLayout, priceMinor = 125000) {
-  return (
-    layout === "banquet"
-      ? [
-          "A · Preferente",
-          "B · Preferente",
-          "C · General",
-          "D · General",
-          "E · General",
-        ]
-      : [
-          "A · Preferente",
-          "B · Preferente",
-          "C · General",
-          "D · General",
-          "E · General",
-        ]
-  ).map((name, index) => ({
+  if (layout === "banquet")
+    return [
+      {
+        id: "salon",
+        name: "Salón · Precio único",
+        capacity: BANQUET_CAPACITY,
+        priceMinor,
+      },
+    ];
+  return [
+    "A · Preferente",
+    "B · Preferente",
+    "C · General",
+    "D · General",
+    "E · General",
+  ].map((name, index) => ({
     id: String.fromCharCode(65 + index),
     name,
     capacity: 100,
     priceMinor: index < 2 ? priceMinor + 25000 : priceMinor,
   }));
 }
+
 const names = [
   "Alex Hernández",
   "Sofía Martínez",
@@ -88,7 +89,7 @@ export function createAdminFixtures(): AdminData {
       seatId: `${zone.id}-${previous + n + 1}`,
       seat:
         event.layout === "banquet"
-          ? `Mesa ${Math.floor((previous + n) / 10) + 1} · Lugar ${((previous + n) % 10) + 1}`
+          ? `Mesa ${banquetSeatIdentity(previous + n).table} · Lugar ${banquetSeatIdentity(previous + n).number}`
           : `Fila ${`${zone.id}${Math.floor((previous + n) / 10) + 1}`} · Asiento ${((previous + n) % 10) + 1}`,
       priceMinor: zone.priceMinor,
       used: false,
@@ -172,7 +173,7 @@ export function createAdminFixtures(): AdminData {
         id: `HIST-${i + 1}-${n + 1}`,
         seatId: `${zone.id}-${i * 2 + n + 1}`,
         zoneId: zone.id,
-        seat: `Mesa ${Math.floor((i * 2 + n) / 10) + 1} · Lugar ${((i * 2 + n) % 10) + 1}`,
+        seat: `Mesa ${banquetSeatIdentity(i * 2 + n).table} · Lugar ${banquetSeatIdentity(i * 2 + n).number}`,
         priceMinor: zone.priceMinor,
         used: i < 9,
         usedAt:

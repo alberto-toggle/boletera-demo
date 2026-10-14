@@ -7,7 +7,7 @@ El detalle presenta los datos esenciales y enlaza mediante **Elegir lugares** a 
 ## Responsabilidades
 
 - `event-page.tsx`: valida el identificador contra las fixtures; un evento desconocido devuelve 404.
-- `fixtures.ts`: recinto ficticio de 500 lugares: cinco secciones de 100, cincuenta mesas de diez (o filas para conferencias), dos niveles de precio y ocupación determinista.
+- `fixtures.ts`: recintos de demo: salón de 660 lugares (66 mesas de diez, precio único) y auditorio de 500 lugares por filas, con ocupación determinista.
 - `model.ts`: estados excluyentes de selección, checkout, procesamiento, rechazo, expiración y confirmación. Reglas de selección, importes en centavos, datos del comprador y emisión única de boletos.
 - `components/booking-flow.tsx`: composición, reducer local, temporizador limpiado al abandonar el checkout, foco al cambiar de paso y descarga de boletos.
 - `components/seat-map.tsx`: selector controlado adaptado del playground; no contiene disponibilidad ni importes propios.
@@ -36,13 +36,13 @@ Referencias: `Boleteria_MVP_Funcional.docx.pdf` y
 - Flujo de compra web (§6.1 del MVP): evento → mapa → lugares → comprador → pago → boletos.
 - RN-01/RN-02/RN-03: compra pendiente antes de pagar, confirmación completa y emisión de un boleto único por lugar; volver a enviar la acción de pago no duplica la emisión.
 - RN-05/RN-06: apartado al continuar, expiración y liberación al volver, rechazar o expirar. El temporizador no es el único control: pagar después del límite también expira la compra.
-- Datos del comprador: nombre y correo o teléfono verificado. Clasificación público/militar, matrícula libre obligatoria para comprador militar y cantidad de asistentes militares; no un formulario por asistente.
+- Datos del comprador: nombre y correo verificado. Clasificación público/militar, matrícula libre obligatoria para comprador militar y cantidad de asistentes militares; no un formulario por asistente.
 - Compra y asistencia separadas: los boletos nacen con estado válido de prueba; esta pantalla no marca asistencia.
 - Aclaración del usuario sobre cuentas: comprar como invitado es opcionalmente compatible con una sesión de cuenta ficticia. No se implementa autenticación real.
 
-Los cinco minutos de apartado, máximo de ocho lugares, distribución, suplemento
-Preferente de $250 MXN y cuenta de ejemplo son decisiones **de demo**, no requisitos
-confirmados. El precio mostrado es el total de prueba, sin cargos adicionales.
+Los cinco minutos de apartado y las cuentas de ejemplo son decisiones **de demo**.
+La distribución de cenas baile procede del plano del cliente y no tiene límite de
+compra ni suplemento por zona. El auditorio conserva sus zonas de precio ilustrativas. El precio mostrado es el total de prueba, sin cargos adicionales.
 
 ## Límites explícitos
 
@@ -102,7 +102,7 @@ cualquier escala. El zoom revela números; la selección sigue en el reducer.
 Hay arrastre, rueda, pellizco de dos dedos, controles de zoom y ajuste del recinto,
 selector de secciones y teclado (flechas, +/−, Inicio). Se respeta movimiento
 reducido. Total y continuación permanecen visibles. Volver desde identificación
-conserva la selección. El límite por compra sigue siendo ocho.
+conserva la selección. El límite anterior de ocho se retiró con la actualización de octubre de 2026.
 
 Se adapta el patrón controlado de `lavikatiyar/seat-selection` instalado en el
 playground, con una nueva composición de recinto y mesas de diez. `seat-map.tsx`
@@ -155,3 +155,30 @@ Verificado en Chrome: compra completa por registro, login, invitado con teléfon
 «Saltar a 00:10 · Demo» acorta el vencimiento del apartado activo a diez
 segundos como máximo y deja actuar la expiración normal. No prolonga el plazo
 ni está disponible durante el procesamiento/retención de un cobro.
+
+## Actualización de recinto y reglas · 2026-10-14
+
+Las cenas baile usan el plano compartido del cliente: 66 mesas (1–58 y A–H),
+10 lugares cada una, 660 en total y precio único por evento. Venta en línea y
+taquilla permiten lugares sueltos y mesas completas disponibles, sin el límite
+anterior de ocho. Las ventas confirmadas son finales; cancelar un apartado sin
+pago no equivale a cancelar una venta. Sin descuentos ni modo offline.
+
+El evento destacado es Cena baile · Día de Muertos, 30 de octubre de 2026.
+Nombre y fecha proceden del cliente; 19:00, $1,250 MXN, nombre del recinto,
+textos complementarios y fotografía son datos ilustrativos autorizados.
+Las marcas rosas del documento no son ocupación permanente del mapa.
+
+Administración incluye cortesías por evento, exclusivas del perfil administrador:
+se asigna un lugar libre, se persiste y se descarga un PDF para imprimir.
+No son ventas ni ingresos; sí descuentan disponibilidad, protegen el lugar y
+aparecen en Asistencia. Staff reconoce su código y conserva el primer ingreso.
+El adaptador `features/access/demo/courtesies.ts` sincroniza estas invitaciones
+entre pestañas del mismo origen con la clave `boletera-courtesies-demo-v1`.
+No implica sincronización de todo el inventario con los canales de venta.
+
+Los eventos administrativos antiguos de mesas se adaptan al aforo y precio único;
+las configuraciones individuales del antiguo plano de cinco secciones se descartan
+al migrar ese plano. Las ventas guardadas de taquilla conservan sus importes y
+etiquetas históricas, aunque el catálogo cambie. Limpiar datos de demo permite
+mostrar todos los ejemplos desde cero con la nueva distribución.

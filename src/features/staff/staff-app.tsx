@@ -18,6 +18,7 @@ import {
   useInternalAccess,
   InternalSignOut,
 } from "@/features/internal-access/access";
+import { useCourtesies } from "@/features/access/demo/courtesies";
 import { accessCatalog } from "@/features/access/demo/catalog";
 import { registerAccess, useAccessRecords } from "@/features/access/demo/store";
 import { checkTicket, type AccessResult } from "@/features/access/model";
@@ -26,7 +27,24 @@ import { AccessResultCard } from "./components/access-result";
 import { TicketSearch } from "./components/ticket-search";
 export function StaffApp() {
   const { name } = useInternalAccess();
-  const [catalog] = useState(accessCatalog);
+  const [baseCatalog] = useState(accessCatalog);
+  const courtesies = useCourtesies();
+  const catalog = useMemo(
+    () => ({
+      events: [
+        ...baseCatalog.events,
+        ...courtesies
+          .map((c) => c.event)
+          .filter(
+            (e, i, all) =>
+              !baseCatalog.events.some((b) => b.id === e.id) &&
+              all.findIndex((a) => a.id === e.id) === i,
+          ),
+      ],
+      tickets: [...baseCatalog.tickets, ...courtesies],
+    }),
+    [baseCatalog, courtesies],
+  );
   const records = useAccessRecords();
   const tickets = useMemo(
     () =>
@@ -332,8 +350,8 @@ export function StaffApp() {
                 />
                 {notice && <p role="status">{notice}</p>}
                 <p className="staff-access-note">
-                  Solo se registra el primer ingreso. Los reingresos se
-                  controlan con el mecanismo físico definido para el evento.
+                  Acceso principal único. Cada boleto permite un ingreso; un
+                  boleto utilizado no puede volver a registrarse.
                 </p>
               </aside>
             </div>

@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Venue } from "@/features/seating/model";
-import { date, money, SELLER_LIMIT, type SellerEvent } from "../model";
+import { date, money, type SellerEvent } from "../model";
 
 type Props = { event: SellerEvent; venue: Venue };
 function EventInformation({ event, venue }: Props) {
@@ -69,7 +69,8 @@ function EventInformation({ event, venue }: Props) {
           </table>
         </div>
         <p className="seller-muted">
-          Precios en MXN · Hasta {SELLER_LIMIT} boletos por venta.
+          Precios en MXN · Sin límite de boletos por venta. Ventas finales, sin
+          cancelaciones ni descuentos.
         </p>
       </section>
       <section>

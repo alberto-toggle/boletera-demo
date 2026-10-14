@@ -5,8 +5,7 @@ export const venueCatalog = [
     name: "Gran Salón Boletera",
     layout: "banquet",
     arrangement: "tables",
-    description:
-      "Mesas y lugares asignados · 5 secciones · Pista de baile central",
+    description: "66 mesas · 10 lugares por mesa · Pista de baile central",
   },
   {
     id: "auditorio",

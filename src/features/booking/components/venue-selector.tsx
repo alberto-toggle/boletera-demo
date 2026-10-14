@@ -10,13 +10,14 @@ import {
 import { ArrowRight, Trash2, Map, Maximize2, Minimize2, X } from "lucide-react";
 import type { DemoVenue } from "../fixtures";
 import { VenueMap } from "./venue-map";
-import { MAX_SEATS, totalForSeats } from "../model";
+import { totalForSeats } from "../model";
 import { formatPrice } from "@/features/event-discovery/model";
 interface Props {
   venue: DemoVenue;
   eventTitle: string;
   selectedIds: readonly string[];
   onToggle: (id: string) => void;
+  onToggleGroup: (ids: string[]) => void;
   onContinue: () => void;
   onClear: () => void;
   notice: string | null;
@@ -29,6 +30,7 @@ export function VenueSelector({
   eventTitle,
   selectedIds,
   onToggle,
+  onToggleGroup,
   onContinue,
   onClear,
   notice,
@@ -91,6 +93,7 @@ export function VenueSelector({
               venue={venue}
               selectedIds={selectedIds}
               onToggle={onToggle}
+              onToggleGroup={onToggleGroup}
             />
           </div>
           <aside id={`${id}-selection`} className="venue-selection">
@@ -107,7 +110,11 @@ export function VenueSelector({
               <Trash2 size={15} aria-hidden="true" />
               Limpiar selección
             </button>
-            <p>Puedes elegir hasta {MAX_SEATS} lugares.</p>
+            <p>
+              Sin límite de boletos por compra.
+              {venue.arrangement === "tables" &&
+                " Puedes elegir una mesa completa de 10 lugares."}
+            </p>
             <div className="seat-legend">
               <span>
                 <i />
@@ -156,7 +163,9 @@ export function VenueSelector({
                 >
                   <Map size={32} />
                   <p>
-                    Primero una sección.
+                    {venue.arrangement === "tables"
+                      ? "Primero una mesa."
+                      : "Primero una sección."}
                     <br />
                     Después, tu lugar favorito.
                   </p>
@@ -164,8 +173,7 @@ export function VenueSelector({
               )}
             </AnimatePresence>
             <p role="status" className="venue-notice">
-              {notice ??
-                `${selected.length} de ${MAX_SEATS} lugares seleccionados`}
+              {notice ?? `${selected.length} lugares seleccionados`}
             </p>
           </aside>
         </div>

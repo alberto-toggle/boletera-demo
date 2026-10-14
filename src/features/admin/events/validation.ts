@@ -1,3 +1,4 @@
+import { BANQUET_CAPACITY } from "@/domain/venues/banquet";
 import { validSeatOverrides } from "../inventory/model";
 import { findVenue } from "@/domain/venues/catalog";
 import { isEventCategory } from "@/domain/events/category";
@@ -8,6 +9,13 @@ export function validateEvent(
   sales: readonly AdminSale[],
 ): string[] {
   const errors: string[] = [];
+  if (
+    event.layout === "banquet" &&
+    (event.zones.length !== 1 ||
+      event.zones[0]?.id !== "salon" ||
+      event.zones[0]?.capacity !== BANQUET_CAPACITY)
+  )
+    errors.push("El salón tiene 66 mesas de 10 lugares y un único precio.");
   if (
     event.seatOverrides !== undefined &&
     !validSeatOverrides(event.seatOverrides)

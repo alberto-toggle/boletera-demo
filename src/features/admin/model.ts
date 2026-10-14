@@ -136,15 +136,24 @@ export function eventInventory(
   const capacity = eventSeats(event).filter((s) => s.enabled).length;
   const held = new Set(
     holds
-      .filter((h) => h.eventId === event.id && h.expiresAt > now)
+      .filter(
+        (h) =>
+          h.eventId === event.id && h.expiresAt > now && h.kind !== "courtesy",
+      )
+      .flatMap((h) => h.seatIds),
+  ).size;
+  const courtesy = new Set(
+    holds
+      .filter((h) => h.eventId === event.id && h.kind === "courtesy")
       .flatMap((h) => h.seatIds),
   ).size;
   const revenue = confirmed.reduce((sum, sale) => sum + saleTotal(sale), 0);
   return {
     sold,
     capacity,
-    available: Math.max(0, capacity - sold - held),
+    available: Math.max(0, capacity - sold - held - courtesy),
     held,
+    courtesy,
     revenue,
     percentage: capacity ? Math.round((sold / capacity) * 100) : 0,
   };

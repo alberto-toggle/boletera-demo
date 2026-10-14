@@ -12,6 +12,7 @@ import { Brand } from "@/features/event-discovery/components/chrome";
 import { AccountPreview } from "@/features/event-discovery/components/event-preview";
 import {
   eventCategories,
+  formatEventDate,
   type DiscoveryEvent,
 } from "@/features/event-discovery/model";
 import { PaletteSelector } from "./palette-switcher";
@@ -134,7 +135,7 @@ export function MegaNavigation({
                     className="mega-secondary"
                     onClick={close}
                   >
-                    Toda la agenda 2027 →
+                    Toda la agenda →
                   </Link>
                 </div>
                 <div>
@@ -172,7 +173,13 @@ export function MegaNavigation({
                     sizes="300px"
                   />
                   <div>
-                    <span>15 SEPTIEMBRE · EVENTO DESTACADO</span>
+                    <span>
+                      {formatEventDate(
+                        featuredEvent.startsAt,
+                        "short",
+                      ).toUpperCase()}{" "}
+                      · EVENTO DESTACADO
+                    </span>
                     <strong>
                       Lo que nos une,
                       <br />

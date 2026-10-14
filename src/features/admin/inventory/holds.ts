@@ -30,7 +30,17 @@ export function useInventoryHolds(
               h.seatIds.every((id: unknown) => typeof id === "string"),
           )
         ) {
-          setHolds(raw);
+          setHolds(
+            raw
+              .map((h) => ({
+                ...h,
+                seatIds: h.seatIds.filter((id: string) => {
+                  const event = events.find((e) => e.id === h.eventId);
+                  return event && eventSeats(event).some((s) => s.id === id);
+                }),
+              }))
+              .filter((h) => h.seatIds.length),
+          );
           return;
         }
         const created = events

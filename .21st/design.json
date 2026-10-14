@@ -501,6 +501,11 @@
       "scope": "Admin / estadísticas",
       "decision": "Áreas animadas de ingresos, dona por canal, barras de pagos y mapa de actividad 2D/3D con filtro de vendedor; paleta propia azul, violeta y cian, separada de verde/dorado de marca. Adaptaciones aisladas de bloques descargados de Pace UI y 21st; datos derivados de ventas confirmadas. Tabla con ordenamiento y subtotal inspirados en Records Table.",
       "source": "Petición del usuario, 2026-10-07"
+    },
+    {
+      "scope": "Plano de cena baile / venta en línea y taquilla",
+      "decision": "Reproducir la disposición del plano impreso del cliente: 66 mesas numeradas y A–H, márgenes interiores laterales amplios y pista cuadrada con circulación libre alrededor. Geometría compartida, sin alterar identidad ni capacidad de las mesas. Sustituye la distribución ilustrativa anterior de cinco secciones para cenas baile.",
+      "source": "Ajuste explícito del usuario, 14 de octubre de 2026."
     }
   ],
   "evidence": [

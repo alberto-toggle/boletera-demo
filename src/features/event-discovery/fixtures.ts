@@ -3,7 +3,7 @@ import type { DiscoveryEvent } from "./model";
 
 // All names, venues, dates, prices and inclusions are illustrative, not confirmed requirements.
 const common = { city: "Ciudad de México" } as const;
-export const featuredEvent: DiscoveryEvent = {
+const independenceEvent: DiscoveryEvent = {
   ...common,
   id: "noche-independencia",
   title: "Noche de Independencia",
@@ -22,9 +22,31 @@ export const featuredEvent: DiscoveryEvent = {
   ],
 };
 
+// Nombre y fecha confirmados por el cliente. Hora, precio y fotografía son de demo.
+export const featuredEvent: DiscoveryEvent = {
+  ...common,
+  id: "dia-muertos-2026",
+  title: "Cena baile · Día de Muertos",
+  category: "Cena baile",
+  startsAt: "2026-10-30T19:00:00-06:00",
+  venue: venueCatalog[0].name,
+  price: { amountMinor: 125000, currency: "MXN" },
+  image: "/images/events/catrina-tradition.jpg",
+  imageAlt: "Catrina junto a una ofrenda de Día de Muertos",
+  imagePosition: "68% 50%",
+  description:
+    "Celebremos el Día de Muertos con una cena, música y baile. Una noche de tradición para compartir en mesas de diez lugares alrededor de la pista central.",
+  includes: [
+    "Cena",
+    "D.J. BOC Producciones y agrupaciones musicales",
+    "Lugar asignado en mesa",
+  ],
+};
+
 // Canonical chronological order for all four demos. Heroes use featuredEvent,
 // which is the same object included below, including its image and crop.
 export const demoEvents: readonly DiscoveryEvent[] = [
+  featuredEvent,
   {
     ...common,
     id: "dia-ejercito",
@@ -100,7 +122,7 @@ export const demoEvents: readonly DiscoveryEvent[] = [
       "Lugar en auditorio",
     ],
   },
-  featuredEvent,
+  independenceEvent,
   {
     ...common,
     id: "noche-tradiciones",

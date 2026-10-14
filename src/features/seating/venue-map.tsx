@@ -1,4 +1,5 @@
 "use client";
+import { BANQUET_TABLE_RADIUS, BANQUET_VIEW } from "@/domain/venues/banquet";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { CircleAlert, Minus, Plus, RotateCcw } from "lucide-react";
 
@@ -10,15 +11,18 @@ import {
   VENUE_VIEW,
   type MapBox,
 } from "./venue-layout";
+import { BanquetLandmarks } from "./banquet-landmarks";
 import { formatPrice } from "./model";
 
 export function VenueMap({
   venue,
   selectedIds,
   onToggle,
-  maxSeats = 8,
+  maxSeats = Infinity,
+  onToggleGroup,
 }: {
   maxSeats?: number;
+  onToggleGroup?: (ids: string[]) => void;
   venue: DemoVenue;
   selectedIds: readonly string[];
   onToggle: (id: string) => void;
@@ -61,14 +65,20 @@ export function VenueMap({
     onToggle(id);
   }
   const sections = useMemo(() => layoutVenue(venue), [venue]);
-  const [camera, setCamera] = useState(VENUE_VIEW);
+  const overview = venue.arrangement === "tables" ? BANQUET_VIEW : VENUE_VIEW;
+  const [camera, setCamera] = useState(overview);
   const current = useRef(camera);
   const svg = useRef<SVGSVGElement>(null);
   const frame = useRef(0);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const dragged = useRef(false);
   const helpId = useId();
-  const detailed = camera.width < 640;
+  const tableMode = venue.arrangement === "tables";
+  const detailed = camera.width < (tableMode ? 360 : 640);
+  const [tableFocus, setTableFocus] = useState("");
+  const activeTable = sections
+    .flatMap((s) => s.groups)
+    .find((g) => g.name === tableFocus);
   const focusedSection = detailed
     ? sections.find(({ box }) => {
         const x = camera.x + camera.width / 2,
@@ -84,7 +94,8 @@ export function VenueMap({
   function move(next: MapBox, animate = false) {
     setLimitHint(null);
     cancelAnimationFrame(frame.current);
-    const target = constrainCamera(next);
+    const target = constrainCamera(next, overview);
+    if (target.width >= overview.width - 60) setTableFocus("");
     const start = current.current;
     const update = (value: MapBox) => {
       current.current = value;
@@ -111,6 +122,10 @@ export function VenueMap({
     };
     frame.current = requestAnimationFrame(tick);
   }
+  function focusTable(group: { name: string; x: number; y: number }) {
+    setTableFocus(group.name);
+    move({ x: group.x - 95, y: group.y - 95, width: 190, height: 190 }, true);
+  }
   function worldPoint(x: number, y: number) {
     const matrix = svg.current?.getScreenCTM();
     return matrix
@@ -124,7 +139,7 @@ export function VenueMap({
   ) {
     const c = current.current;
     const p = point ?? { x: c.x + c.width / 2, y: c.y + c.height / 2 };
-    const width = Math.min(1060, Math.max(140, c.width * factor));
+    const width = Math.min(overview.width, Math.max(140, c.width * factor));
     move(
       {
         x: p.x - ((p.x - c.x) * width) / c.width,
@@ -148,23 +163,65 @@ export function VenueMap({
     <div className="continuous-venue">
       <div className="venue-map-toolbar">
         <label>
-          Sección{" "}
+          {tableMode ? "Mesa" : "Sección"}{" "}
           <select
-            aria-label="Acercar a una sección"
-            value={focusedSection?.id ?? ""}
+            aria-label={
+              tableMode ? "Acercar a una mesa" : "Acercar a una sección"
+            }
+            value={tableMode ? tableFocus : (focusedSection?.id ?? "")}
             onChange={(event) => {
+              if (tableMode) {
+                setTableFocus(event.target.value);
+                const group = sections
+                  .flatMap((s) => s.groups)
+                  .find((g) => g.name === event.target.value);
+                move(
+                  group
+                    ? {
+                        x: group.x - 95,
+                        y: group.y - 95,
+                        width: 190,
+                        height: 190,
+                      }
+                    : overview,
+                  true,
+                );
+                return;
+              }
               const section = sections.find((s) => s.id === event.target.value);
-              move(section ? focusBox(section.box) : VENUE_VIEW, true);
+              move(section ? focusBox(section.box) : overview, true);
             }}
           >
             <option value="">Todo el recinto</option>
-            {sections.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name} · {s.zone}
-              </option>
-            ))}
+            {tableMode
+              ? sections
+                  .flatMap((s) => s.groups)
+                  .map((g) => (
+                    <option key={g.name} value={g.name}>
+                      Mesa {g.name.slice(1)}
+                    </option>
+                  ))
+              : sections.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name} · {s.zone}
+                  </option>
+                ))}
           </select>
         </label>
+        {tableMode && activeTable && onToggleGroup && (
+          <button
+            type="button"
+            className="venue-expand"
+            disabled={activeTable.seats.some((s) => s.occupied)}
+            onClick={() => onToggleGroup(activeTable.seats.map((s) => s.id))}
+          >
+            {activeTable.seats.some((s) => s.occupied)
+              ? "Mesa parcialmente ocupada"
+              : activeTable.seats.every((s) => selectedIds.includes(s.id))
+                ? "Quitar mesa completa"
+                : "Elegir mesa completa · 10 lugares"}
+          </button>
+        )}
         <span
           id={helpId}
           role="status"
@@ -211,7 +268,7 @@ export function VenueMap({
               event.preventDefault();
             if (event.key === "+" || event.key === "=") zoom(0.75);
             if (event.key === "-") zoom(1.33);
-            if (event.key === "Home") move(VENUE_VIEW, true);
+            if (event.key === "Home") move(overview, true);
             if (event.key.startsWith("Arrow"))
               move({
                 ...c,
@@ -288,77 +345,128 @@ export function VenueMap({
             dragged.current = true;
           }}
         >
-          <rect
-            x="20"
-            y="10"
-            width="960"
-            height="990"
-            rx="45"
-            className="venue-shell"
-          />
-          <rect
-            x="320"
-            y="40"
-            width="360"
-            height="65"
-            rx="12"
-            className="map-stage"
-          />
-          <text x="500" y="79" textAnchor="middle" className="map-stage-label">
-            ESCENARIO
-          </text>
-          {venue.arrangement === "tables" ? (
-            <g
-              aria-label="Pista de baile, área no seleccionable"
-              className="map-dance-floor"
-            >
-              <rect x="360" y="150" width="280" height="360" rx="12" />
-              <text x="500" y="325" textAnchor="middle">
-                <tspan x="500">PISTA</tspan>
-                <tspan x="500" dy="26">
-                  DE BAILE
-                </tspan>
-              </text>
-            </g>
+          {tableMode ? (
+            <BanquetLandmarks />
           ) : (
-            <text x="500" y="550" textAnchor="middle" className="map-aisle">
-              PASILLO CENTRAL
-            </text>
+            <>
+              <rect
+                x="20"
+                y="10"
+                width="960"
+                height="990"
+                rx="45"
+                className="venue-shell"
+              />
+              <rect
+                x="320"
+                y="40"
+                width="360"
+                height="65"
+                rx="12"
+                className="map-stage"
+              />
+              <text
+                x="500"
+                y="79"
+                textAnchor="middle"
+                className="map-stage-label"
+              >
+                ESCENARIO
+              </text>
+              {venue.arrangement === "tables" ? (
+                <g
+                  aria-label="Pista de baile, área no seleccionable"
+                  className="map-dance-floor"
+                >
+                  <rect x="360" y="150" width="280" height="360" rx="12" />
+                  <text x="500" y="325" textAnchor="middle">
+                    <tspan x="500">PISTA</tspan>
+                    <tspan x="500" dy="26">
+                      DE BAILE
+                    </tspan>
+                  </text>
+                </g>
+              ) : (
+                <text x="500" y="550" textAnchor="middle" className="map-aisle">
+                  PASILLO CENTRAL
+                </text>
+              )}
+              <text x="500" y="979" textAnchor="middle" className="map-aisle">
+                ↑ ACCESO PRINCIPAL
+              </text>
+            </>
           )}
-          <text x="500" y="979" textAnchor="middle" className="map-aisle">
-            ↑ ACCESO PRINCIPAL
-          </text>
           {sections.map((section) => (
             <g key={section.id} data-section={section.id}>
-              <rect {...section.box} rx="12" className="map-section-ground" />
-              <text
-                x={section.box.x + section.box.width / 2}
-                y={section.box.y + 26}
-                textAnchor="middle"
-                className="map-section-label"
-              >
-                {section.name} · {section.zone}
-              </text>
-              <text
-                x={section.box.x + section.box.width / 2}
-                y={section.box.y + 43}
-                textAnchor="middle"
-                className="map-section-price"
-              >
-                {formatPrice({
-                  amountMinor: section.amountMinor,
-                  currency: "MXN",
-                })}{" "}
-                MXN / lugar
-              </text>
+              {!tableMode && (
+                <>
+                  <rect
+                    {...section.box}
+                    rx="12"
+                    className="map-section-ground"
+                  />
+                  <text
+                    x={section.box.x + section.box.width / 2}
+                    y={section.box.y + 26}
+                    textAnchor="middle"
+                    className="map-section-label"
+                  >
+                    {section.name} · {section.zone}
+                  </text>
+                  <text
+                    x={section.box.x + section.box.width / 2}
+                    y={section.box.y + 43}
+                    textAnchor="middle"
+                    className="map-section-price"
+                  >
+                    {formatPrice({
+                      amountMinor: section.amountMinor,
+                      currency: "MXN",
+                    })}{" "}
+                    MXN / lugar
+                  </text>
+                </>
+              )}
               {section.groups.map((group) => (
                 <g key={group.name}>
                   {venue.arrangement === "tables" && (
                     <circle
                       cx={group.x}
                       cy={group.y}
-                      r="15"
+                      r={BANQUET_TABLE_RADIUS}
                       className="map-table"
+                      role={detailed ? "button" : undefined}
+                      tabIndex={detailed ? 0 : -1}
+                      aria-label={`Acercar a mesa ${group.name.slice(1)}`}
+                      onClick={() => {
+                        if (!dragged.current) {
+                          setTableFocus(group.name);
+                          move(
+                            {
+                              x: group.x - 95,
+                              y: group.y - 95,
+                              width: 190,
+                              height: 190,
+                            },
+                            true,
+                          );
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setTableFocus(group.name);
+                          move(
+                            {
+                              x: group.x - 95,
+                              y: group.y - 95,
+                              width: 190,
+                              height: 190,
+                            },
+                            true,
+                          );
+                        }
+                      }}
                     />
                   )}
                   <text
@@ -367,7 +475,7 @@ export function VenueMap({
                     textAnchor="middle"
                     className="map-group-label"
                   >
-                    {group.name}
+                    {tableMode ? group.name.slice(1) : group.name}
                   </text>
                   {group.seats.map((seat) => {
                     const chosen = selectedIds.includes(seat.id);
@@ -380,12 +488,12 @@ export function VenueMap({
                     return (
                       <g
                         key={seat.id}
-                        role="button"
+                        role={detailed ? "button" : undefined}
                         tabIndex={visible && !seat.occupied ? 0 : -1}
                         aria-disabled={seat.occupied}
-                        aria-pressed={chosen}
+                        aria-pressed={detailed ? chosen : undefined}
                         aria-label={`${seat.label}, ${seat.occupied ? "ocupado" : chosen ? "seleccionado" : "disponible"}, ${formatPrice({ amountMinor: seat.amountMinor, currency: "MXN" })} MXN`}
-                        className={`map-seat${chosen ? " chosen" : ""}${seat.occupied ? " occupied" : ""}`}
+                        className={`map-seat${!detailed ? " overview-seat" : ""}${chosen ? " chosen" : ""}${seat.occupied ? " occupied" : ""}`}
                         onClick={(event) => {
                           if (!dragged.current && detailed && !seat.occupied)
                             selectSeat(seat.id, event.currentTarget);
@@ -393,6 +501,7 @@ export function VenueMap({
                         onKeyDown={(event) => {
                           if (
                             (event.key === "Enter" || event.key === " ") &&
+                            detailed &&
                             !seat.occupied
                           ) {
                             event.preventDefault();
@@ -420,9 +529,33 @@ export function VenueMap({
                       </g>
                     );
                   })}
+                  {tableMode && !detailed && (
+                    <circle
+                      cx={group.x}
+                      cy={group.y}
+                      r={36}
+                      className="map-table-target"
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Acercar a mesa ${group.name.slice(1)}`}
+                      onClick={() => {
+                        if (!dragged.current) focusTable(group);
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          focusTable(group);
+                        }
+                      }}
+                    >
+                      <title>
+                        {`Mesa ${group.name.slice(1)} · Acercar para elegir lugares`}
+                      </title>
+                    </circle>
+                  )}
                 </g>
               ))}
-              {!detailed && (
+              {!detailed && !tableMode && (
                 <rect
                   {...section.box}
                   rx="12"
@@ -469,7 +602,7 @@ export function VenueMap({
           <button
             type="button"
             aria-label="Ver todo el recinto"
-            onClick={() => move(VENUE_VIEW, true)}
+            onClick={() => move(overview, true)}
           >
             <RotateCcw size={19} />
           </button>
@@ -484,7 +617,7 @@ export function VenueMap({
           <button
             type="button"
             aria-label="Alejar mapa"
-            disabled={camera.width >= 1060}
+            disabled={camera.width >= overview.width}
             onClick={() => zoom(1.4)}
           >
             <Minus size={20} />
@@ -493,7 +626,9 @@ export function VenueMap({
         <span className="venue-camera-caption">
           {detailed
             ? "Selecciona tus lugares"
-            : "Toca una sección para acercarte"}
+            : tableMode
+              ? "Elige una mesa para acercarte; después selecciona tus lugares"
+              : "Toca una sección para acercarte"}
         </span>
       </div>
     </div>

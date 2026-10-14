@@ -1,3 +1,4 @@
+import { zonesForLayout } from "./fixtures";
 import { migrateDemoEvent } from "@/domain/venues/migrate-demo-event";
 import type { AdminEvent } from "../model";
 import { isStoredEvent } from "../events/validation";
@@ -19,8 +20,24 @@ export function readAdminEvents(fallback: AdminEvent[]): AdminEvent[] {
       raw.events.every(isStoredEvent) &&
       new Set(raw.events.map((event) => event.id)).size === raw.events.length
     ) {
-      const storedEvents = raw.events;
-      return [...storedEvents, ...fallback.filter(event => !storedEvents.some(stored => stored.id === event.id))];
+      const storedEvents = raw.events.map((event) =>
+        event.layout === "banquet" && event.zones[0]?.id !== "salon"
+          ? {
+              ...event,
+              zones: zonesForLayout(
+                "banquet",
+                Math.min(...event.zones.map((z) => z.priceMinor)),
+              ),
+              seatOverrides: undefined,
+            }
+          : event,
+      );
+      return [
+        ...storedEvents,
+        ...fallback.filter(
+          (event) => !storedEvents.some((stored) => stored.id === event.id),
+        ),
+      ];
     }
   } catch {
     /* Invalid/unavailable storage leaves the seeded demo usable. */

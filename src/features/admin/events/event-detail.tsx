@@ -72,6 +72,12 @@ export function EventDetail({ eventId }: { eventId: string }) {
           <div className="admin-actions">
             <ActionLink
               variant="outline"
+              href={`/admin/eventos/${event.id}/cortesias`}
+            >
+              Cortesías
+            </ActionLink>
+            <ActionLink
+              variant="outline"
               href={`/admin/eventos/${event.id}/editar`}
             >
               <Pencil />
@@ -92,7 +98,10 @@ export function EventDetail({ eventId }: { eventId: string }) {
           {
             label: "Capacidad total",
             value: String(inventory.capacity),
-            detail: `${event.zones.length} zonas configuradas`,
+            detail:
+              event.layout === "banquet"
+                ? "66 mesas · 10 lugares por mesa"
+                : `${event.zones.length} zonas configuradas`,
             icon: Armchair,
           },
           {
@@ -104,7 +113,7 @@ export function EventDetail({ eventId }: { eventId: string }) {
           {
             label: "Disponibles",
             value: String(inventory.available),
-            detail: `${inventory.held} apartados · Excluidos del disponible`,
+            detail: `${inventory.held} apartados · ${inventory.courtesy} cortesías`,
             icon: CalendarDays,
           },
           {

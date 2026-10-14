@@ -118,6 +118,7 @@ export function Checkout({
             />
           ) : (
             <form onSubmit={submit}>
+              <p>Ventas finales. No hay cancelaciones ni descuentos.</p>
               {stage === "attendees" ? (
                 <div className="buyer-fields">
                   <p className="verified-contact">

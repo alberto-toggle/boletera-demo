@@ -201,7 +201,10 @@ export function TicketDesignGallery({
                       time: formatEventTime(event.startsAt),
                       venue: event.venue,
                       address: event.city,
-                      section: seat.sectionId,
+                      section:
+                        venue.arrangement === "tables"
+                          ? "Salón"
+                          : seat.sectionId,
                       table:
                         venue.arrangement === "tables"
                           ? seat.group.replace(/^M/, "")

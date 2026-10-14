@@ -4,13 +4,15 @@ import { Users, Ticket, UserCheck, Clock } from "lucide-react";
 import { useAdmin } from "../demo/provider";
 import { AdminSelect, SearchField, StatusBadge } from "../components/controls";
 import { MetricCards } from "../components/metric-cards";
+import { useAccessRecords } from "@/features/access/demo/store";
 import { accessTime } from "@/features/access/model";
 export function AttendanceView() {
-  const { events, sales, now } = useAdmin();
+  const { events, sales, now, courtesies } = useAdmin();
   const [eventId, setEventId] = useState("all");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
-  const tickets = sales
+  const records = useAccessRecords();
+  const soldTickets = sales
     .filter(
       (s) =>
         s.status === "confirmed" &&
@@ -24,6 +26,22 @@ export function AttendanceView() {
         event: events.find((e) => e.id === s.eventId),
       })),
     );
+  const tickets = [
+    ...soldTickets,
+    ...courtesies
+      .filter((c) => eventId === "all" || c.eventId === eventId)
+      .map((c) => ({
+        id: c.id,
+        seat: c.seat,
+        zoneId: c.zone,
+        priceMinor: 0,
+        used: records.some((r) => r.ticketId === c.id),
+        usedAt: records.find((r) => r.ticketId === c.id)?.usedAt,
+        buyer: c.buyer,
+        email: c.email,
+        event: events.find((e) => e.id === c.eventId),
+      })),
+  ];
   const entered = tickets.filter((t) => t.used).length;
   const pastUnused = tickets.filter(
     (t) => !t.used && t.event && Date.parse(t.event.startsAt) < now,
@@ -55,9 +73,9 @@ export function AttendanceView() {
       <MetricCards
         items={[
           {
-            label: "Boletos vendidos",
+            label: "Boletos emitidos",
             value: String(tickets.length),
-            detail: "Compras confirmadas",
+            detail: "Ventas confirmadas y cortesías",
             icon: Ticket,
           },
           {

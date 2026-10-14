@@ -160,6 +160,8 @@ export function EventVenueFields({
       <div className="admin-form-section">
         <h2>Aforo y precios</h2>
         <p>
+          {draft.layout === "banquet" &&
+            "66 mesas de 10 lugares. Precio único, sin descuentos. "}
           Los precios nuevos aplican a ventas futuras. Los boletos emitidos
           conservan su importe.
         </p>
@@ -183,6 +185,7 @@ export function EventVenueFields({
                   </td>
                   <td>
                     <Input
+                      readOnly={draft.layout === "banquet"}
                       aria-label={`Capacidad ${zone.name}`}
                       type="number"
                       required

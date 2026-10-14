@@ -1,3 +1,7 @@
+import {
+  banquetTables,
+  BANQUET_SEAT_RING_RADIUS,
+} from "@/domain/venues/banquet";
 import type { Venue as DemoVenue } from "./model";
 
 export interface MapBox {
@@ -10,6 +14,29 @@ export const VENUE_VIEW: MapBox = { x: -30, y: -20, width: 1060, height: 1060 };
 
 /** One coordinate system for the overview, section focus and individual seats. */
 export function layoutVenue(venue: DemoVenue) {
+  if (venue.arrangement === "tables")
+    return venue.sections.map((section) => ({
+      ...section,
+      box: { x: 30, y: 250, width: 1340, height: 900 },
+      groups: banquetTables.map((table) => ({
+        name: `M${table.label}`,
+        x: table.x,
+        y: table.y,
+        seats: venue.seats
+          .filter((s) => s.group === `M${table.label}`)
+          .map((seat, i) => ({
+            ...seat,
+            x:
+              table.x +
+              BANQUET_SEAT_RING_RADIUS *
+                Math.cos((i * Math.PI) / 5 - Math.PI / 2),
+            y:
+              table.y +
+              BANQUET_SEAT_RING_RADIUS *
+                Math.sin((i * Math.PI) / 5 - Math.PI / 2),
+          })),
+      })),
+    }));
   return venue.sections.map((section, index) => {
     const upper = index < 2;
     const box = {
@@ -60,11 +87,14 @@ export function focusBox(box: MapBox): MapBox {
     height: size,
   };
 }
-export function constrainCamera(box: MapBox): MapBox {
-  const size = Math.min(1060, Math.max(140, box.width));
+export function constrainCamera(
+  box: MapBox,
+  overview: MapBox = VENUE_VIEW,
+): MapBox {
+  const size = Math.min(overview.width, Math.max(140, box.width));
   return {
-    x: Math.max(-100, Math.min(1100 - size, box.x)),
-    y: Math.max(-100, Math.min(1100 - size, box.y)),
+    x: Math.max(-100, Math.min(overview.width + 40 - size, box.x)),
+    y: Math.max(-100, Math.min(overview.width + 40 - size, box.y)),
     width: size,
     height: size,
   };

@@ -220,3 +220,14 @@
   cursor: pointer;
   font-size: 20px;
 }
+
+.banquet-landmarks .map-stage-label { font-size:14px; }
+.banquet-landmarks .map-section-label { font-size:10px; }
+.map-table[role="button"] { cursor:pointer; }
+.map-table[role="button"]:focus { stroke:var(--ink);stroke-width:3;outline:none; }
+.map-table + .map-group-label {font-size:13px;font-weight:700;fill:var(--ink);}
+
+/* Overview: one zoom target per table; seats become interactive in detail. */
+.map-seat.overview-seat { pointer-events: none; cursor: inherit; }
+.map-table-target { fill: transparent; stroke: transparent; cursor: pointer; outline: none; }
+.map-table-target:hover, .map-table-target:focus-visible { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 3 3; }

@@ -14,7 +14,7 @@ export function InstitutionalHome() {
       </a>
       <div className="institutional-topline">
         <span>UN ESPACIO PARA ENCONTRARNOS</span>
-        <span>CIUDAD DE MÉXICO · TEMPORADA 2027</span>
+        <span>CIUDAD DE MÉXICO · TEMPORADA 2026–2027</span>
       </div>
       <Header direction="institucional" />
       <main id="contenido">
@@ -93,7 +93,7 @@ export function InstitutionalHome() {
         <section className="agenda-section" id="agenda">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">AGENDA 2027</p>
+              <p className="eyebrow">AGENDA 2026–2027</p>
               <h2>
                 Siempre hay un motivo
                 <br />

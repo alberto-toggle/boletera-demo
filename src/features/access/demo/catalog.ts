@@ -26,7 +26,10 @@ export function accessCatalog(): {
           buyer: s.buyer.name,
           email: s.buyer.email,
           seat: t.seat,
-          zone: t.zoneId,
+          zone:
+            data.events
+              .find((e) => e.id === s.eventId)
+              ?.zones.find((z) => z.id === t.zoneId)?.name ?? t.zoneId,
           usedAt: t.usedAt,
         })),
       ),

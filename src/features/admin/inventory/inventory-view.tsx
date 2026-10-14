@@ -46,7 +46,7 @@ function InventoryEditor({ event }: { event: AdminEvent }) {
   const locked = !!seat && occupied.has(seat.id);
   const filtered = seats.filter((s) => s.zoneId === zone);
   const activeHolds = holds.filter(
-    (h) => h.eventId === event.id && h.expiresAt > now,
+    (h) => h.eventId === event.id && h.expiresAt > now && h.kind !== "courtesy",
   );
   function update(value: SeatOverride) {
     setOverrides((previous) => [
@@ -107,7 +107,7 @@ function InventoryEditor({ event }: { event: AdminEvent }) {
           {
             label: "Disponibles",
             value: String(stats.available),
-            detail: "Excluye vendidos y apartados",
+            detail: `Excluye ventas, apartados y ${stats.courtesy} cortesías`,
             icon: LockKeyhole,
           },
         ]}
@@ -194,7 +194,7 @@ function InventoryEditor({ event }: { event: AdminEvent }) {
             <>
               <p>
                 {locked
-                  ? "Este lugar está protegido porque está vendido o apartado."
+                  ? "Este lugar está protegido porque está vendido, apartado o asignado como cortesía."
                   : "Personaliza su identificación o retíralo del aforo vendible."}
               </p>
               <label>

@@ -47,3 +47,30 @@ duplicado, evento incorrecto, inexistente, búsqueda, recarga, sincronización c
 admin y móvil sin desbordamiento. No se añaden pruebas unitarias. El lector se comprobó con un QR en video sintético, liberación de cámara y permiso denegado. La cámara física
 queda para validación con un dispositivo; las ayudas permiten presentar el flujo
 sin depender de ella.
+
+## Actualización de recinto y reglas · 2026-10-14
+
+Las cenas baile usan el plano compartido del cliente: 66 mesas (1–58 y A–H),
+10 lugares cada una, 660 en total y precio único por evento. Venta en línea y
+taquilla permiten lugares sueltos y mesas completas disponibles, sin el límite
+anterior de ocho. Las ventas confirmadas son finales; cancelar un apartado sin
+pago no equivale a cancelar una venta. Sin descuentos ni modo offline.
+
+El evento destacado es Cena baile · Día de Muertos, 30 de octubre de 2026.
+Nombre y fecha proceden del cliente; 19:00, $1,250 MXN, nombre del recinto,
+textos complementarios y fotografía son datos ilustrativos autorizados.
+Las marcas rosas del documento no son ocupación permanente del mapa.
+
+Administración incluye cortesías por evento, exclusivas del perfil administrador:
+se asigna un lugar libre, se persiste y se descarga un PDF para imprimir.
+No son ventas ni ingresos; sí descuentan disponibilidad, protegen el lugar y
+aparecen en Asistencia. Staff reconoce su código y conserva el primer ingreso.
+El adaptador `features/access/demo/courtesies.ts` sincroniza estas invitaciones
+entre pestañas del mismo origen con la clave `boletera-courtesies-demo-v1`.
+No implica sincronización de todo el inventario con los canales de venta.
+
+Los eventos administrativos antiguos de mesas se adaptan al aforo y precio único;
+las configuraciones individuales del antiguo plano de cinco secciones se descartan
+al migrar ese plano. Las ventas guardadas de taquilla conservan sus importes y
+etiquetas históricas, aunque el catálogo cambie. Limpiar datos de demo permite
+mostrar todos los ejemplos desde cero con la nueva distribución.

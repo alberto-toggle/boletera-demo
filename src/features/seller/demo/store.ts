@@ -7,7 +7,6 @@ import {
   customerError,
   expireSales,
   SELLER_HOLD_MS,
-  SELLER_LIMIT,
   transitionSale,
   type Customer,
   type SaleAction,
@@ -40,7 +39,6 @@ function validSale(value: unknown): value is Sale {
       typeof value.holdExtended !== "boolean") ||
     !Array.isArray(value.seats) ||
     value.seats.length < 1 ||
-    value.seats.length > SELLER_LIMIT ||
     typeof value.status !== "string" ||
     ![
       "pending",
@@ -61,13 +59,17 @@ function validSale(value: unknown): value is Sale {
         venues[value.eventId as string].seats.some(
           (v) =>
             v.id === s.id &&
-            v.amountMinor === s.amountMinor &&
-            v.label === s.label &&
+            typeof s.amountMinor === "number" &&
+            Number.isSafeInteger(s.amountMinor) &&
+            s.amountMinor >= 0 &&
+            s.amountMinor <= 100000000 &&
+            typeof s.label === "string" &&
+            typeof s.group === "string" &&
+            typeof s.zone === "string" &&
+            typeof s.sectionId === "string" &&
             v.group === s.group &&
-            v.zone === s.zone &&
-            v.sectionId === s.sectionId &&
             v.number === s.number &&
-            v.occupied === s.occupied,
+            s.occupied === false,
         ),
     )
   )
@@ -294,8 +296,7 @@ export function tick() {
 export function reserve(eventId: string, ids: string[]): string | null {
   tick();
   const base = venues[eventId];
-  if (!base || !state.signedIn || ids.length < 1 || ids.length > SELLER_LIMIT)
-    return null;
+  if (!base || !state.signedIn || ids.length < 1) return null;
   const venue = availableVenue(base, state.sales, eventId);
   const seats = venue.seats.filter((s) => ids.includes(s.id) && !s.occupied);
   if (seats.length !== ids.length) return null;

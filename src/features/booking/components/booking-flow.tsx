@@ -195,6 +195,9 @@ export function BookingFlow({
               venue={venue}
               eventTitle={event.title}
               selectedIds={state.selectedIds}
+              onToggleGroup={(seatIds) =>
+                dispatch({ type: "toggle-group", seatIds })
+              }
               onToggle={(seatId) => dispatch({ type: "toggle", seatId })}
               onClear={() => dispatch({ type: "clear-selection" })}
               onContinue={reserve}

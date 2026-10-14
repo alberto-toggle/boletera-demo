@@ -1,3 +1,4 @@
+import { formatEventDate } from "../model";
 import { PastEvents } from "@/features/event-experience/components/past-events";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
@@ -26,7 +27,7 @@ export function GalaHome() {
           <Header direction="gala" />
           <section className="gala-hero">
             <p className="eyebrow">
-              ENCUENTROS EXTRAORDINARIOS · TEMPORADA 2027
+              ENCUENTROS EXTRAORDINARIOS · TEMPORADA 2026–2027
             </p>
             <h1>
               Hay noches
@@ -49,12 +50,12 @@ export function GalaHome() {
                 <span className="eyebrow">PRÓXIMA GRAN CELEBRACIÓN</span>
                 <p>{featuredEvent.title}</p>
                 <span>
-                  15 SEPTIEMBRE 2027 <span className="gala-separator">/</span>{" "}
-                  CIUDAD DE MÉXICO
+                  {formatEventDate(featuredEvent.startsAt).toUpperCase()}{" "}
+                  <span className="gala-separator">/</span> CIUDAD DE MÉXICO
                 </span>
               </div>
               <span className="gala-edition" aria-hidden="true">
-                01 — 09
+                01 — {demoEvents.length}
               </span>
             </div>
           </section>
@@ -67,7 +68,9 @@ export function GalaHome() {
                 La agenda <em>completa.</em>
               </h2>
             </div>
-            <span className="eyebrow">09 ENCUENTROS · 2027</span>
+            <span className="eyebrow">
+              {demoEvents.length} ENCUENTROS · 2026–2027
+            </span>
           </div>
           <Agenda events={demoEvents} presentation="cards" />
         </section>

@@ -1,3 +1,4 @@
+import { banquetSeatIdentity } from "@/domain/venues/banquet";
 import type { AdminEvent, AdminSale } from "../model";
 export interface SeatOverride {
   id: string;
@@ -6,6 +7,7 @@ export interface SeatOverride {
   enabled: boolean;
 }
 export interface InventoryHold {
+  kind?: "courtesy";
   id: string;
   eventId: string;
   seatIds: string[];
@@ -19,7 +21,10 @@ export function eventSeats(event: AdminEvent) {
       return {
         id,
         zoneId: zone.id,
-        row: String(Math.floor(index / 10) + 1),
+        row:
+          event.layout === "banquet"
+            ? banquetSeatIdentity(index).table
+            : String(Math.floor(index / 10) + 1),
         number: String((index % 10) + 1),
         enabled: true,
         ...overrides.get(id),
