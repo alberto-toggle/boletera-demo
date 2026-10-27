@@ -1,3 +1,4 @@
+import type { BanquetConfiguration } from "@/domain/venues/banquet-configuration";
 import {
   eventSeats,
   type SeatOverride,
@@ -28,6 +29,7 @@ export interface AdminEvent {
   layout: VenueLayout;
   zones: EventZone[];
   seatOverrides?: SeatOverride[];
+  banquetConfiguration?: BanquetConfiguration;
   updatedAt: string;
 }
 export type SaleStatus = "confirmed" | "failed" | "expired";

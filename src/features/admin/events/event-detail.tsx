@@ -100,7 +100,7 @@ export function EventDetail({ eventId }: { eventId: string }) {
             value: String(inventory.capacity),
             detail:
               event.layout === "banquet"
-                ? "66 mesas · 10 lugares por mesa"
+                ? `${66 + (event.banquetConfiguration?.extras.length ?? 0)} mesas · 10 lugares por mesa`
                 : `${event.zones.length} zonas configuradas`,
             icon: Armchair,
           },
@@ -172,7 +172,11 @@ export function EventDetail({ eventId }: { eventId: string }) {
               </p>
             </div>
           </div>
-          <VenuePreview layout={event.layout} zones={event.zones} />
+          <VenuePreview
+            layout={event.layout}
+            zones={event.zones}
+            banquetConfiguration={event.banquetConfiguration}
+          />
           <p className="admin-venue-caption">
             Distribución de referencia · No está a escala
           </p>

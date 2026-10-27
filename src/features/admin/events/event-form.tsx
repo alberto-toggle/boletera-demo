@@ -22,6 +22,8 @@ import { applyEventExample } from "../demo/event-form-examples";
 import { EventFormDemoTools } from "./event-form-demo-tools";
 import { dateLabel, money, type AdminEvent, type AdminSale } from "../model";
 import { validateEvent } from "./validation";
+import { BanquetTableEditor } from "./banquet-table-editor";
+import { occupiedSeatIds } from "../inventory/model";
 import { VenuePreview } from "./venue-preview";
 import {
   EventInformationFields,
@@ -93,11 +95,13 @@ function EventForm({
   covers: Cover[];
   onSave: (event: AdminEvent) => string | null;
 }) {
+  const { holds, now } = useAdmin();
   const [draft, setDraft] = useState(initial);
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [mediaBusy, setMediaBusy] = useState(false);
+  const [tableSelectionPending, setTableSelectionPending] = useState(false);
   const [beforeExample, setBeforeExample] = useState<AdminEvent | null>(null);
   const [demoMessage, setDemoMessage] = useState("");
   const router = useRouter();
@@ -108,7 +112,7 @@ function EventForm({
   }
   function next(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (mediaBusy) return;
+    if (mediaBusy || tableSelectionPending) return;
     const errors = validateEvent(draft, sales);
     if (errors.length) {
       setError(errors[0]);
@@ -175,7 +179,7 @@ function EventForm({
           <EventFormDemoTools
             editing={editing}
             category={draft.category}
-            disabled={mediaBusy || saving}
+            disabled={mediaBusy || saving || tableSelectionPending}
             canUndo={beforeExample !== null}
             message={demoMessage}
             onFill={(category) => {
@@ -215,6 +219,7 @@ function EventForm({
               sales={sales}
               update={update}
               onVenueChange={(name) => {
+                setTableSelectionPending(false);
                 const venue = findVenue(name);
                 if (venue)
                   setDraft({
@@ -223,7 +228,26 @@ function EventForm({
                     layout: venue.layout,
                     zones: zonesForLayout(venue.layout),
                     seatOverrides: [],
+                    banquetConfiguration: undefined,
                   });
+              }}
+            />
+          )}
+          {step === 1 && draft.layout === "banquet" && (
+            <BanquetTableEditor
+              onPendingChange={setTableSelectionPending}
+              configuration={draft.banquetConfiguration}
+              occupied={occupiedSeatIds(draft.id, sales, holds, now)}
+              onChange={(configuration) => {
+                setDraft((current) => ({
+                  ...current,
+                  banquetConfiguration: configuration,
+                  zones: current.zones.map((zone) => ({
+                    ...zone,
+                    capacity: (66 + configuration.extras.length) * 10,
+                  })),
+                }));
+                setError("");
               }}
             />
           )}
@@ -233,11 +257,17 @@ function EventForm({
               {error}
             </p>
           )}
+          {tableSelectionPending && (
+            <p className="px-6 text-sm text-muted-foreground" role="status">
+              Confirma o cancela la selección de mesas antes de continuar.
+            </p>
+          )}
           <div className="admin-form-footer">
             {step > 0 ? (
               <Button
                 type="button"
                 variant="outline"
+                disabled={tableSelectionPending}
                 onClick={() => {
                   setStep(step - 1);
                   setError("");
@@ -253,7 +283,10 @@ function EventForm({
             )}
             <div>
               {step < 2 ? (
-                <Button type="submit" disabled={mediaBusy}>
+                <Button
+                  type="submit"
+                  disabled={mediaBusy || tableSelectionPending}
+                >
                   Continuar
                   <ArrowRight />
                 </Button>
@@ -287,7 +320,11 @@ function EventForm({
           <p className="admin-eyebrow">VISTA PREVIA</p>
           <div className="admin-panel">
             {step === 1 ? (
-              <VenuePreview layout={draft.layout} zones={draft.zones} />
+              <VenuePreview
+                layout={draft.layout}
+                zones={draft.zones}
+                banquetConfiguration={draft.banquetConfiguration}
+              />
             ) : (
               <>
                 <div className="admin-form-cover">

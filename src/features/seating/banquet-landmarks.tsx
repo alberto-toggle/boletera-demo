@@ -2,8 +2,10 @@ import { BANQUET_PLAN_SCALE } from "@/domain/venues/banquet";
 /** Shared SVG furniture; geometry follows the client floor plan, not a photograph. */
 export function BanquetLandmarks({
   showRestrooms = true,
+  bounds = { x: 25, y: 30, width: 1350, height: 1210 },
 }: {
   showRestrooms?: boolean;
+  bounds?: { x: number; y: number; width: number; height: number };
 }) {
   return (
     <g
@@ -16,10 +18,10 @@ export function BanquetLandmarks({
       }
     >
       <rect
-        x="25"
-        y="30"
-        width="1350"
-        height="1210"
+        x={bounds.x}
+        y={bounds.y}
+        width={bounds.width}
+        height={bounds.height}
         rx="8"
         className="venue-shell"
       />
@@ -69,7 +71,9 @@ export function BanquetLandmarks({
             </text>
           </g>
         ))}
-      <g transform="translate(1310 1110) rotate(-55)">
+      <g
+        transform={`translate(${bounds.x + bounds.width - 65} ${bounds.y + bounds.height - 130}) rotate(-55)`}
+      >
         <rect
           x="-30"
           y="-12"
@@ -81,10 +85,20 @@ export function BanquetLandmarks({
           BAR
         </text>
       </g>
-      <text x="700" y="1175" textAnchor="middle" className="map-aisle">
+      <text
+        x="700"
+        y={bounds.y + bounds.height - 65}
+        textAnchor="middle"
+        className="map-aisle"
+      >
         HALL
       </text>
-      <text x="700" y="1220" textAnchor="middle" className="map-aisle">
+      <text
+        x="700"
+        y={bounds.y + bounds.height - 20}
+        textAnchor="middle"
+        className="map-aisle"
+      >
         ↑ ACCESO PRINCIPAL
       </text>
     </g>

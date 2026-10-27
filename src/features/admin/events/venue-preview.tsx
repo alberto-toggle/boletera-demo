@@ -1,20 +1,28 @@
-import { banquetTables, BANQUET_PLAN_SCALE } from "@/domain/venues/banquet";
+import {
+  configuredTables,
+  banquetBounds,
+  banquetView,
+} from "@/domain/venues/banquet-configuration";
 import { BanquetLandmarks } from "@/features/seating/banquet-landmarks";
 import type { AdminEvent } from "../model";
 export function VenuePreview({
   layout,
   zones,
-}: Pick<AdminEvent, "layout" | "zones">) {
+  banquetConfiguration,
+}: Pick<AdminEvent, "layout" | "zones" | "banquetConfiguration">) {
   if (layout === "banquet")
     return (
-      <div className="admin-banquet-preview">
+      <div className="admin-banquet-preview admin-banquet-map">
         <svg
-          viewBox={`0 0 ${1400 * BANQUET_PLAN_SCALE} ${1270 * BANQUET_PLAN_SCALE}`}
+          viewBox={Object.values(banquetView(banquetConfiguration)).join(" ")}
           role="img"
           aria-label="Plano de cena baile: mesas 1 a 58 y A a H, pista central y acceso principal"
         >
-          <BanquetLandmarks />
-          {banquetTables.map((t) => (
+          <BanquetLandmarks
+            showRestrooms={false}
+            bounds={banquetBounds(banquetConfiguration)}
+          />
+          {configuredTables(banquetConfiguration).map((t) => (
             <g key={t.label}>
               <circle cx={t.x} cy={t.y} r="23" className="map-table" />
               <text
@@ -28,7 +36,10 @@ export function VenuePreview({
             </g>
           ))}
         </svg>
-        <p>66 mesas · 10 lugares por mesa · Precio único</p>
+        <p>
+          {configuredTables(banquetConfiguration).length} mesas · 10 lugares por
+          mesa · Precio único
+        </p>
       </div>
     );
   return (

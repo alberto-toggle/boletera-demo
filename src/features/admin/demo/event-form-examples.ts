@@ -110,6 +110,8 @@ export function applyEventExample(
   return {
     ...draft,
     ...example,
+    banquetConfiguration: undefined,
+    seatOverrides: [],
     images: example.images?.map((image) => ({ ...image })),
     includes: [...example.includes],
     zones: example.zones.map((zone) => ({ ...zone })),

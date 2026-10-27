@@ -1,4 +1,7 @@
-import { banquetSeatIdentity } from "@/domain/venues/banquet";
+import {
+  configuredTables,
+  banquetSeatId,
+} from "@/domain/venues/banquet-configuration";
 import type { AdminEvent, AdminSale } from "../model";
 export interface SeatOverride {
   id: string;
@@ -15,16 +18,29 @@ export interface InventoryHold {
 }
 export function eventSeats(event: AdminEvent) {
   const overrides = new Map(event.seatOverrides?.map((s) => [s.id, s]));
+  if (event.layout === "banquet")
+    return event.zones.flatMap((zone) =>
+      configuredTables(event.banquetConfiguration).flatMap((table) =>
+        Array.from({ length: 10 }, (_, index) => {
+          const id = banquetSeatId(table, index, zone.id);
+          return {
+            id,
+            zoneId: zone.id,
+            row: table.label,
+            number: String(index + 1),
+            enabled: true,
+            ...overrides.get(id),
+          };
+        }),
+      ),
+    );
   return event.zones.flatMap((zone) =>
     Array.from({ length: zone.capacity }, (_, index) => {
       const id = `${zone.id}-${index + 1}`;
       return {
         id,
         zoneId: zone.id,
-        row:
-          event.layout === "banquet"
-            ? banquetSeatIdentity(index).table
-            : String(Math.floor(index / 10) + 1),
+        row: String(Math.floor(index / 10) + 1),
         number: String((index % 10) + 1),
         enabled: true,
         ...overrides.get(id),

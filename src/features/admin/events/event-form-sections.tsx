@@ -161,7 +161,7 @@ export function EventVenueFields({
         <h2>Aforo y precios</h2>
         <p>
           {draft.layout === "banquet" &&
-            "66 mesas de 10 lugares. Precio único, sin descuentos. "}
+            "66 mesas base de 10 lugares; puedes agregar mesas extra. Precio único, sin descuentos. "}
           Los precios nuevos aplican a ventas futuras. Los boletos emitidos
           conservan su importe.
         </p>

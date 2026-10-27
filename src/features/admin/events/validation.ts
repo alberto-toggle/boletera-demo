@@ -1,4 +1,7 @@
-import { BANQUET_CAPACITY } from "@/domain/venues/banquet";
+import {
+  configuredTables,
+  validBanquetConfiguration,
+} from "@/domain/venues/banquet-configuration";
 import { validSeatOverrides } from "../inventory/model";
 import { findVenue } from "@/domain/venues/catalog";
 import { isEventCategory } from "@/domain/events/category";
@@ -10,12 +13,20 @@ export function validateEvent(
 ): string[] {
   const errors: string[] = [];
   if (
+    event.banquetConfiguration !== undefined &&
+    !validBanquetConfiguration(event.banquetConfiguration)
+  )
+    return ["Revisa las posiciones de las mesas extra."];
+  if (
     event.layout === "banquet" &&
     (event.zones.length !== 1 ||
       event.zones[0]?.id !== "salon" ||
-      event.zones[0]?.capacity !== BANQUET_CAPACITY)
+      event.zones[0]?.capacity !==
+        configuredTables(event.banquetConfiguration).length * 10)
   )
-    errors.push("El salón tiene 66 mesas de 10 lugares y un único precio.");
+    errors.push(
+      "El aforo debe corresponder a las 66 mesas base más las extras, con 10 lugares por mesa.",
+    );
   if (
     event.seatOverrides !== undefined &&
     !validSeatOverrides(event.seatOverrides)
@@ -73,6 +84,8 @@ export function isStoredEvent(value: unknown): value is AdminEvent {
   if (!value || typeof value !== "object") return false;
   const event = value as Record<string, unknown>;
   return (
+    (event.banquetConfiguration === undefined ||
+      validBanquetConfiguration(event.banquetConfiguration)) &&
     (event.seatOverrides === undefined ||
       validSeatOverrides(event.seatOverrides)) &&
     typeof event.id === "string" &&
